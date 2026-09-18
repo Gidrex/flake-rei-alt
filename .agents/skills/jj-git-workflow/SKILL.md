@@ -16,8 +16,6 @@ bookmarks, and pushes go through `jj`. `trunk() = main@origin`.
 - `jj config get git.push` = `gitlab` → bare `jj git push` goes to GitLab.
 - `main` tracks both remote bookmarks (`main@origin`, `main@gitlab`), so the default
   push updates whichever remote you push to.
-- `scripts/flake_rebuild.sh` pushes **only to `origin` with `-f`** — GitLab lagging
-  behind afterwards is normal.
 
 ## Standard commit cycle
 
@@ -48,7 +46,7 @@ jj git push --dry-run                    # what jj would push (and to which remo
 
 Typical pictures:
 
-- `main@gitlab` N commits behind `main` after `flake_rebuild.sh` — fixed by a normal push.
+- `main@gitlab` N commits behind `main` after a local-only backup commit — fixed by a normal push.
 - Changes sit in undescribed `@` off `main` — `push main` will NOT send them;
   `describe` + `bookmark move` first.
 - `jj git push` says "No bookmarks/tags found in the default push revset" —
@@ -57,8 +55,7 @@ Typical pictures:
 
 ## Gotchas
 
-- Never `git commit`, `git add -A`, or `git push -f` by hand. The only exception is
-  `flake_rebuild.sh` itself, and only on explicit request (force-push to origin!).
+- Never `git commit`, `git add -A`, or `git push -f` by hand (commits go through `jj`; pushes never forced).
 - Push only on explicit user request.
 - `jj` auto-snapshots the working copy on every command; `git status` may show
   staged/unstaged entries as a result — normal for colocated mode, do not touch

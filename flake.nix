@@ -2,10 +2,13 @@
   description = "Gidrex flake configuration for working machines.";
 
   inputs = {
+    # Pinned to the previously locked rev (it used to be an implicit registry
+    # input). Update deliberately with `nix flake update nixpkgs`.
+    nixpkgs.url = "github:NixOS/nixpkgs/a32edd7654519351e48e80372a928df336394670";
+
     # Core
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    flake-utils.url = "github:numtide/flake-utils";
 
     # Theming
     catppuccin.url = "github:catppuccin/nix";
@@ -24,105 +27,38 @@
   outputs =
     { nixpkgs, home-manager, ... }@inputs:
     let
-      # Clean yazi plugins from docs
-      cleanPlugin =
-        src:
-        nixpkgs.lib.cleanSourceWith {
-          src = src;
-          filter =
-            path: type:
-            let
-              baseName = baseNameOf path;
-            in
-            !(
-              builtins.any (suffix: nixpkgs.lib.hasSuffix suffix baseName) [
-                ".md"
-                "LICENSE"
-                ".png"
-                ".jpg"
-              ]
-              || baseName == "README"
-              || nixpkgs.lib.hasInfix "LICENSE" baseName # exclude this files
-              || (
-                type == "directory" && builtins.pathExists path && builtins.length (builtins.attrNames (builtins.readDir path)) == 0
-              )
-            ); # empty dirs
-        };
-
-      # Module arguments
-      moduleArgs = {
-        # inherit (inputs) catppuccin-foot;
-        yazi-plugins = builtins.mapAttrs (_: cleanPlugin) {
-          inherit (inputs) open-with-cmd close-and-restore-tab;
-        };
-        # tigerlake
-        rei-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkcwdevqLSxMqKZEo94A4w2VRgeSRCZm5j+hM0pafDf gidrex@rei";
-        # icelake
-        shou-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgmd6mBmIKY5akqKrnTkaJZjKcrCeVIsHOxZW6Xotir Desench@proton.me";
+      system = "x86_64-linux";
+      vars = import ./nix/vars.nix;
+      pkgs = import ./nix/pkgs.nix { inherit nixpkgs system vars; };
+      yazi-plugins = import ./nix/yazi-plugins.nix {
+        inherit (nixpkgs) lib;
+        inherit inputs;
       };
 
-      # Common modules
+      # Shared by all machines; the machine delta is appended per host below.
+      # New shared modules are wired in hm-modules/default.nix, not here.
       commonModules = [
-        ./home.nix
-
-        # Sounds settings
-        ./hm-modules/sound/mpv.nix
-
-        # My cli/tui tools
-        ./hm-modules/termTools/yazi
-        ./hm-modules/termTools/fish
-        ./hm-modules/termTools/helix
-        ./hm-modules/termTools/neovim
-        ./hm-modules/termTools/less.nix
-
-        # Security
+        ./hm-modules
         inputs.sops-nix.homeManagerModules.sops
-        ./hm-modules/security/keys.nix
-        ./hm-modules/security/sops.nix
-        ./hm-modules/security/rclone.nix
-
-        # Wayland apps
-        ./hm-modules/wayland/foot.nix
-        ./hm-modules/wayland/kitty.nix
-        ./hm-modules/wayland/ghostty.nix
-
-        # Theming (Im prefer catppuccin mocha theme)
         inputs.catppuccin.homeModules.catppuccin
-        ./hm-modules/themes/gtk.nix
-        ./hm-modules/themes/qt.nix
-
-        { _module.args = moduleArgs; }
       ];
 
-      pkgs = import nixpkgs {
-        localSystem = "x86_64-linux";
-
-        config = {
-          allowUnfree = false;
-          allowUnfreePredicate =
-            pkg:
-            builtins.elem (nixpkgs.lib.getName pkg) [
-              "unrar"
-              "obsidian"
-            ];
-        };
-      };
-
-      # Machine configurations
+      # Explicit host map: adding a machine means adding one line here
+      # plus machines/<name>/default.nix (see .agents/skills/add-machine/).
       machines = {
         icelake = ./machines/icelake;
         tigerlake = ./machines/tigerlake;
       };
-
     in
     {
-
-      # Home Manager builder
       homeConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames machines) (
         name:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = commonModules ++ [ machines.${name} ];
+          # Explicit injection (replaces the old `_module.args` magic):
+          # every module may take `vars`, `inputs` and `yazi-plugins`.
+          extraSpecialArgs = { inherit inputs vars yazi-plugins; };
         }
       );
     };

@@ -10,6 +10,8 @@
   ];
 
   programs.helix = {
+    enable = true;
+
     ignores = [
       ".build/"
 

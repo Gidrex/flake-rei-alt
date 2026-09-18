@@ -31,6 +31,7 @@ in
     ];
 
   programs.yazi = {
+    enable = true;
     shellWrapperName = "y";
 
     # Plugins init

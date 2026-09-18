@@ -8,20 +8,17 @@ skills to load.
 ## How to assign a task to the agent
 
 1. **Name the machine for apply/verify tasks.** `FLAKE_MACHINE=tigerlake|icelake`
-   is required by `just hm`, `scripts/flake_rebuild.sh`, `setup_niri.sh`.
+   is required by `just hm` and `setup_niri.sh`.
 2. **State the done criterion.** "Done" here means: `just qa` is green plus
    `nix eval`/`nix build --dry-run` sees the changes (see the `verify-hm-change` skill).
    A task is not closed without verification.
 3. **Say whether applying is allowed.** By default the agent only edits files and
-   verifies via eval. `just hm` (real switch), `scripts/flake_rebuild.sh`,
-   `git`/`jj push` — only on explicit request.
+   verifies via eval. `just hm` (real switch) and `git`/`jj push` — only on explicit request.
 
 ## Hard rules (non-negotiable)
 
 - Commits go through `jj` only, never raw `git` (`git` here is just the backend).
 - No pushes (to `origin` or `gitlab`) without an explicit request.
-- Do not run `scripts/flake_rebuild.sh` unasked: it does `git add -A`,
-  a `--no-verify` commit, and a **force-push to `origin`**.
 - Secrets: never write plaintext values into the repo and never print decrypted
   `secrets/secrets.yaml` content into chat. New secrets only via the `sops-add-secret` skill.
 - Do not edit `~/.config/niri` directly — those are symlinks into `dotfiles/niri/`.

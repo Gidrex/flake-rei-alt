@@ -6,33 +6,28 @@ description: Use when adding a new machine (new homeConfigurations entry under m
 # Adding a new machine
 
 Machines are **NOT** auto-discovered from directories: they form an explicit `machines`
-map in `flake.nix:112-115`, which `genAttrs` turns into `homeConfigurations`
-(flake.nix:121-127). A new machine takes 4 steps.
+map in `flake.nix:48-51`, which `genAttrs` turns into `homeConfigurations`
+(flake.nix:54). A new machine takes 4 steps.
 
 ## 1. `machines/<name>/default.nix`
 
 Minimal template (compare with `machines/tigerlake/default.nix`):
 
 ```nix
-{ pkgs, ... }:
+{ pkgs, vars, ... }:
 {
-  programs = {
-    fish.enable = true;
-    foot = {
-      enable = true;
-      settings.main.font = "GeistMonoNerdFontMono:size=14";
-    };
-  };
+  # foot, fish and friends self-enable in hm-modules — only deltas here.
+  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=${toString vars.footFontSize.<name>}";
 
   home.packages = with pkgs; [ ];
 
-  home.sessionVariables.FLAKE_MACHINE = "<name>";  # must match the directory name
-  home.stateVersion = "26.05";                     # same everywhere, do not bump
+  home.sessionVariables.FLAKE_MACHINE = "<name>"; # must match the directory name
 }
 ```
 
-Shared stuff does not belong here — it goes to `home.nix`/`hm-modules`
-(see the `add-hm-module` skill).
+Shared stuff does not belong here — it goes to `hm-modules`
+(see the `add-hm-module` skill). `stateVersion` is global (`nix/vars.nix`); foot font
+sizes live in `nix/vars.nix:footFontSize` (add the new machine's size there).
 
 ## 2. Register in `flake.nix`
 

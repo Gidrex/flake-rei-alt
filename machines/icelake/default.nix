@@ -1,15 +1,6 @@
-{ ... }:
+{ vars, ... }:
 {
-  programs = {
-    fish.enable = true;
-    foot = {
-      enable = true;
-      settings.main.font = "GeistMonoNerdFontMono:size=9";
-    };
-  };
-
-  # home.packages = with pkgs; [ ];
+  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=${toString vars.footFontSize.icelake}";
 
   home.sessionVariables.FLAKE_MACHINE = "icelake";
-  home.stateVersion = "26.05";
 }

@@ -52,9 +52,5 @@ fish -n /tmp/check.fish && echo FISH_SYNTAX_OK
 ## Gotchas
 
 - `just hm` performs a **real** `home-manager switch` (a new system generation),
-  not a dry run. Run it only on explicit request.
-- `scripts/flake_rebuild.sh` — on request only: needs `gum`, does
-  `git add -A` + a `--no-verify` commit + force-push to `origin` (skip the push with
-  `FLAKE_BACKUP=0`).
-- `nixfmt` is usually not installed here — `just qa` silently skips it (guarded by
-  `command -v`); that is not an error.
+  not a dry run. Run it only on explicit request. Dry-run eval lives in `just check`.
+- `just qa` runs `nixfmt --check` (width 120) and fails on drift — fix with `just fmt`.

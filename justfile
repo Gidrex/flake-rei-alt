@@ -1,21 +1,51 @@
-# Justfile for flake-rei
+# Justfile for flake-rei (home-manager dotfiles flake)
 
-# Default recipe - list all available commands
-@default:
-    just --list
+@_default:
+    just --list --unsorted
 
-# QA: Nix, Niri
-@qa:
-    ! command -v niri > /dev/null || niri validate
-    ! command -v nixfmt > /dev/null || (command -v fd > /dev/null && fd -e nix -X nixfmt --width 120 || find . -name "*.nix" -exec nixfmt -c --width 120 {} +)
+# Format all nix files (width 120)
+fmt:
+    fd -e nix -X nixfmt --width 120
 
-# Rebuild hm with change generation
+# Check formatting without modifying (CI/QA)
+fmt-check:
+    fd -e nix -X nixfmt --check --width 120
+
+# Validate niri configs (skipped when niri is absent, e.g. non-niri hosts)
+niri-check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if command -v niri >/dev/null; then niri validate; else echo "skip: niri not installed"; fi
+
+# QA: formatting + niri validation
+qa: fmt-check niri-check
+
+# Dry-run eval of one machine or all (default). Makes no system changes.
+check machine="all":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    hosts="{{ machine }}"
+    if [ "$hosts" = "all" ]; then hosts="icelake tigerlake"; fi
+    for h in $hosts; do
+      echo "==> dry-run eval: $h"
+      nix build --impure ".#homeConfigurations.$h.activationPackage" --dry-run
+    done
+
+# Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
 hm:
-    home-manager switch --flake ./#$FLAKE_MACHINE -b backup
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${FLAKE_MACHINE:?Set FLAKE_MACHINE=icelake|tigerlake}"
+    home-manager switch --flake ./#"$FLAKE_MACHINE" -b backup
+
+# Regenerate checked-in shell completions (keeps modules free of IFD)
+update-completions:
+    rip completions fish > hm-modules/termTools/fish/completions_rip.fish
 
 # Generate blurred versions of wallpapers in each directory (parallel processing)
 blur-wallpapers:
     #!/usr/bin/env bash
+    set -euo pipefail
     command -v magick > /dev/null || (echo -e "\\033[0;31mNo found magick\\033[0m" && exit 0)
     nproc=$(nproc 2>/dev/null || echo 4)
     jobs=$((nproc > 1 ? nproc - 1 : 1))

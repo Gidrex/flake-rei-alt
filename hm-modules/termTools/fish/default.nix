@@ -4,29 +4,6 @@
   lib,
   ...
 }:
-let
-  inherit (builtins) concatStringsSep genList listToAttrs;
-
-  # Universal mapper for functions
-  mkFuncWrap = wraps: body: { inherit wraps body; };
-  mkFunc =
-    name: val:
-    let
-      isDots = lib.hasPrefix "." name;
-      spec = if lib.isString val then { body = val; } else val;
-      # Automatically add $argv if not present in the body
-      finalBody = if lib.hasInfix "$argv" spec.body then spec.body else "${spec.body} \$argv";
-    in
-    {
-      inherit name;
-      value =
-        (lib.filterAttrs (n: v: n != "description") spec)
-        // {
-          body = finalBody;
-        }
-        // (lib.optionalAttrs isDots { wraps = "cd"; });
-    };
-in
 {
   programs.fish = {
     enable = true;
@@ -44,49 +21,79 @@ in
           colored-man-pages
         ];
 
+    # Plain function definitions: every body takes `$argv` explicitly,
+    # `wraps` gives fish completions for the wrapped command.
     functions = lib.mkMerge [
-      (listToAttrs (
-        lib.mapAttrsToList mkFunc {
-          md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
-          e = "$EDITOR";
-          gd = builtins.readFile ./gd_function.fish;
-          hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup";
-        }
-      ))
+      {
+        md = {
+          wraps = "mkdir";
+          body = "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
+        };
+        e.body = "$EDITOR $argv";
+        gd.body = builtins.readFile ./gd_function.fish;
+        hm.body = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup $argv";
+      }
 
-      (lib.mkIf config.programs.eza.enable (
-        listToAttrs (
-          lib.mapAttrsToList mkFunc {
-            ls = mkFuncWrap "eza" "__eza_cols";
-            la = mkFuncWrap "eza" "__eza_cols -al";
-            lt = mkFuncWrap "eza" "__eza_cols -T";
-            __eza_cols = "if contains -- -T \$argv; or contains -- --tree \$argv; or test (count \$argv) -gt 1; ${pkgs.eza}/bin/eza --icons=always \$argv; else; CLICOLOR_FORCE=1 paste (${pkgs.eza}/bin/eza --only-dirs -1 --color=always --icons=always \$argv | psub) (${pkgs.eza}/bin/eza --only-files -1 --color=always --icons=always \$argv | psub) | column -t -s \\t; end";
-          }
-        )
-      ))
+      (lib.mkIf config.programs.eza.enable {
+        ls = {
+          wraps = "eza";
+          body = "__eza_cols $argv";
+        };
+        la = {
+          wraps = "eza";
+          body = "__eza_cols -al $argv";
+        };
+        lt = {
+          wraps = "eza";
+          body = "__eza_cols -T $argv";
+        };
+        __eza_cols.body = "if contains -- -T \$argv; or contains -- --tree \$argv; or test (count \$argv) -gt 1; ${pkgs.eza}/bin/eza --icons=always \$argv; else; CLICOLOR_FORCE=1 paste (${pkgs.eza}/bin/eza --only-dirs -1 --color=always --icons=always \$argv | psub) (${pkgs.eza}/bin/eza --only-files -1 --color=always --icons=always \$argv | psub) | column -t -s \\t; end";
+      })
 
-      (lib.mkIf config.programs.helix.enable (
-        listToAttrs (
-          lib.mapAttrsToList mkFunc {
-            h = mkFuncWrap "hx" "${pkgs.helix}/bin/hx";
-            helixing = lib.mkIf (config.programs.fd.enable && config.programs.skim.enable) ''
-              set -l selection (${pkgs.fd}/bin/fd . --type file --type symlink -E '*.{png,jpg,jpeg,webp,docx,svg,pdf}' | ${pkgs.skim}/bin/sk --height=20 --layout=reverse -0 -1)
-              ${pkgs.helix}/bin/hx "$selection" || echo ""
-            '';
-          }
-        )
-      ))
+      (lib.mkIf config.programs.helix.enable {
+        h = {
+          wraps = "hx";
+          body = "${pkgs.helix}/bin/hx $argv";
+        };
+        # NOTE: the old mkFunc mapper never actually appended `$argv` here —
+        # filterAttrs preserved the mkIf structure, so the merge used the raw
+        # content. Body reproduced verbatim (verified byte-identical via eval).
+        helixing = lib.mkIf (config.programs.fd.enable && config.programs.skim.enable) ''
+          set -l selection (${pkgs.fd}/bin/fd . --type file --type symlink -E '*.{png,jpg,jpeg,webp,docx,svg,pdf}' | ${pkgs.skim}/bin/sk --height=20 --layout=reverse -0 -1)
+          ${pkgs.helix}/bin/hx "$selection" || echo ""
+        '';
+      })
 
-      (lib.mkIf config.programs.neovim.enable (
-        listToAttrs (lib.mapAttrsToList mkFunc { n = mkFuncWrap "nvim" "${pkgs.neovim}/bin/nvim"; })
-      ))
+      (lib.mkIf config.programs.neovim.enable {
+        n = {
+          wraps = "nvim";
+          body = "${pkgs.neovim}/bin/nvim $argv";
+        };
+      })
 
-      # Dots: ".. == cd ../", "... == cd ../../", ...
-      (listToAttrs (
-        map (
-          dots: mkFunc (concatStringsSep "" (genList (_: ".") dots)) "cd ${concatStringsSep "/" (genList (_: "..") (dots - 1))}"
-        ) (genList (i: i + 2) 5)
-      ))
+      # `..` == `cd ..`, `...` == `cd ../..`, and so on.
+      {
+        ".." = {
+          wraps = "cd";
+          body = "cd ..";
+        };
+        "..." = {
+          wraps = "cd";
+          body = "cd ../..";
+        };
+        "...." = {
+          wraps = "cd";
+          body = "cd ../../..";
+        };
+        "....." = {
+          wraps = "cd";
+          body = "cd ../../../..";
+        };
+        "......" = {
+          wraps = "cd";
+          body = "cd ../../../../..";
+        };
+      }
     ];
 
     interactiveShellInit = ''
@@ -107,7 +114,9 @@ in
 
     completions = {
       gd = builtins.readFile ./gd_completion.fish;
-      rip = builtins.readFile (pkgs.runCommand "rip-completions" { } "${pkgs.rip2}/bin/rip completions fish > $out");
+      # Checked in (see just update-completions) to avoid IFD at eval time:
+      # pkgs.runCommand here would rebuild on every evaluation.
+      rip = builtins.readFile ./completions_rip.fish;
     };
   };
 

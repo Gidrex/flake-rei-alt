@@ -12,29 +12,35 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
   the GitLab URL in `README.md` is stale.
 - **Nix reads the committed `main` revision, not your working tree.** `nix flake metadata ./` resolves to
   `git+file://...?ref=refs/heads/main&rev=<sha>`, so uncommitted edits are invisible to `nix`/`home-manager`
-  unless you commit them or pass `--impure`. `scripts/flake_rebuild.sh` passes `--impure`; `just hm` does not.
-- **`FLAKE_MACHINE` env var is required** by `just hm` and `scripts/flake_rebuild.sh` (values: `icelake` or `tigerlake`).
+  unless you commit them or pass `--impure` (`just check` uses `--impure`; `just hm` does not).
+- **`FLAKE_MACHINE` env var is required** by `just hm` (values: `icelake` or `tigerlake`).
   The Nix modules set it per-machine too (`home.sessionVariables.FLAKE_MACHINE`).
 
 ## Commands
 
-- Format + validate (Nix width 120, `niri validate`): `just qa`
-- Apply home-manager (new generation, backup previous): `just hm`
-- Format + auto-git-backup + rebuild: `scripts/flake_rebuild.sh` — **CAUTION**: by default it `git add -A`,
-  commits with `--no-verify`, and **force-pushes to origin**. Set `FLAKE_BACKUP=0` to skip the push step. Requires `gum`.
+- Format Nix files (width 120): `just fmt`; check only: `just fmt-check`
+- QA = format check + `niri validate`: `just qa`
+- Dry-run eval (no system changes), one or all machines: `just check [machine]`
+- Regenerate checked-in completions: `just update-completions`
+- Apply home-manager (new generation, backup previous): `just hm` (needs `FLAKE_MACHINE`)
 - There is no `devShell`/`packages` output and no test runner; only `homeConfigurations.<machine>` exists, so
-  `nix flake check` is not the meaningful verification — `just qa` then `just hm` (dry eval) is.
-- `nixfmt` is not installed by default here; the `just qa` formatter is guarded by `command -v nixfmt`.
+  `nix flake check` is not the meaningful verification — `just qa` then `just check` is.
+- `nixpkgs` is pinned to an exact rev in `flake.nix:7`; update deliberately via `nix flake update nixpkgs`.
 
 ## Structure
 
-- `flake.nix` → composes `commonModules` (`home.nix` + everything under `hm-modules/`) with `machines/<name>/default.nix`.
-  Machines are an **explicit map** (`flake.nix:112-115`) that `genAttrs` turns into `homeConfigurations`
-  (flake.nix:121) — adding a machine needs a flake edit, see `.agents/skills/add-machine/`.
-- `home.nix` = shared base (programs, packages, theme, session vars/path).
-- `hm-modules/` grouped by area: `termTools/{fish,helix,neovim,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
-- Modules may depend on custom args injected via `_module.args` in `flake.nix` (flake.nix:53). Example: a module
-  declaring `yazi-plugins` in its function args (only works because `flake.nix` supplies it) — don't assume args are global.
+- `flake.nix` → slim outputs: `nix/vars.nix` (user/keys/theme constants) + `nix/pkgs.nix`
+  (locked nixpkgs instantiation) + `nix/yazi-plugins.nix` (cleaned external plugins) compose
+  `commonModules` (`hm-modules/` + sops-nix + catppuccin) with `machines/<name>/default.nix`.
+  Machines are an **explicit map** (`flake.nix:48-51`) that `genAttrs` turns into `homeConfigurations`
+  (flake.nix:54) — adding a machine needs a flake edit, see `.agents/skills/add-machine/`.
+- `hm-modules/default.nix` = single wiring point for shared modules (add new modules there, not in `flake.nix`).
+- `hm-modules/` grouped by area: `core/{nix,identity,packages,theme}`, `shell/{vcs,search,system}`,
+  `docs.nix`, `termTools/{fish,helix,neovim,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
+- Modules get `vars`, `inputs`, `yazi-plugins` via `extraSpecialArgs` in `flake.nix:61` — declare them
+  as function args where needed (e.g. yazi plugins); no `_module.args` magic.
+- Machine deltas are minimal: per-machine foot font size (from `vars.footFontSize`),
+  `FLAKE_MACHINE`, extra packages. Terminals etc. self-enable in `hm-modules/`.
 - Adding a machine also needs a niri setup (below).
 
 ## Niri (only for `icelake` + `tigerlake`)
