@@ -31,6 +31,7 @@
         };
         e.body = "$EDITOR $argv";
         gd.body = builtins.readFile ./gd_function.fish;
+        hmr.body = builtins.readFile ./hmr_function.fish;
         hm.body = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup $argv";
       }
 
@@ -114,6 +115,7 @@
 
     completions = {
       gd = builtins.readFile ./gd_completion.fish;
+      hmr = "complete -f -c hmr";
       # Checked in (see just update-completions) to avoid IFD at eval time:
       # pkgs.runCommand here would rebuild on every evaluation.
       rip = builtins.readFile ./completions_rip.fish;
