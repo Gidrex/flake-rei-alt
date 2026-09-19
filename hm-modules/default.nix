@@ -28,7 +28,6 @@
     ./wayland/foot.nix
     ./wayland/kitty.nix
 
-    ./themes/gtk.nix
     ./themes/qt.nix
   ];
 }
