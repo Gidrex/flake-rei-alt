@@ -1,10 +1,52 @@
-# Declarative opencode: nixpkgs binary + managed config, no curl installer.
+# Declarative opencode: pinned binary + managed config, no curl installer.
 # Auth for the managed `opencode-go` provider resolves at runtime from the
 # sops secret file — only the path lands in the nix store, never the key.
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  # Pin opencode to 1.18.29: nixpkgs 1.18.30 has a known upstream bun runtime bug
+  # (nixpkgs#563241: TypeError: undefined is not an object (evaluating 'a.name'))
+  # causing crashes in SystemPrompt.environment when sending prompts.
+  opencodePkg = pkgs.stdenvNoCC.mkDerivation rec {
+    pname = "opencode";
+    version = "1.18.29";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
+      hash = "sha256-6oALf/ViJrcJUhJsn8HiUXykxLVoL9nT+eh0SWl6EZQ=";
+    };
+
+    sourceRoot = ".";
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm755 opencode $out/bin/opencode
+      wrapProgram $out/bin/opencode \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.ripgrep ]} \
+        --set OPENCODE_DISABLE_AUTOUPDATE true
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "AI coding agent built for the terminal";
+      homepage = "https://github.com/anomalyco/opencode";
+      mainProgram = "opencode";
+    };
+  };
+in
 {
   programs.opencode = {
     enable = true;
+    package = opencodePkg;
     enableMcpIntegration = true;
     # Global rules: ./AGENTS.md lands at ~/.config/opencode/AGENTS.md,
     # auto-loaded by every session
