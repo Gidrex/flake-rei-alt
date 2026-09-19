@@ -25,7 +25,8 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 - Apply home-manager (new generation, backup previous): `just hm` (needs `FLAKE_MACHINE`)
 - There is no `devShell`/`packages` output and no test runner; only `homeConfigurations.<machine>` exists, so
   `nix flake check` is not the meaningful verification — `just qa` then `just check` is.
-- `nixpkgs` is pinned to an exact rev in `flake.nix:7`; update deliberately via `nix flake update nixpkgs`.
+- `nixpkgs` tracks the `nixos-unstable` branch (`flake.nix:7`); update deliberately via
+  `nix flake update nixpkgs` — it rebuilds the world on next `just hm`.
 
 ## Structure
 
@@ -58,9 +59,9 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 ## Quirks
 
-- Unfree packages are allow-listed via `allowUnfreePredicate` (only `unrar`, `obsidian`) — adding another non-free
-  pkg means editing `flake.nix:102`.
-- `targets.genericLinux.enable = true` in `home.nix` — **disable on an actual NixOS host**.
+- Unfree packages are allow-listed via `allowUnfree` in `nix/vars.nix` (only `unrar`, `obsidian`) —
+  adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
+- `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
 - Global theme: catppuccin `mocha`, `autoEnable = true`. `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
 - Neovim Lua lives in `hm-modules/termTools/neovim/lua/`; `.luarc.json` disables `undefined-global` diagnostics
   (Neovim provides those globals — not a real bug).

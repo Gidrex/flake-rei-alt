@@ -2,9 +2,9 @@
   description = "Gidrex flake configuration for working machines.";
 
   inputs = {
-    # Pinned to the previously locked rev (it used to be an implicit registry
-    # input). Update deliberately with `nix flake update nixpkgs`.
-    nixpkgs.url = "github:NixOS/nixpkgs/a32edd7654519351e48e80372a928df336394670";
+    # Tracks nixos-unstable. Update deliberately with `nix flake update nixpkgs`
+    # (it rebuilds the world on next `just hm` — never bump blindly).
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Core
     home-manager.url = "github:nix-community/home-manager";
