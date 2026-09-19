@@ -72,6 +72,11 @@ in
             apiKey = "{file:${config.sops.secrets.opencode_api_key.path}}";
           };
         };
+        "openrouter" = {
+          options = {
+            apiKey = "{file:${config.sops.secrets.openrouter_api_key.path}}";
+          };
+        };
       };
     };
     # Currently selected TUI theme (was only in local TUI state, kv.json).

@@ -10,6 +10,7 @@
       gdrive_secret = { };
       gdrive_token = { };
       opencode_api_key = { };
+      openrouter_api_key = { };
     };
   };
 }
