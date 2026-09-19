@@ -9,6 +9,7 @@
       gdrive_client_id = { };
       gdrive_secret = { };
       gdrive_token = { };
+      opencode_api_key = { };
     };
   };
 }
