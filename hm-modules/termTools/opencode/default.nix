@@ -51,6 +51,17 @@ in
     # Global rules: ./AGENTS.md lands at ~/.config/opencode/AGENTS.md,
     # auto-loaded by every session
     context = ./AGENTS.md;
+    # Global skills: ./skills/<name>/ lands at ~/.config/opencode/skills/<name>/,
+    # loaded on demand via the `skill` tool (see AGENTS.md router).
+    skills = {
+      python-uv = ./skills/python-uv;
+      typescript-biome = ./skills/typescript-biome;
+      rust-cargo = ./skills/rust-cargo;
+      flutter-dart = ./skills/flutter-dart;
+      nix-hm = ./skills/nix-hm;
+      lua-shell = ./skills/lua-shell;
+      ctx7-docs = ./skills/ctx7-docs;
+    };
     settings = {
       # nix owns the binary; self-update would fight the package manager.
       autoupdate = false;
