@@ -41,23 +41,24 @@ hm:
 # CVE scan of a home-manager closure (transitive runtime deps).
 # Default is the live (current) profile; pass an explicit store path to audit an older generation.
 # First run downloads the NVD feed (~minutes); later runs use ~/.cache/vulnix.
+# Known false positives live in vulnix-whitelist.toml (name-mismatch CVEs).
 # Exit 0 = clean, 2 = advisories found. NVD 503s are retried (the feed flaps).
-vult-audit profile="$HOME/.local/state/nix/profiles/home-manager":
+vulnix-audit profile="$HOME/.local/state/nix/profiles/home-manager":
     #!/usr/bin/env bash
     set -uo pipefail
     attempts=5
     delay=20
     for ((i = 1; i <= attempts; i++)); do
       set +e
-      nix run nixpkgs#vulnix -- --closure --show-description "{{ profile }}"
+      nix run nixpkgs#vulnix -- -w ./vulnix-whitelist.toml --closure --show-description "{{ profile }}"
       rc=$?
       set -e
       if [ "$rc" -eq 0 ] || [ "$rc" -eq 2 ] || [ "$rc" -eq 3 ]; then exit "$rc"; fi
       if [ "$i" -eq "$attempts" ]; then
-        echo "vult-audit: NVD fetch still failing after $attempts attempts (rc=$rc)" >&2
+        echo "vulnix-audit: NVD fetch still failing after $attempts attempts (rc=$rc)" >&2
         exit "$rc"
       fi
-      echo "vult-audit: attempt $i/$attempts failed (rc=$rc), retry in ${delay}s..." >&2
+      echo "vulnix-audit: attempt $i/$attempts failed (rc=$rc), retry in ${delay}s..." >&2
       sleep "$delay"
     done
 
@@ -76,16 +77,16 @@ secrets-scan:
 
 # Full security audit: CVE scan of the closure + secret-leak scan of the repo.
 # Both phases always run; summary at the end. Exit 0 = clean.
-# Exit code priority: vult-audit (0 clean / 2 advisories / 1 infra fail) then secrets-scan (0/1).
+# Exit code priority: vulnix-audit (0 clean / 2 advisories / 1 infra fail) then secrets-scan (0/1).
 audit profile="$HOME/.local/state/nix/profiles/home-manager":
     #!/usr/bin/env bash
     set -uo pipefail
-    vult_rc=0
+    vulnix_rc=0
     sec_rc=0
-    just vult-audit "{{ profile }}" || vult_rc=$?
+    just vulnix-audit "{{ profile }}" || vulnix_rc=$?
     just secrets-scan || sec_rc=$?
-    echo "==> audit summary: vult-audit=$vult_rc secrets-scan=$sec_rc"
-    if [ "$vult_rc" -ne 0 ]; then exit "$vult_rc"; fi
+    echo "==> audit summary: vulnix-audit=$vulnix_rc secrets-scan=$sec_rc"
+    if [ "$vulnix_rc" -ne 0 ]; then exit "$vulnix_rc"; fi
     exit "$sec_rc"
 
 # Generate blurred versions of wallpapers in each directory (parallel processing)

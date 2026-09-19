@@ -1,0 +1,94 @@
+# Vulnix false-positive whitelist for `just vulnix-audit` / `just audit`.
+# Syntax: TOML sections ["<pname>-<version>"] or ["<pname>"] (any version),
+# with a `cve` list. A rule only masks the listed CVEs; any NEW CVE for the
+# same package still shows up. Verified against the 2026-09-20 audit.
+# Re-check a rule (remove it) when nixpkgs is updated past the fixed version.
+
+# NOTE: product-mismatch entries are deliberately UNVERSIONED (["pname"]).
+# A CVE about a different product never applies, whatever version nixpkgs
+# vendors — and unversioned sections also cover -fish-completions split
+# derivations (their version string is "X.Y-fish-completions").
+# Versioned sections are only for "fixed in vendored version" entries below:
+# those must re-appear after a nixpkgs update so the fix gets re-verified.
+
+["cargo"]
+cve = [
+  "CVE-2026-14363",
+  "CVE-2026-58521",
+  "CVE-2026-39839",
+  "CVE-2026-39840",
+  "CVE-2026-39841",
+  "CVE-2026-39837",
+  "CVE-2026-58519",
+]
+comment = "Rust cargo, not the MediaWiki Cargo extension"
+
+["git"]
+cve = [
+  "CVE-2022-36882",
+  "CVE-2022-30947",
+  "CVE-2022-36883",
+  "CVE-2022-38663",
+  "CVE-2021-21684",
+  "CVE-2022-36884",
+]
+comment = "Jenkins Git Plugin, not git itself (covers git + git-*-fish-completions)"
+
+["kitty"]
+cve = [
+  "CVE-2024-23749",
+  "CVE-2024-25003",
+  "CVE-2024-25004",
+]
+comment = "KiTTY (Windows PuTTY fork), not kitty terminal"
+
+["ninja"]
+cve = [ "CVE-2021-4336" ]
+comment = "monitor-ninja (PHP app), not the ninja build tool"
+
+["orc"]
+cve = [ "CVE-2025-47436" ]
+comment = "Apache ORC, not the Oil Runtime Compiler"
+
+["cups"]
+cve = [ "CVE-2022-26691" ]
+comment = "Apple macOS Security Update, not CUPS printing"
+
+["shellcheck"]
+cve = [ "CVE-2021-28794" ]
+comment = "unofficial VSCode extension, not shellcheck itself"
+
+["zlib"]
+cve = [
+  "CVE-2026-27820",
+  "CVE-2023-6992",
+]
+comment = "Ruby zlib binding / Cloudflare fork; upstream unaffected"
+
+["ada"]
+cve = [ "CVE-2024-9410" ]
+comment = "Ada.cx SaaS, not the ada URL parser"
+
+["gstreamer-1.28.6"]
+cve = [ "CVE-2026-73433" ]
+comment = "fixed upstream in 1.28.6, which is the vendored version"
+
+["libmicrohttpd-1.0.6"]
+cve = [
+  "CVE-2025-59777",
+  "CVE-2025-62689",
+]
+comment = "affects <=1.0.2, vendored 1.0.6 already contains the fix"
+
+["gcc"]
+cve = [ "CVE-2023-4039" ]
+comment = "DISPUTED, AArch64-only; hosts are x86_64"
+
+# Name-only match, version string truncated by nixpkgs wrapper.
+["lapack"]
+cve = [ "CVE-2021-4048" ]
+comment = "affects lapack <=3.10.0; nixpkgs vendors 3.12.1"
+
+["avahi"]
+cve = [ "CVE-2021-26720" ]
+comment = "Debian packaging script only, not upstream avahi"
