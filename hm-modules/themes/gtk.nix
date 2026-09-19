@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 {
   gtk = {
-    enable = true;
+    enable = false;
     theme = {
       name = "catppuccin-mocha-lavender-standard";
       package = pkgs.catppuccin-gtk.override {

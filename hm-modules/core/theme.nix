@@ -8,9 +8,9 @@
     flavor = vars.theme.flavor;
     accent = vars.theme.accent;
     foot.enable = false;
-    gtk = {
-      icon.enable = true;
-      icon.accent = "sky";
-    };
+    # gtk = {
+    #   icon.enable = true;
+    #   icon.accent = "sky";
+    # };
   };
 }
