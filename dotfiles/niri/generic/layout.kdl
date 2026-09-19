@@ -25,7 +25,7 @@ layout {
     //     proportion 1.0
     // }
     focus-ring {
-        width 2
+        width 1
         // active-color "#ffffff"
         // inactive-color "#808080"
         active-color "#07b5ef"
