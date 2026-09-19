@@ -80,4 +80,8 @@ in
       theme = lib.mkForce "catppuccin-macchiato";
     };
   };
+
+  # Global plugin: force ANSI colors in shell tool output.
+  # programs.opencode has no `plugins` option, so place the file directly.
+  xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;
 }
