@@ -13,14 +13,15 @@ window-rule {
 }
 
 window-rule {
+    open-on-output "DP-2"
     match app-id=r#".*prismlauncher.*"#
+    match app-id="goofcord"
+    match app-id="equibop"
     default-column-width { proportion 0.5; }
 }
 
 window-rule {
     open-on-output "DP-2"
-    match app-id="goofcord"
-    match app-id="equibop"
     match app-id=r#"(?i)steam"#
     match app-id="foot"
     match app-id="kitty"
@@ -30,7 +31,7 @@ window-rule {
     match app-id="chrome-.*"
     match app-id="chromium"
     match app-id="com.follow.clash"
-    default-column-width { proportion 0.95; }
+    default-column-width { proportion 0.75; }
 }
 
 window-rule {
@@ -41,3 +42,14 @@ window-rule {
     default-column-width { proportion 1.0; }
     open-fullscreen true
 }
+
+window-rule {
+    match app-id="foot" is-active=true
+    opacity 0.97
+}
+
+window-rule {
+    match app-id="foot" is-active=false
+    opacity 0.8
+}
+
