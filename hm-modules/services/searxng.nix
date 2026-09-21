@@ -7,7 +7,15 @@
 
   sops.templates."searxng-settings.yml" = {
     content = ''
-      use_default_settings: true
+      # 2026-09-21: startpage/ecosia consistently hit request_timeout (3.0s),
+      # other general engines respond in <1s (measured via &engines=).
+      use_default_settings:
+        engines:
+          remove:
+            - startpage
+            - ecosia
+      outgoing:
+        request_timeout: 1.5
       server:
         bind_address: "127.0.0.1"
         port: 8888
