@@ -25,6 +25,8 @@
     ./security/sops.nix
     ./security/rclone.nix
 
+    ./services/searxng.nix
+
     ./wayland/foot.nix
     ./wayland/kitty.nix
 
