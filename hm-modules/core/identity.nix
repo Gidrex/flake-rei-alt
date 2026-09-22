@@ -1,6 +1,4 @@
-# Identity, session env/path, host integration flags.
-# EDITOR/VISUAL/SHELL/TERM are plain strings (not mkIf-guarded): fish, helix
-# and foot are unconditionally enabled in this flake, so the guards were dead.
+# Identity, env/path, host flags. EDITOR etc. unguarded (always enabled).
 { config, vars, ... }:
 {
   home = {

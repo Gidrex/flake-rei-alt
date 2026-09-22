@@ -1,6 +1,4 @@
-# Declarative opencode: pinned binary + managed config, no curl installer.
-# Auth for the managed `opencode-go` provider resolves at runtime from the
-# sops secret file — only the path lands in the nix store, never the key.
+# Declarative opencode; auth resolves at runtime from sops (path only in store).
 {
   config,
   lib,
@@ -8,9 +6,7 @@
   ...
 }:
 let
-  # Pin opencode to 1.18.29: nixpkgs 1.18.30 has a known upstream bun runtime bug
-  # (nixpkgs#563241: TypeError: undefined is not an object (evaluating 'a.name'))
-  # causing crashes in SystemPrompt.environment when sending prompts.
+  # Pin 1.18.29: .30 crashes (upstream bun bug, nixpkgs#563241).
   opencodePkg = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "opencode";
     version = "1.18.29";
@@ -48,11 +44,9 @@ in
     enable = true;
     package = opencodePkg;
     enableMcpIntegration = true;
-    # Global rules: ./AGENTS.md lands at ~/.config/opencode/AGENTS.md,
-    # auto-loaded by every session
+    # AGENTS.md auto-loaded by every session
     context = ./AGENTS.md;
-    # Global skills: ./skills/<name>/ lands at ~/.config/opencode/skills/<name>/,
-    # loaded on demand via the `skill` tool (see AGENTS.md router).
+    # Skills on demand via `skill` tool
     skills = {
       python-uv = ./skills/python-uv;
       typescript-biome = ./skills/typescript-biome;
@@ -63,7 +57,7 @@ in
       ctx7-docs = ./skills/ctx7-docs;
     };
     settings = {
-      # nix owns the binary; self-update would fight the package manager.
+      # Self-update off: nix owns the binary.
       autoupdate = false;
       lsp = true;
       provider = {
@@ -79,14 +73,12 @@ in
         };
       };
     };
-    # Currently selected TUI theme (was only in local TUI state, kv.json).
-    # mkForce: catppuccin/nix defaults this to "catppuccin" (mocha flavour).
+    # TUI theme (mkForce over catppuccin default).
     tui = {
       theme = lib.mkForce "catppuccin-macchiato";
     };
   };
 
-  # Global plugin: force ANSI colors in shell tool output.
-  # programs.opencode has no `plugins` option, so place the file directly.
+  # Force ANSI colors (no `plugins` option, placed directly).
   xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;
 }

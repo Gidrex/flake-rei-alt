@@ -1,5 +1,4 @@
-# Shared CLI/TUI packages, grouped by area. Machine-specific additions
-# belong to machines/<name>/default.nix, not here.
+# Shared packages by area; machine extras in machines/<name>.
 { pkgs, ... }:
 {
   home.packages =

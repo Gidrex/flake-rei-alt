@@ -2,8 +2,7 @@
   description = "Gidrex flake configuration for working machines.";
 
   inputs = {
-    # Tracks nixos-unstable. Update deliberately with `nix flake update nixpkgs`
-    # (it rebuilds the world on next `just hm` — never bump blindly).
+    # nixos-unstable. Bump via `nix flake update nixpkgs`, never blindly.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Core
@@ -17,7 +16,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Helix master (build from source on each switch once input is updated).
+    # Helix master, built from source.
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -39,16 +38,14 @@
         inherit inputs;
       };
 
-      # Shared by all machines; the machine delta is appended per host below.
-      # New shared modules are wired in hm-modules/default.nix, not here.
+      # Shared modules; machine delta appended per host. New modules go in hm-modules/default.nix.
       commonModules = [
         ./hm-modules
         inputs.sops-nix.homeManagerModules.sops
         inputs.catppuccin.homeModules.catppuccin
       ];
 
-      # Explicit host map: adding a machine means adding one line here
-      # plus machines/<name>/default.nix (see .agents/skills/add-machine/).
+      # New machine: one line here + machines/<name>/default.nix.
       machines = {
         icelake = ./machines/icelake;
         tigerlake = ./machines/tigerlake;
@@ -60,8 +57,7 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = commonModules ++ [ machines.${name} ];
-          # Explicit injection (replaces the old `_module.args` magic):
-          # every module may take `vars`, `inputs` and `yazi-plugins`.
+          # Modules may take `vars`, `inputs`, `yazi-plugins`.
           extraSpecialArgs = { inherit inputs vars yazi-plugins; };
         }
       );

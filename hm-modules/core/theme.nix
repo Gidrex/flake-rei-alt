@@ -1,5 +1,4 @@
-# Global theme: catppuccin mocha, auto-enabled for all supported apps.
-# Per-app opt-outs live in the app's own module (e.g. kitty), not here.
+# Catppuccin mocha, auto-enabled. Opt-outs live in app modules.
 { vars, ... }:
 {
   catppuccin = {

@@ -39,6 +39,6 @@
     };
   };
 
-  # Disable catppuccin integration for kitty to respect manual colors
+  # No catppuccin: manual colors.
   catppuccin.kitty.enable = false;
 }

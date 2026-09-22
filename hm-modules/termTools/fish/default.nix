@@ -21,8 +21,7 @@
           colored-man-pages
         ];
 
-    # Plain function definitions: every body takes `$argv` explicitly,
-    # `wraps` gives fish completions for the wrapped command.
+    # Plain functions take `$argv`; `wraps` gives completions.
     functions = lib.mkMerge [
       {
         md = {
@@ -56,9 +55,7 @@
           wraps = "hx";
           body = "${pkgs.helix}/bin/hx $argv";
         };
-        # NOTE: the old mkFunc mapper never actually appended `$argv` here —
-        # filterAttrs preserved the mkIf structure, so the merge used the raw
-        # content. Body reproduced verbatim (verified byte-identical via eval).
+        # NOTE: old mapper never appended `$argv`; body reproduced verbatim (byte-identical).
         helixing = lib.mkIf (config.programs.fd.enable && config.programs.skim.enable) ''
           set -l selection (${pkgs.fd}/bin/fd . --type file --type symlink -E '*.{png,jpg,jpeg,webp,docx,svg,pdf}' | ${pkgs.skim}/bin/sk --height=20 --layout=reverse -0 -1)
           ${pkgs.helix}/bin/hx "$selection" || echo ""
@@ -116,8 +113,7 @@
     completions = {
       gd = builtins.readFile ./gd_completion.fish;
       hmr = "complete -f -c hmr";
-      # Checked in (see just update-completions) to avoid IFD at eval time:
-      # pkgs.runCommand here would rebuild on every evaluation.
+      # Checked in to avoid IFD; runCommand would rebuild on every eval.
       rip = builtins.readFile ./completions_rip.fish;
     };
   };

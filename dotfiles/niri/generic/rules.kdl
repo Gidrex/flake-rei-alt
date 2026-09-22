@@ -69,7 +69,7 @@ window-rule {
     default-column-width { proportion 1.0; }
 }
 
-// Hiden from screencast
+// Hidden from screencast
 window-rule {
     block-out-from "screencast"
     match app-id=r#".*ayugram.*"#

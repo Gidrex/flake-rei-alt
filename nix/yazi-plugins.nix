@@ -1,9 +1,7 @@
-# External (non-nixpkgs) yazi plugins, cleaned of docs/screenshots.
-# Result is passed to home-manager modules via extraSpecialArgs as `yazi-plugins`.
+# External yazi plugins (no docs/screenshots), passed as `yazi-plugins`.
 { lib, inputs }:
 let
-  # Suffix-only filter: fast (no builtins.readDir per path during eval) and
-  # sufficient — leftover empty dirs are harmless, docs/screenshots are the bloat.
+  # Suffix-only filter: fast, drops docs/screenshots.
   excludedNames = [
     "LICENSE"
     "README"

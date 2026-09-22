@@ -8,8 +8,7 @@
     ];
   };
 
-  # Weekly user-profile GC (Tuesday 03:15, catches up after suspend).
-  # Home-manager only trims its own generations; dead store paths go via --delete-older-than.
+  # Weekly GC Tue 03:15; trims generations and dead store paths.
   nix.gc = {
     automatic = true;
     dates = "Tue 03:15";

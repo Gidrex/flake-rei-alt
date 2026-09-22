@@ -48,6 +48,6 @@
     '';
   };
 
-  # Link the lua configuration directory
+  # Lua config symlink
   xdg.configFile."nvim/lua".source = ./lua;
 }

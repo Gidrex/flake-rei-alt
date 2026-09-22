@@ -1,5 +1,4 @@
-# Locked nixpkgs instantiation shared by all homeConfigurations.
-# Unfree is deny-by-default; extra packages are allow-listed in nix/vars.nix.
+# Locked nixpkgs for all machines; unfree deny-by-default (allow-list in nix/vars.nix).
 {
   nixpkgs,
   system,

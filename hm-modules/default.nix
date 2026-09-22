@@ -1,5 +1,4 @@
-# Single wiring point for all shared home-manager modules.
-# Machine deltas live in machines/<name>/default.nix and are appended in flake.nix.
+# Shared modules wiring; machine deltas in machines/<name>.
 {
   imports = [
     ./core/nix.nix
