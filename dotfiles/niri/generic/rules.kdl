@@ -5,6 +5,17 @@ window-rule {
     draw-border-with-background false
 }
 
+// Never steal focus
+window-rule {
+    open-focused false
+}
+
+// Exceptions that may still autofocus
+window-rule {
+    match app-id="^foot$"
+    open-focused true
+}
+
 // Enable VRR
 window-rule {
     variable-refresh-rate true
@@ -64,6 +75,13 @@ window-rule {
     match app-id=r#".*ayugram.*"#
     match app-id=r#".*telegram.*"#
     match title=r#"(?i)bitwarden"#
+}
+layer-rule {
+    block-out-from "screencast"
+    match namespace="^notifications$"
+}
+layer-rule {
+    block-out-from "screencast"
     match namespace="^noctalia-notification$"
 }
 
