@@ -64,10 +64,7 @@ window-rule {
     match app-id=r#".*ayugram.*"#
     match app-id=r#".*telegram.*"#
     match title=r#"(?i)bitwarden"#
-}
-layer-rule {
-    block-out-from "screencast"
-    match namespace="^notifications$"
+    match namespace="^noctalia-notification$"
 }
 
 window-rule {
