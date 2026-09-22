@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  inputs,
   config,
   ...
 }:
@@ -11,6 +12,7 @@
 
   programs.helix = {
     enable = true;
+    package = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix;
 
     ignores = [
       ".build/"

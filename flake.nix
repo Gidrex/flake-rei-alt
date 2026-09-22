@@ -17,6 +17,10 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Helix master (build from source on each switch once input is updated).
+    helix.url = "github:helix-editor/helix";
+    helix.inputs.nixpkgs.follows = "nixpkgs";
+
     # Yazi plugins
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
     open-with-cmd.flake = false;
