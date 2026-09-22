@@ -78,10 +78,6 @@ window-rule {
 
 // Per workspace config
 window-rule {
-    match app-id=".*zen"
-    match app-id="glide-glide"
-    match app-id="Yandex-browser"
-    match app-id="chromium"
     match app-id="Hermes"
     open-on-workspace "1"
 }
@@ -93,6 +89,14 @@ window-rule {
     match app-id=r#"(?i)HytaleClient"#
     match app-id="Antigravity"
     open-on-workspace "3"
+}
+
+window-rule {
+    match app-id=".*zen"
+    match app-id="glide-glide"
+    match app-id="Yandex-browser"
+    match app-id="chromium"
+    open-on-workspace "4"
 }
 
 window-rule {
