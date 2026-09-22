@@ -35,12 +35,24 @@ window-rule {
 }
 
 window-rule {
-    open-on-output "HDMI-A-1"
+    open-on-workspace "mini"
     match app-id="foot-mini"
     match app-id="kitty-mini"
     // match app-id="mpv"
     default-column-width { proportion 1.0; }
     open-fullscreen true
+    draw-border-with-background false
+    geometry-corner-radius 0
+    clip-to-geometry true
+    focus-ring {
+        off
+    }
+    border {
+        off
+    }
+    shadow {
+        off
+    }
 }
 
 window-rule {

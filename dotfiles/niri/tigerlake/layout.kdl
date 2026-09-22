@@ -12,3 +12,19 @@ workspace "6" { open-on-output "DP-2"; }
 workspace "7" { open-on-output "DP-2"; }
 workspace "8" { open-on-output "DP-2"; }
 workspace "9" { open-on-output "DP-2"; }
+
+workspace "mini" {
+    open-on-output "HDMI-A-1"
+    layout {
+        gaps 0
+        focus-ring {
+            off
+        }
+        border {
+            off
+        }
+        shadow {
+            off
+        }
+    }
+}
