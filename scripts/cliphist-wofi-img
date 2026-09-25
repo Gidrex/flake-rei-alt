@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# cliphist + wofi with image previews. Pipe stdout to wl-copy.
+# Thumbnails cached in XDG_CACHE_HOME.
+
+thumb_dir="${XDG_CACHE_HOME:-$HOME/.cache}/cliphist/thumbs"
+mkdir -p "$thumb_dir"
+
+# cliphist 0.7.0: default list is `id + preview`, images look like [[ binary data 31 KiB png 633x242 ]]
+cliphist_list="$(cliphist list)"
+
+# drop cached thumbs gone from history
+for thumb in "$thumb_dir"/*; do
+    [ -e "$thumb" ] || continue
+    clip_id="${thumb##*/}"
+    clip_id="${clip_id%.*}"
+    if ! grep -q "^$clip_id\s" <<< "$cliphist_list"; then
+        rm -f "$thumb"
+    fi
+done
+
+# thumbnail uncached images, print img: path; text passes through as-is
+choice=$(gawk -F'\t' -v thumbs="$thumb_dir" '
+{
+    id = $1
+    preview = substr($0, index($0, "\t") + 1)
+    if (match(preview, /^\[\[ binary data [0-9.]+ [A-Za-z]+ ([a-z0-9]+) [0-9]+x[0-9]+ \]\]$/, m)) {
+        image = id "." m[1]
+        cmd = "[ -f \"" thumbs "/" image "\" ] || cliphist decode " id " | magick - -resize \x27256x256>\x27 \"" thumbs "/" image "\""
+        system(cmd)
+        print "img:" thumbs "/" image
+        next
+    }
+    print id "\t" preview
+}' <<< "$cliphist_list" | wofi -I --dmenu --cache-file=/dev/null -Dimage_size=48)
+
+[ -z "$choice" ] && exit 1
+
+if [ "${choice::4}" = "img:" ]; then
+    clip_id="${choice##*/}"
+    cliphist decode "${clip_id%.*}"
+else
+    cliphist decode <<<"$choice"
+fi
