@@ -26,7 +26,7 @@ binds {
     Mod+W { set-column-width "25%"; }
     Mod+A { set-column-width "50%"; }
     Mod+G { set-column-width "75%"; }
-    Mod+F { set-column-width "95%"; }
+    Mod+F { set-column-width "100%"; }
 
     // Monitor navigation
     Mod+R { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh focus HDMI-A-1"; }
