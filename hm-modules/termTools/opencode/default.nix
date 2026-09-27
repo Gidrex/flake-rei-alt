@@ -55,6 +55,7 @@ in
       nix-hm = ./skills/nix-hm;
       lua-shell = ./skills/lua-shell;
       ctx7-docs = ./skills/ctx7-docs;
+      jev-agent = ./skills/jev-agent;
     };
     settings = {
       # Self-update off: nix owns the binary.
@@ -81,4 +82,16 @@ in
 
   # Force ANSI colors (no `plugins` option, placed directly).
   xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;
+
+  # Jev decision skill runtime (non-secret default; key itself stays in sops).
+  home.sessionVariables = {
+    JEV_LANGUAGE = "en-US";
+  };
+
+  # JEV_API_KEY from the decrypted sops file at shell runtime (path only in store).
+  programs.fish.interactiveShellInit = lib.mkIf config.programs.fish.enable ''
+    if test -z "$JEV_API_KEY"; and test -f "${config.sops.secrets.jev_api_key.path}"
+      set -gx JEV_API_KEY (cat "${config.sops.secrets.jev_api_key.path}")
+    end
+  '';
 }

@@ -11,6 +11,7 @@
       gdrive_token = { };
       opencode_api_key = { };
       openrouter_api_key = { };
+      jev_api_key = { };
       searx_secret_key = { };
     };
   };

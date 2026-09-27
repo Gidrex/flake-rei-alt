@@ -48,6 +48,7 @@
 | Nix/home-managerflake change, `nixfmt`, `just qa/check` | `nix-hm` |
 | Lua, shell scripts, `stylua`/`shellcheck` | `lua-shell` |
 | Any third-party framework/SDK/API docs | `ctx7-docs` |
+| Typed decisions (choice/score/noul): routing, gates, review | `jev-agent` |
 
 Load the matching skill **before** coding. It owns the full dev cycle and exact QA gates.
 If two apply (e.g. `nix-hm` + repo-local `.agents` skills), load both.
