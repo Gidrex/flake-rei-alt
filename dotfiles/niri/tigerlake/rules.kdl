@@ -35,6 +35,13 @@ window-rule {
 }
 
 window-rule {
+    open-on-output "DP-2"
+    match app-id="Tabletop Simulator.x86_64"
+    open-fullscreen true
+    default-column-width { proportion 1.0; }
+}
+
+window-rule {
     open-on-workspace "mini"
     match app-id="foot-mini"
     match app-id="kitty-mini"
