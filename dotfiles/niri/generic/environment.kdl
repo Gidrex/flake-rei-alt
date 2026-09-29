@@ -9,7 +9,7 @@ environment {
     XDG_SESSION_TYPE "wayland"
     CLUTTER_BACKEND "wayland"
     QT_QPA_PLATFORM "wayland;xcb"
-    SDL_VIDEODRIVER "wayland"
+    SDL_VIDEODRIVER "wayland,x11"
     GDK_BACKEND "wayland,x11,*"
     GSK_RENDERER "ngl"
 
