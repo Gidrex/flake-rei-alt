@@ -27,7 +27,7 @@ in
   home.packages =
     with pkgs;
     lib.mkIf config.programs.yazi.enable [
-      trash-cli # requirements for boydaihungst/restore.yazi
+      trash-cli # CLI trash utils (trash-list/put/empty); yazi native Trash VFS needs none of it
     ];
 
   programs.yazi = {
@@ -42,7 +42,6 @@ in
         toggle-pane
         piper
         relative-motions
-        restore
         mediainfo
         duckdb
         ;
@@ -99,9 +98,6 @@ in
 
       require("full-border"):setup { type = ui.Border.ROUNDED }
       require("close-and-restore-tab"):setup()
-      require("restore"):setup({
-        show_confirm = false,
-      })
     '';
   };
 
