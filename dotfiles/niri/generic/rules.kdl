@@ -91,8 +91,10 @@ window-rule {
 
 // Per workspace config
 window-rule {
-    match app-id="Hermes"
-    match app-id="com.nousresearch.hermes"
+    match app-id=".*zen"
+    match app-id="glide-glide"
+    match app-id="Yandex-browser"
+    match app-id="chromium"
     open-on-workspace "1"
 }
 
@@ -106,10 +108,8 @@ window-rule {
 }
 
 window-rule {
-    match app-id=".*zen"
-    match app-id="glide-glide"
-    match app-id="Yandex-browser"
-    match app-id="chromium"
+    match app-id="Hermes"
+    match app-id="com.nousresearch.hermes"
     open-on-workspace "4"
 }
 
