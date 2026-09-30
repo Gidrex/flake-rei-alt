@@ -67,6 +67,10 @@
           wraps = "nvim";
           body = "${pkgs.neovim}/bin/nvim $argv";
         };
+        nv = {
+          wraps = "nvim";
+          body = "${pkgs.neovim}/bin/nvim $argv";
+        };
       })
 
       # `..` == `cd ..`, `...` == `cd ../..`, and so on.
