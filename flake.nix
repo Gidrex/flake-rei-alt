@@ -20,8 +20,10 @@
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Neovim config as a standalone flake (single enable = full config).
-    nixvim-rei.url = "path:/home/gidrex/Projects/nixvim-rei";
+    # Neovim config as a standalone flake. The justfile rebuild recipes
+    # (`hm`, `check`, `nvim-smoke`) override this with the local checkout
+    # when /home/gidrex/Projects/nixvim-rei exists (see justfile).
+    nixvim-rei.url = "gitlab:gidrex/nixvim-rei";
     nixvim-rei.inputs.nixpkgs.follows = "nixpkgs";
     nixvim-rei.inputs.home-manager.follows = "home-manager";
     nixvim-rei.inputs.sops-nix.follows = "sops-nix";

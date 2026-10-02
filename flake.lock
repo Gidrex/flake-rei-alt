@@ -155,14 +155,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1790963040,
-        "narHash": "sha256-c9Rs0MXA0aMtKnrnGh4aQ+QrdDrKUmKGpPeojDQqs7Y=",
-        "path": "/home/gidrex/Projects/nixvim-rei",
-        "type": "path"
+        "lastModified": 1790964186,
+        "narHash": "sha256-XGm6R40yR9zPTfo74j01hcURDOPSSUu0uakqYlo14mA=",
+        "owner": "gidrex",
+        "repo": "nixvim-rei",
+        "rev": "00f9d72a2efec4c190cafa65137cc1954167a747",
+        "type": "gitlab"
       },
       "original": {
-        "path": "/home/gidrex/Projects/nixvim-rei",
-        "type": "path"
+        "owner": "gidrex",
+        "repo": "nixvim-rei",
+        "type": "gitlab"
       }
     },
     "open-with-cmd": {
