@@ -32,9 +32,10 @@ check machine="all":
     done
 
 # Headless smoke test of the working-tree neovim config (catches startup Lua errors
-# like E5113 before `just hm`). Assembles a scratch XDG home from the working-tree
-# lua/ plus the plugin set from the working-tree eval (no system changes, no apply
-# needed). Requires FLAKE_MACHINE.
+# like E5113 before `just hm`). Assembles a scratch XDG home from the generated
+# init.lua plus the plugin set from the working-tree eval; also builds the nixvim
+# package (byte-compile check). No system changes, no apply needed.
+# Requires FLAKE_MACHINE.
 nvim-smoke:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -42,23 +43,23 @@ nvim-smoke:
     work=$(mktemp -d)
     trap 'rm -rf "$work"' EXIT
     mkdir -p "$work/config/nvim" "$work/data/nvim/site/pack/hm/start"
-    ln -s "$PWD/hm-modules/termTools/neovim/lua" "$work/config/nvim/lua"
-    mapfile -t pairs < <(nix eval --impure --raw ".#homeConfigurations.$FLAKE_MACHINE.config.programs.neovim.plugins" --apply 'ps: builtins.concatStringsSep "\n" (map (p: (p.name or p.pname) + "=" + toString p) ps)')
-    drvs=()
-    names=()
-    for pair in "${pairs[@]}"; do
-      names+=("${pair%%=*}")
-      drvs+=("${pair#*=}")
-    done
+    # Generated init.lua and extraFiles, built for real (unbuilt store paths dangle)
+    initfile=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.initSource" | tail -1)
+    ln -s "$initfile" "$work/config/nvim/init.lua"
+    extrafiles=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.extraFiles" | tail -1)
+    if [ -d "$extrafiles/lua" ]; then
+      ln -s "$extrafiles/lua" "$work/config/nvim/lua"
+    fi
+    mapfile -t drvs < <(nix eval --impure --raw ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.plugins" --apply 'ps: builtins.concatStringsSep "\n" (map (p: toString p.plugin) ps)')
     mapfile -t outs < <(nix build --impure --no-link --print-out-paths "${drvs[@]}" | grep '^/nix/store')
-    for i in "${!outs[@]}"; do
-      ln -s "${outs[$i]}" "$work/data/nvim/site/pack/hm/start/${names[$i]}"
+    i=0
+    for out in "${outs[@]}"; do
+      ln -s "$out" "$work/data/nvim/site/pack/hm/start/p$i"
+      i=$((i + 1))
     done
-    keypath=$(nix eval --impure --raw ".#homeConfigurations.$FLAKE_MACHINE.config.sops.secrets.opencode_api_key.path")
-    codelldb=$(nix eval --impure --raw ".#homeConfigurations.$FLAKE_MACHINE.config.programs.neovim.extraPackages" --apply 'ps: let l = builtins.filter (p: (p.pname or "") == "vscode-extension-vadimcn-vscode-lldb") ps; in "${builtins.head l}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb"')
-    printf 'vim.g.minuet_api_key_file = "%s";\nvim.g.codelldb_path = "%s";\nrequire('"'"'init'"'"')\n' "$keypath" "$codelldb" > "$work/config/nvim/init.lua"
     log="$work/smoke.log"
-    XDG_CONFIG_HOME="$work/config" XDG_DATA_HOME="$work/data" nvim --headless -i NONE -c 'qa!' > "$log" 2>&1 || true
+    pkg=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
+    XDG_CONFIG_HOME="$work/config" XDG_DATA_HOME="$work/data" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || true
     if grep -qE 'E[0-9]+:|Error' "$log"; then echo "nvim-smoke: FAIL"; cat "$log"; exit 1; fi
     echo "nvim-smoke: OK (${#outs[@]} plugins linked)"
 

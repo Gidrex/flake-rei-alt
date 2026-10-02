@@ -20,6 +20,10 @@
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # NixVim (neovim as Nix modules, tracks nixpkgs).
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+
     # Yazi plugins
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
     open-with-cmd.flake = false;
@@ -43,6 +47,7 @@
         ./hm-modules
         inputs.sops-nix.homeManagerModules.sops
         inputs.catppuccin.homeModules.catppuccin
+        inputs.nixvim.homeModules.nixvim
       ];
 
       # New machine: one line here + machines/<name>/default.nix.

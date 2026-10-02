@@ -34,10 +34,10 @@
 - `Space G l` — file history (Diffview)
 - `]c` / `[c` — next / prev hunk
 
-## AI completion (minuet, Muse Spark)
+## AI completion (minuet, DeepSeek V4.1 Flash)
 
-- suggestions appear in the blink menu while typing
-- `Alt+y` (insert mode) — invoke manually
+- `Alt+y` (insert mode) — invoke manually (auto is off: no network lag while typing)
+- `Ctrl+n` / `Ctrl+p` — next / prev suggestion; `Ctrl+y` or `Enter` — accept; `Ctrl+e` — dismiss
 
 ## Surround / comment
 

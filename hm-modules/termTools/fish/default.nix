@@ -62,7 +62,7 @@
         '';
       })
 
-      (lib.mkIf config.programs.neovim.enable {
+      (lib.mkIf config.programs.nixvim.enable {
         n = {
           wraps = "nvim";
           body = "${pkgs.neovim}/bin/nvim $argv";
