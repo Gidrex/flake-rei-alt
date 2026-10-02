@@ -31,6 +31,30 @@ check machine="all":
       nix build --impure ".#homeConfigurations.$h.activationPackage" --dry-run
     done
 
+# Headless startup check of the nixvim config from the nixvim-rei input
+# (catches Lua errors like E5113 that eval can't see). Plugins come from the
+# wrapper itself, so no per-plugin assembly. Requires FLAKE_MACHINE.
+# Not part of `qa` (slow). Develop the config in /home/gidrex/Projects/nixvim-rei
+# (it has its own `just nvim-smoke` against a minimal smoke host).
+nvim-smoke:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${FLAKE_MACHINE:?Set FLAKE_MACHINE=icelake|tigerlake}"
+    work=$(mktemp -d)
+    trap 'rm -rf "$work"' EXIT
+    mkdir -p "$work/config/nvim"
+    initfile=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.initSource" | tail -1)
+    ln -s "$initfile" "$work/config/nvim/init.lua"
+    extrafiles=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.extraFiles" | tail -1)
+    if [ -d "$extrafiles/lua" ]; then
+      ln -s "$extrafiles/lua" "$work/config/nvim/lua"
+    fi
+    pkg=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
+    log="$work/smoke.log"
+    XDG_CONFIG_HOME="$work/config" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || true
+    if grep -qE 'E[0-9]+:|Error' "$log"; then echo "nvim-smoke: FAIL"; cat "$log"; exit 1; fi
+    echo "nvim-smoke: OK"
+
 # Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
 hm:
     #!/usr/bin/env bash

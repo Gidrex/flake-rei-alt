@@ -32,12 +32,12 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 - `flake.nix` → slim outputs: `nix/vars.nix` (user/keys/theme constants) + `nix/pkgs.nix`
   (locked nixpkgs instantiation) + `nix/yazi-plugins.nix` (cleaned external plugins) compose
-  `commonModules` (`hm-modules/` + sops-nix + catppuccin) with `machines/<name>/default.nix`.
+  `commonModules` (`hm-modules/` + sops-nix + catppuccin + nixvim-rei) with `machines/<name>/default.nix`.
   Machines are an **explicit map** (`flake.nix:48-51`) that `genAttrs` turns into `homeConfigurations`
   (flake.nix:54) — adding a machine needs a flake edit, see `.agents/skills/add-machine/`.
 - `hm-modules/default.nix` = single wiring point for shared modules (add new modules there, not in `flake.nix`).
 - `hm-modules/` grouped by area: `core/{nix,identity,packages,theme}`, `shell/{vcs,search,system}`,
-  `docs.nix`, `termTools/{fish,helix,neovim,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
+  `docs.nix`, `termTools/{fish,helix,nixvim-rei,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
 - Modules get `vars`, `inputs`, `yazi-plugins` via `extraSpecialArgs` in `flake.nix:61` — declare them
   as function args where needed (e.g. yazi plugins); no `_module.args` magic.
 - Machine deltas are minimal: per-machine foot font size (from `vars.footFontSize`),
@@ -63,5 +63,7 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
   adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
 - `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
 - Global theme: catppuccin `mocha`, `autoEnable = true`. `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
-- Neovim Lua lives in `hm-modules/termTools/nixvim/lua/`; `.luarc.json` disables `undefined-global` diagnostics
-  (Neovim provides those globals — not a real bug).
+- Neovim config lives in the standalone `nixvim-rei` flake (`/home/gidrex/Projects/nixvim-rei`,
+  input in `flake.nix`); this repo only sets `programs.nixvim-rei.enable = true`
+  (`hm-modules/termTools/nixvim-rei.nix`). Its Lua + `.luarc.json` (`undefined-global`
+  disabled — Neovim provides those globals, not a bug) live there too.

@@ -20,9 +20,12 @@
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # NixVim (neovim as Nix modules, tracks nixpkgs).
-    nixvim.url = "github:nix-community/nixvim";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    # Neovim config as a standalone flake (single enable = full config).
+    nixvim-rei.url = "path:/home/gidrex/Projects/nixvim-rei";
+    nixvim-rei.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim-rei.inputs.home-manager.follows = "home-manager";
+    nixvim-rei.inputs.sops-nix.follows = "sops-nix";
+    nixvim-rei.inputs.catppuccin.follows = "catppuccin";
 
     # Yazi plugins
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
@@ -47,7 +50,6 @@
         ./hm-modules
         inputs.sops-nix.homeManagerModules.sops
         inputs.catppuccin.homeModules.catppuccin
-        inputs.nixvim.homeModules.nixvim
       ];
 
       # New machine: one line here + machines/<name>/default.nix.

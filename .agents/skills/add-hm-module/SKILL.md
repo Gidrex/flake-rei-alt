@@ -7,7 +7,7 @@ description: Use when adding or changing a home-manager module, fish function, y
 
 Layout: `hm-modules/default.nix` is the single wiring point; shared code lives in
 `hm-modules/` grouped by area (`core/{nix,identity,packages,theme}`, `shell/{vcs,search,system}`,
-`docs.nix`, `termTools/{fish,helix,neovim,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`);
+`docs.nix`, `termTools/{fish,helix,nixvim-rei,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`);
 `machines/<name>/default.nix` is the machine delta. A new shared module must be
 **added to the `imports` in `hm-modules/default.nix`**, otherwise it is not part of the build.
 
