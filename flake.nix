@@ -16,10 +16,6 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Helix master, built from source.
-    helix.url = "github:helix-editor/helix";
-    helix.inputs.nixpkgs.follows = "nixpkgs";
-
     # Neovim config as a standalone flake. The justfile rebuild recipes
     # (`hm`, `check`, `nvim-smoke`) override this with the local checkout
     # when /home/gidrex/Projects/nixvim-rei exists (see justfile).
