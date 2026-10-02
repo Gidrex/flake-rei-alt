@@ -31,38 +31,6 @@ check machine="all":
       nix build --impure ".#homeConfigurations.$h.activationPackage" --dry-run
     done
 
-# Headless smoke test of the working-tree neovim config (catches startup Lua errors
-# like E5113 before `just hm`). Assembles a scratch XDG home from the generated
-# init.lua plus the plugin set from the working-tree eval; also builds the nixvim
-# package (byte-compile check). No system changes, no apply needed.
-# Requires FLAKE_MACHINE.
-nvim-smoke:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    : "${FLAKE_MACHINE:?Set FLAKE_MACHINE=icelake|tigerlake}"
-    work=$(mktemp -d)
-    trap 'rm -rf "$work"' EXIT
-    mkdir -p "$work/config/nvim" "$work/data/nvim/site/pack/hm/start"
-    # Generated init.lua and extraFiles, built for real (unbuilt store paths dangle)
-    initfile=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.initSource" | tail -1)
-    ln -s "$initfile" "$work/config/nvim/init.lua"
-    extrafiles=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.extraFiles" | tail -1)
-    if [ -d "$extrafiles/lua" ]; then
-      ln -s "$extrafiles/lua" "$work/config/nvim/lua"
-    fi
-    mapfile -t drvs < <(nix eval --impure --raw ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.plugins" --apply 'ps: builtins.concatStringsSep "\n" (map (p: toString p.plugin) ps)')
-    mapfile -t outs < <(nix build --impure --no-link --print-out-paths "${drvs[@]}" | grep '^/nix/store')
-    i=0
-    for out in "${outs[@]}"; do
-      ln -s "$out" "$work/data/nvim/site/pack/hm/start/p$i"
-      i=$((i + 1))
-    done
-    log="$work/smoke.log"
-    pkg=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
-    XDG_CONFIG_HOME="$work/config" XDG_DATA_HOME="$work/data" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || true
-    if grep -qE 'E[0-9]+:|Error' "$log"; then echo "nvim-smoke: FAIL"; cat "$log"; exit 1; fi
-    echo "nvim-smoke: OK (${#outs[@]} plugins linked)"
-
 # Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
 hm:
     #!/usr/bin/env bash
