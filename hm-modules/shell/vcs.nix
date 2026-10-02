@@ -37,7 +37,30 @@ in
 
     lazygit = {
       enable = true;
-      settings.gui.nerdFontsVersion = "3";
+      settings = {
+        gui.nerdFontsVersion = "3";
+        git.autoFetch = false; # No startup fetch (slow)
+        # Catppuccin Mocha (matches the global theme; lazygit has no auto-theme)
+        gui.theme = {
+          activeBorderColor = [
+            "#89b4fa"
+            "bold"
+          ];
+          inactiveBorderColor = [ "#a6adc8" ];
+          searchingActiveBorderColor = [
+            "#89b4fa"
+            "bold"
+          ];
+          optionsTextColor = [ "#89b4fa" ];
+          selectedLineBgColor = [ "#313244" ];
+          cherryPickedCommitFgColor = [ "#89b4fa" ];
+          cherryPickedCommitBgColor = [ "#cba6f7" ];
+          markedBaseCommitFgColor = [ "#89b4fa" ];
+          markedBaseCommitBgColor = [ "#f9e2af" ];
+          unstagedChangesColor = [ "#f38ba8" ];
+          defaultFgColor = [ "#cdd6f4" ];
+        };
+      };
     };
   };
 }
