@@ -3,16 +3,25 @@
 - `Alt+w` — save file
 - `Alt+q` — quit
 - `Z` — LazyGit (floating window); `ZZ` / `ZQ` are disabled
+- `Ctrl+y` — yazi picker (overrides Vim-default scroll-up)
+- files auto-format on save (conform); no manual format key
+
+## Motion
+
+- `g h` — first character of line
+- `g l` — last character of line
 
 ## Space menu (leader = space)
 
-- `Space f` — file picker
-- `Space b` — buffers
+- `Space f` — file picker, text files only (input focused, type right away)
+- `Space b` — buffers (input focused, type right away)
 - `Space g` — git status
 - `Space /` — live grep
 - `Space d` — diagnostics
+- snacks pickers never dim the current buffer
 - `Space x` — diagnostics list (Trouble)
-- `Space y` — yazi picker
+- `Space y` — yank selection to system clipboard (visual)
+- `Space p` — paste from system clipboard
 - `Space q` — calculator (qalc)
 - `Space a` — outline (Aerial)
 - `Space Space` — reload buffer
@@ -20,7 +29,6 @@
 - `Space r` — rename symbol
 - `Space D` — go to definition
 - `Space h` — hover docs
-- `Space F` — format buffer
 - `Space i` — toggle inlay hints
 
 ## Git review (Space G)
@@ -30,9 +38,10 @@
 - `Space G p` — preview hunk
 - `Space G b` — blame line
 - `Space G d` — diff current buffer
-- `Space G D` — side-by-side diff (Diffview)
-- `Space G l` — file history (Diffview)
-- `]c` / `[c` — next / prev hunk
+- `Space G D` — side-by-side diff (Diffview, `q` to quit)
+- `Space G l` — file history (Diffview, `q` to quit)
+- `]c` / `[c` — next / prev hunk (same: `]g` / `[g`)
+- `]G` / `[G` — last / first change in file
 
 ## AI completion (minuet, DeepSeek V4.1 Flash)
 

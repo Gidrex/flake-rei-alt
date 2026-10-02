@@ -24,6 +24,5 @@ Hard rules:
   same style (`-` lists, `` `keys` — description ``, English, brief). No keybind change without doc update.
 
 Verify before finishing: `nixfmt --check --width 120` on touched `.nix` files,
-`FLAKE_MACHINE=<machine> just nvim-smoke` (headless startup test of the generated
-config, catches E-codes like E5113), `just qa`, `just check` (both machines).
+`just qa`, `just check` (both machines).
 Never run `just hm` unless explicitly asked.

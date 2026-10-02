@@ -14,8 +14,4 @@ function M.is_not_deno(_, ctx)
   return not in_deno_project(ctx)
 end
 
-function M.format_buffer()
-  require("conform").format({ async = true, lsp_format = "fallback" })
-end
-
 return M

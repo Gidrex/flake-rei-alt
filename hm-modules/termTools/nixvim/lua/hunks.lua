@@ -22,4 +22,24 @@ function M.prev()
   end
 end
 
+function M.first()
+  if vim.wo.diff then
+    vim.cmd.normal({ "gg]c", bang = true })
+  else
+    vim.schedule(function()
+      require("gitsigns").nav_hunk("first")
+    end)
+  end
+end
+
+function M.last()
+  if vim.wo.diff then
+    vim.cmd.normal({ "G[c", bang = true })
+  else
+    vim.schedule(function()
+      require("gitsigns").nav_hunk("last")
+    end)
+  end
+end
+
 return M

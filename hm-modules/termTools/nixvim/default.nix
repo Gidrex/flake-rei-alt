@@ -17,6 +17,15 @@ let
     inherit desc;
     mode = "n";
   };
+
+  # q quits Diffview from diff buffers and both file panels (upstream binds q
+  # only in option/help panels); merged over defaults, user keys win.
+  diffviewQuit = {
+    mode = "n";
+    key = "q";
+    action.__raw = "require('diffview.actions').close";
+    description = "Close Diffview";
+  };
 in
 {
   catppuccin.nvim.enable = false;
@@ -120,16 +129,52 @@ in
           action.__raw = "require('hunks').prev";
           options.desc = "Prev hunk";
         }
-        # Yazi picker (yazi with a chooser file); <C-y> stays a Vim default.
+        # Same jumps, git-mnemonic aliases; [G/]G go to the first/last change
         {
           mode = "n";
-          key = "<leader>y";
+          key = "]g";
+          action.__raw = "require('hunks').next";
+          options.desc = "Next Change";
+        }
+        {
+          mode = "n";
+          key = "[g";
+          action.__raw = "require('hunks').prev";
+          options.desc = "Prev Change";
+        }
+        {
+          mode = "n";
+          key = "]G";
+          action.__raw = "require('hunks').last";
+          options.desc = "Last Change";
+        }
+        {
+          mode = "n";
+          key = "[G";
+          action.__raw = "require('hunks').first";
+          options.desc = "First Change";
+        }
+        # Line edges (gh overrides the Vim-default select-mode mapping)
+        (mkN "gh" "0" "First Character of Line")
+        (mkN "gl" "$" "Last Character of Line")
+        # Yazi picker (yazi with a chooser file); <C-y> overrides the Vim-default scroll-up.
+        {
+          mode = "n";
+          key = "<C-y>";
           action.__raw = "require('helpers').open_yazi_picker";
           options = {
             silent = true;
             desc = "Yazi Picker";
           };
         }
+        # System clipboard (wl-copy/wl-paste provider): yank selection, paste anywhere.
+        {
+          mode = "v";
+          key = "<leader>y";
+          action = "\"+y";
+          options.desc = "Yank Selection to System Clipboard";
+        }
+        (mkN "<leader>p" "\"+p" "Paste from System Clipboard")
         # Minuet: manual AI completion trigger (auto runs via blink source, see lua/minuet-setup.lua)
         {
           mode = "i";
@@ -311,6 +356,11 @@ in
       };
       diffview = {
         enable = true;
+        settings.keymaps = {
+          view = [ diffviewQuit ];
+          file_panel = [ diffviewQuit ];
+          file_history_panel = [ diffviewQuit ];
+        };
         lazyLoad.settings.cmd = [
           "DiffviewOpen"
           "DiffviewFileHistory"
@@ -328,9 +378,18 @@ in
       };
       snacks = {
         enable = true;
-        settings.picker.enabled = true;
+        settings.picker = {
+          enabled = true;
+          # Pickers never dim the current buffer behind them
+          layout.backdrop = false;
+        };
         lazyLoad.settings.keys = [
-          (snacksKey "<leader>f" "function() Snacks.picker.files() end" "File Picker")
+          # Files opens with input focused: type to filter, C-n/C-p to move, Enter to open, Esc to close
+          (snacksKey "<leader>f"
+            "function() Snacks.picker.files({ exclude = { '*.png', '*.jpg', '*.jpeg', '*.webp', '*.gif', '*.bmp', '*.ico', '*.svg', '*.avif', '*.tif', '*.tiff', '*.heic', '*.pdf', '*.doc', '*.docx', '*.xls', '*.xlsx', '*.ppt', '*.pptx', '*.odt', '*.zip', '*.tar', '*.gz', '*.bz2', '*.xz', '*.7z', '*.rar', '*.zst', '*.mp3', '*.wav', '*.ogg', '*.flac', '*.m4a', '*.mp4', '*.mkv', '*.webm', '*.avi', '*.mov', '*.ttf', '*.otf', '*.woff', '*.woff2', '*.exe', '*.msi', '*.dmg', '*.iso', '*.db', '*.sqlite', '*.sqlite3', '*.pyc', '*.class', '*.o', '*.so', '*.dll' } }) end"
+            "File Picker"
+          )
+          # Buffers opens with input focused, same seamless flow as files
           (snacksKey "<leader>b" "function() Snacks.picker.buffers() end" "Buffers")
           (snacksKey "<leader>g" "function() Snacks.picker.git_status() end" "Git Status (Diff)")
           (snacksKey "<leader>/" "function() Snacks.picker.grep() end" "Live Grep")
@@ -458,12 +517,8 @@ in
             lsp_format = "fallback";
           };
         };
-        lazyLoad.settings = {
-          event = "BufWritePre";
-          keys = [
-            (snacksKey "<leader>F" "require('format-cond').format_buffer" "Format Buffer")
-          ];
-        };
+        # Auto-format on save (format_on_save above); no manual bind by design
+        lazyLoad.settings.event = "BufWritePre";
       };
 
       dap.enable = true;
