@@ -38,7 +38,13 @@ function M.open_yazi_picker()
   if start == "" then
     start = vim.fn.getcwd()
   end
-  local cmd = "yazi " .. vim.fn.shellescape(start) .. " --chooser-file=" .. vim.fn.shellescape(tmp)
+  -- No Wayland/X11 for yazi here: ueberzugpp draws its overlay against the foot
+  -- window, not this 90% float, so images land offset. Without a display yazi
+  -- falls back to inline chafa (correctly positioned, terminal bg).
+  local cmd = "env -u WAYLAND_DISPLAY -u DISPLAY yazi "
+    .. vim.fn.shellescape(start)
+    .. " --chooser-file="
+    .. vim.fn.shellescape(tmp)
   M.float_term(cmd, function()
     local f = io.open(tmp, "r")
     if f then

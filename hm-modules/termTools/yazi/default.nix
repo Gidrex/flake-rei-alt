@@ -38,7 +38,7 @@ in
     plugins = {
       inherit (pkgs.yaziPlugins)
         chmod
-        full-border
+        # full-border
         toggle-pane
         piper
         relative-motions
@@ -70,7 +70,7 @@ in
         (mkPreviewer "mediainfo" "{audio/*,video/*,image/*,application/subrip,application/postscript}")
         {
           url = "*/";
-          run = ''piper -- ${pkgs.eza}/bin/eza --tree --level=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
+          run = ''piper -- ${pkgs.eza}/bin/eza --tree --level=2 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
         }
         {
           url = "*.md";
@@ -96,7 +96,7 @@ in
         column_fit_factor = 10.0
       })
 
-      require("full-border"):setup { type = ui.Border.ROUNDED }
+      -- require("full-border"):setup { type = ui.Border.ROUNDED }
       require("close-and-restore-tab"):setup()
     '';
   };

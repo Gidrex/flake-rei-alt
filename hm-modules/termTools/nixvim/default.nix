@@ -79,6 +79,10 @@ in
       settings = {
         flavour = "mocha";
         compile.enabled = false;
+        # Single background everywhere: foot bg shows through the editor,
+        # floats (pickers, lazygit/yazi terms) and borders alike.
+        transparent_background = true;
+        float.transparent = true;
       };
     };
 
