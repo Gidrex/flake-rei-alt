@@ -15,7 +15,7 @@
 
     ./termTools/fish
     ./termTools/helix
-    ./termTools/neovim
+    ./termTools/nixvim
     ./termTools/opencode
     ./termTools/yazi
     ./termTools/less.nix

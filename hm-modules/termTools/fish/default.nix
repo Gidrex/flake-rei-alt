@@ -63,13 +63,17 @@
       })
 
       (lib.mkIf config.programs.nixvim.enable {
+        # NOTE: vanilla ${pkgs.neovim} must NOT be used here: it reads the
+        # nixvim-generated init.lua without the pack-dir on rtp, so
+        # require("lz.n") fails with E5113. build.package is the wrapper
+        # that sets packpath/rtp via --cmd.
         n = {
           wraps = "nvim";
-          body = "${pkgs.neovim}/bin/nvim $argv";
+          body = "${config.programs.nixvim.build.package}/bin/nvim $argv";
         };
         nv = {
           wraps = "nvim";
-          body = "${pkgs.neovim}/bin/nvim $argv";
+          body = "${config.programs.nixvim.build.package}/bin/nvim $argv";
         };
       })
 

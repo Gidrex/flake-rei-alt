@@ -63,5 +63,5 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
   adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
 - `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
 - Global theme: catppuccin `mocha`, `autoEnable = true`. `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
-- Neovim Lua lives in `hm-modules/termTools/neovim/lua/`; `.luarc.json` disables `undefined-global` diagnostics
+- Neovim Lua lives in `hm-modules/termTools/nixvim/lua/`; `.luarc.json` disables `undefined-global` diagnostics
   (Neovim provides those globals — not a real bug).

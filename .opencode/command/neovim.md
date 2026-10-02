@@ -4,7 +4,7 @@ description: Add a Neovim feature to this home-manager flake (plugins, LSP, keyb
 
 Add this Neovim feature: $ARGUMENTS
 
-Scope: `hm-modules/termTools/neovim/default.nix` (single file: `programs.nixvim`
+Scope: `hm-modules/termTools/nixvim/default.nix` (single file: `programs.nixvim`
 opts, keymaps, autoCmd, plugins, extraConfigLua — no `lua/` directory, init is generated).
 
 Load these skills first: `nix-hm`, `add-hm-module`, `verify-hm-change`, `lua-shell`
