@@ -3,7 +3,8 @@
 {
   codelldbPath = "${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb";
 
-  # Snacks entries double as lz.n triggers.
+  # Snacks entries double as lz.n triggers. Callback must be a function
+  # expression: lz.n evaluates the spec table at startup.
   snacksKey = key: callback: desc: {
     __unkeyed-1 = key;
     __unkeyed-2.__raw = callback;

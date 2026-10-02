@@ -18,6 +18,7 @@
 ## Space menu (leader = space)
 
 - `Space f` — file picker, text files only (input focused, type right away)
+- `Space F` — files in current buffer's directory
 - `Space b` — buffers (input focused, type right away)
 - `Space g` — git status
 - `Space /` — live grep

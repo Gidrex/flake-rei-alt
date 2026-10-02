@@ -34,11 +34,9 @@ in
         layout.backdrop = false;
       };
       lazyLoad.settings.keys = [
-        # Files opens with input focused.
-        (snacksKey "<leader>f"
-          "function() Snacks.picker.files({ exclude = { '*.png', '*.jpg', '*.jpeg', '*.webp', '*.gif', '*.bmp', '*.ico', '*.svg', '*.avif', '*.tif', '*.tiff', '*.heic', '*.pdf', '*.doc', '*.docx', '*.xls', '*.xlsx', '*.ppt', '*.pptx', '*.odt', '*.zip', '*.tar', '*.gz', '*.bz2', '*.xz', '*.7z', '*.rar', '*.zst', '*.mp3', '*.wav', '*.ogg', '*.flac', '*.m4a', '*.mp4', '*.mkv', '*.webm', '*.avi', '*.mov', '*.ttf', '*.otf', '*.woff', '*.woff2', '*.exe', '*.msi', '*.dmg', '*.iso', '*.db', '*.sqlite', '*.sqlite3', '*.pyc', '*.class', '*.o', '*.so', '*.dll' } }) end"
-          "File Picker"
-        )
+        # <leader>f searches from cwd, <leader>F from the current buffer's dir.
+        (snacksKey "<leader>f" "function() require('pickers').files() end" "File Picker")
+        (snacksKey "<leader>F" "function() require('pickers').files_here() end" "Files Here")
         (snacksKey "<leader>b" "function() Snacks.picker.buffers() end" "Buffers")
         (snacksKey "<leader>g" "function() Snacks.picker.git_status() end" "Git Status (Diff)")
         (snacksKey "<leader>/" "function() Snacks.picker.grep() end" "Live Grep")
