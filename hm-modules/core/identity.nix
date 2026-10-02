@@ -8,8 +8,8 @@
     enableNixpkgsReleaseCheck = false;
 
     sessionVariables = {
-      EDITOR = "hx";
-      VISUAL = "hx";
+      # EDITOR = "hx";
+      # VISUAL = "hx";
       SHELL = "fish";
       TERM = "foot";
 

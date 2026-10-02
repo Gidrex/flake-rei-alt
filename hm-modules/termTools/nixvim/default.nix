@@ -34,6 +34,8 @@ in
     enable = true;
     viAlias = true;
     vimAlias = true;
+    # This nixvim is the default editor (sets EDITOR/VISUAL=nvim)
+    defaultEditor = true;
 
     # nixvim.inputs.nixpkgs follows nixpkgs in flake.nix by design;
     # pin the source explicitly to silence the follows warning.
@@ -308,6 +310,12 @@ in
         pattern = "gitcommit";
         callback.__raw = "require('autocmds').gitcommit_opts";
       }
+      # CSV buffers render as an aligned table out of the box
+      {
+        event = "FileType";
+        pattern = "csv";
+        callback.__raw = "function() require('csvview').enable() end";
+      }
       # Show inlay hints when the server provides them
       {
         event = "LspAttach";
@@ -402,7 +410,21 @@ in
       };
       render-markdown = {
         enable = true;
+        settings = {
+          # Heading background spans the text only, not the full window width
+          heading.width = "block";
+          # Right padding mirrors the overlay icon indent on the left
+          # (default icons are ~2 cells wide); bump if icons change
+          heading.right_pad = 1;
+          # Cursor line stays rendered; raw markup shows only in insert mode
+          # (global render_modes already exclude insert)
+          anti_conceal.enabled = false;
+        };
         lazyLoad.settings.ft = "markdown";
+      };
+      # CSV renders as an aligned table (eager: tiny plugin, enabled per buffer below)
+      csvview = {
+        enable = true;
       };
       indent-blankline = {
         enable = true;

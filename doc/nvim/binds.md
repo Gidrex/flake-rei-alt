@@ -11,6 +11,10 @@
 - `g h` — first character of line
 - `g l` — last character of line
 
+## CSV (auto-rendered table)
+
+- opens as an aligned table with sticky header; `:CsvViewToggle` to switch back to raw text
+
 ## Space menu (leader = space)
 
 - `Space f` — file picker, text files only (input focused, type right away)
