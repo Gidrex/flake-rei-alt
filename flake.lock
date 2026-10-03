@@ -134,11 +134,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790965515,
-        "narHash": "sha256-CbTkU/D7BtGuSGvUVuo1m94dxOkDtbe/HGY43K3zG9g=",
+        "lastModified": 1790986443,
+        "narHash": "sha256-xK68mL92gqS7lq+5SZY8suqsl5OFW1DD0ID3gcmVzIs=",
         "owner": "gidrex",
         "repo": "nixvim-rei",
-        "rev": "fec8d2e929d64c10866431657c10eb719bf01a72",
+        "rev": "2d45b887e40409e5c7a2c3c79789e6da6bc1bce8",
         "type": "gitlab"
       },
       "original": {
