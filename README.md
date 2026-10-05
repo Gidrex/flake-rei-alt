@@ -19,7 +19,6 @@ nix run --experimental-features "flakes nix-command" home-manager/master -- swit
 ```
 
 ## Setup niri config (icelake, tigerlake):
-
 ```sh
 export FLAKE_MACHINE=<machine name>
 ~/flake-rei/scripts/setup_niri.sh
@@ -31,3 +30,8 @@ If `~/.config/niri` already exists, the script moves it to a timestamped backup
 ## rclone gdrive mount
 Declarative via `hm-modules/security/rclone.nix` + sops secrets (`gdrive_*`).
 Mounts automatically to `~/gdrive`. Remount: `gd init`.
+
+## searxng
+
+For add a search engine, add:
+`http://localhost:8888/search?q=%s&category_general=1&language=auto&time_range=&safesearch=0&theme=simple` 

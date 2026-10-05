@@ -1,6 +1,13 @@
 layout {
-    default-column-width { proportion 0.9; }
+    default-column-width { proportion 0.95; }
     gaps 1
+
+    focus-ring {
+        off
+    }
+    border {
+        off
+    }
 
     struts {
         left 2
@@ -16,3 +23,6 @@ workspace "3" { open-on-output "eDP-1"; }
 workspace "4" { open-on-output "eDP-1"; }
 workspace "5" { open-on-output "eDP-1"; }
 workspace "6" { open-on-output "eDP-1"; }
+workspace "7" { open-on-output "eDP-1"; }
+workspace "8" { open-on-output "eDP-1"; }
+workspace "9" { open-on-output "eDP-1"; }
