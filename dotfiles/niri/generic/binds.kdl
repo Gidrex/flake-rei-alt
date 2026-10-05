@@ -1,5 +1,6 @@
 binds {
     Mod+T { spawn "footclient"; }
+    Mod+N { spawn "footclient" "--title" "notes" "sh" "-c" "cd ~/Notes && f=$(fzf) && [ -n \"$f\" ] && ${EDITOR:-nvim} \"$HOME/Notes/$f\""; }
     Mod+X { spawn-sh "/home/gidrex/flake-rei/scripts/OCR_select_area.sh"; }
 
     Mod+B { toggle-window-floating; }

@@ -54,6 +54,19 @@ window-rule {
     default-window-height { proportion 1.0; }
 }
 
+// Notes: foot --title notes opens as a floating window on the current
+// workspace, hidden from screencasts.
+// Height 0.993 ~= 4px top/bottom margins (icelake 960 logical px -> ~3.4px,
+// tigerlake 1440 -> ~5px). Exact px margins are impossible for floating
+// windows in niri (no calc(); gaps apply to tiling only).
+window-rule {
+    match title="^notes$"
+    open-floating true
+    default-column-width { proportion 0.6; }
+    default-window-height { proportion 0.92; }
+    block-out-from "screencast"
+}
+
 // 1.0 proportion
 window-rule {
     match app-id=".*zen"
