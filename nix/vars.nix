@@ -26,7 +26,7 @@
   # Foot font size per machine; key = machines/<name>.
   footFontSize = {
     icelake = 9;
-    tigerlake = 15;
+    tigerlake = 16;
   };
 
   # Do not bump without a home-manager migration.
