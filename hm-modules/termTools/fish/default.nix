@@ -30,7 +30,7 @@
         };
         e.body = "$EDITOR $argv";
         hmr.body = builtins.readFile ./hmr_function.fish;
-        hm.body = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup $argv";
+        hm.body = "~/flake-rei/scripts/hm.sh $argv";
       }
 
       (lib.mkIf config.programs.eza.enable {

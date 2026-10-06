@@ -2,6 +2,7 @@
 
 # Local nixvim-rei checkout wins over the remote flake input when present.
 # Rebuild recipes below pass this as `--override-input` (empty = locked remote).
+# scripts/hm.sh mirrors this logic in bash (single source for `just hm` / fish `hm`).
 # NOTE: nixvim-rei is a git repo, so a path input only sees committed files —
 # commit there first, or the rebuild silently uses stale content.
 has_local_nixvim := path_exists("/home/gidrex/Projects/nixvim-rei/flake.nix")
@@ -63,11 +64,8 @@ nvim-smoke:
     echo "nvim-smoke: OK"
 
 # Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
-hm:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    : "${FLAKE_MACHINE:?Set FLAKE_MACHINE=icelake|tigerlake}"
-    home-manager switch --flake ./#"$FLAKE_MACHINE" {{ nixvim_override }} -b backup
+hm *args:
+    ./scripts/hm.sh {{ args }}
 
 # CVE scan of a home-manager closure (transitive runtime deps).
 # Default is the live (current) profile; pass an explicit store path to audit an older generation.

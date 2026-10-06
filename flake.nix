@@ -16,8 +16,8 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Neovim config as a standalone flake. The justfile rebuild recipes
-    # (`hm`, `check`, `nvim-smoke`) override this with the local checkout
+    # Neovim config as a standalone flake. scripts/hm.sh and the justfile
+    # rebuild recipes (`check`, `nvim-smoke`) override this with the local checkout
     # when /home/gidrex/Projects/nixvim-rei exists (see justfile).
     nixvim-rei.url = "gitlab:gidrex/nixvim-rei";
     nixvim-rei.inputs.nixpkgs.follows = "nixpkgs";
