@@ -29,7 +29,6 @@
           body = "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
         };
         e.body = "$EDITOR $argv";
-        gd.body = builtins.readFile ./gd_function.fish;
         hmr.body = builtins.readFile ./hmr_function.fish;
         hm.body = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup $argv";
       }
@@ -120,7 +119,6 @@
     loginShellInit = "tide configure --auto --style=Classic --prompt_colors='16 colors' --show_time=No --classic_prompt_separators=Round --powerline_prompt_heads=Round --powerline_prompt_tails=Round --powerline_prompt_style='Two lines, character' --prompt_connection=Dotted --powerline_right_prompt_frame=No --prompt_spacing=Sparse --icons='Many icons' --transient=Yes";
 
     completions = {
-      gd = builtins.readFile ./gd_completion.fish;
       hmr = "complete -f -c hmr";
       # Checked in to avoid IFD; runCommand would rebuild on every eval.
       rip = builtins.readFile ./completions_rip.fish;

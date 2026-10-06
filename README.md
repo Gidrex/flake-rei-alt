@@ -29,7 +29,7 @@ If `~/.config/niri` already exists, the script moves it to a timestamped backup
 
 ## rclone gdrive mount
 Declarative via `hm-modules/security/rclone.nix` + sops secrets (`gdrive_*`).
-Mounts automatically to `~/gdrive`. Remount: `gd init`.
+Mounts automatically to `~/gdrive`. Remount: `systemctl --user restart rclone-mount:@gdrive.service`.
 
 ## searxng
 
