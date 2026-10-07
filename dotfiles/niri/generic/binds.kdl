@@ -1,6 +1,6 @@
 binds {
     Mod+T { spawn "footclient"; }
-    Mod+N { spawn "footclient" "--title" "notes" "chora" "open" "notes"; }
+    Mod+N { spawn "footclient" "--title" "notes" "chora" "open" "note"; }
     Mod+X { spawn-sh "/home/gidrex/flake-rei/scripts/OCR_select_area.sh"; }
 
     Mod+B { toggle-window-floating; }
