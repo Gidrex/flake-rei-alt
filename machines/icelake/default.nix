@@ -1,6 +1,6 @@
-{ vars, ... }:
+{ machineName, ... }:
 {
-  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=${toString vars.footFontSize.icelake}";
+  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=9";
 
-  home.sessionVariables.FLAKE_MACHINE = "icelake";
+  home.sessionVariables.FLAKE_MACHINE = machineName;
 }

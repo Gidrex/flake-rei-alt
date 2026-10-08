@@ -38,10 +38,10 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 - `hm-modules/default.nix` = single wiring point for shared modules (add new modules there, not in `flake.nix`).
 - `hm-modules/` grouped by area: `core/{nix,identity,packages,theme}`, `shell/{vcs,search,system}`,
   `docs.nix`, `termTools/{fish,helix,nixvim-rei,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
-- Modules get `vars`, `inputs`, `yazi-plugins` via `extraSpecialArgs` in `flake.nix:61` — declare them
+- Modules get `vars`, `inputs`, `yazi-plugins`, `machineName` via `extraSpecialArgs` in `flake.nix` — declare them
   as function args where needed (e.g. yazi plugins); no `_module.args` magic.
-- Machine deltas are minimal: per-machine foot font size (from `vars.footFontSize`),
-  `FLAKE_MACHINE`, extra packages. Terminals etc. self-enable in `hm-modules/`.
+- Machine deltas are minimal and self-contained: per-machine foot font size,
+  `FLAKE_MACHINE` (from `machineName`), extra packages. Terminals etc. self-enable in `hm-modules/`.
 - Adding a machine also needs a niri setup (below).
 
 ## Niri (only for `icelake` + `tigerlake`)

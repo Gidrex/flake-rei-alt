@@ -1,4 +1,4 @@
-# Catppuccin mocha, auto-enabled. Opt-outs live in app modules.
+# Catppuccin mocha, auto-enabled. Do not hand-roll colors per app.
 { vars, ... }:
 {
   catppuccin = {
@@ -6,6 +6,5 @@
     autoEnable = true;
     flavor = vars.theme.flavor;
     accent = vars.theme.accent;
-    foot.enable = false;
   };
 }

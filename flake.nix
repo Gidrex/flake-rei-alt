@@ -62,8 +62,11 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = commonModules ++ [ machines.${name} ];
-          # Modules may take `vars`, `inputs`, `yazi-plugins`.
-          extraSpecialArgs = { inherit inputs vars yazi-plugins; };
+          # Modules may take `vars`, `inputs`, `yazi-plugins`, `machineName`.
+          extraSpecialArgs = {
+            inherit inputs vars yazi-plugins;
+            machineName = name;
+          };
         }
       );
     };

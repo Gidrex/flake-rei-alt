@@ -14,20 +14,20 @@ map in `flake.nix:48-51`, which `genAttrs` turns into `homeConfigurations`
 Minimal template (compare with `machines/tigerlake/default.nix`):
 
 ```nix
-{ pkgs, vars, ... }:
+{ pkgs, machineName, ... }:
 {
   # foot, fish and friends self-enable in hm-modules — only deltas here.
-  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=${toString vars.footFontSize.<name>}";
+  programs.foot.settings.main.font = "GeistMonoNerdFontMono:size=16";
 
   home.packages = with pkgs; [ ];
 
-  home.sessionVariables.FLAKE_MACHINE = "<name>"; # must match the directory name
+  home.sessionVariables.FLAKE_MACHINE = machineName; # must match the directory name
 }
 ```
 
 Shared stuff does not belong here — it goes to `hm-modules`
 (see the `add-hm-module` skill). `stateVersion` is global (`nix/vars.nix`); foot font
-sizes live in `nix/vars.nix:footFontSize` (add the new machine's size there).
+size lives in `machines/<name>/default.nix` (no shared dict).
 
 ## 2. Register in `flake.nix`
 
