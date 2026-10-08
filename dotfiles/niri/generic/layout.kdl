@@ -24,13 +24,16 @@ layout {
     //     proportion 0.75
     //     proportion 1.0
     // }
+    // focus-ring {
+    //     width 1
+    //     // active-color "#ffffff"
+    //     // inactive-color "#808080"
+    //     active-color "#07b5ef"
+    //     inactive-color "#ffffff00"
+    //     active-gradient from="#ffffff" to="#8b00ff" angle=45 in="oklch longer hue"
+    // }
     focus-ring {
-        width 1
-        // active-color "#ffffff"
-        // inactive-color "#808080"
-        active-color "#07b5ef"
-        inactive-color "#ffffff00"
-        active-gradient from="#ffffff" to="#8b00ff" angle=45 in="oklch longer hue"
+        off
     }
     border {
         off

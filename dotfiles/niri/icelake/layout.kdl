@@ -2,13 +2,6 @@ layout {
     default-column-width { proportion 0.95; }
     gaps 1
 
-    focus-ring {
-        off
-    }
-    border {
-        off
-    }
-
     struts {
         left 2
         right 2
