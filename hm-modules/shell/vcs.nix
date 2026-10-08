@@ -5,6 +5,8 @@ let
   inherit (builtins) pathExists;
 in
 {
+  catppuccin.lazygit.enable = false;
+
   programs = {
     git = {
       enable = true;
