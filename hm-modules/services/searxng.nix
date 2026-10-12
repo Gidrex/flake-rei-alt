@@ -5,16 +5,31 @@
 
   sops.templates."searxng-settings.yml" = {
     content = ''
-      # Google off by default upstream; re-enable with headroom.
+      # google scraping banned from a single IP; use google cse instead.
+      # brave scraping 429s without an API key (needs card); disabled, not
+      # removed: brave.images/videos/news share network "brave" and crash
+      # startup with KeyError when it is removed entirely.
       use_default_settings:
         engines:
           remove:
             - startpage
             - ecosia
+            - google
       engines:
-        - name: google
+        - name: brave
+          disabled: true
+        - name: brave.images
+          disabled: true
+        - name: brave.videos
+          disabled: true
+        - name: brave.news
+          disabled: true
+        - name: qwant
           disabled: false
-          timeout: 3.0
+        - name: mojeek
+          inactive: false
+          disabled: false
+          timeout: 6.0 # Altcha PoW challenge needs room
       search:
         autocomplete: "google" # suggestions as you type
         autocomplete_min: 2
