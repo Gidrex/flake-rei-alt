@@ -72,6 +72,16 @@ in
             apiKey = "{file:${config.sops.secrets.openrouter_api_key.path}}";
           };
         };
+        "google" = {
+          options = {
+            apiKey = "{file:${config.sops.secrets.gemini_api_key.path}}";
+          };
+          models = {
+            "gemini-4-argon" = {
+              name = "Gemini 4 Argon";
+            };
+          };
+        };
       };
     };
     # TUI theme (mkForce over catppuccin default).
