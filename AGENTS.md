@@ -21,7 +21,7 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 - Format Nix files (width 120): `just fmt`; check only: `just fmt-check`
 - QA = format check + `niri validate`: `just qa`
 - Dry-run eval (no system changes), one or all machines: `just check [machine]`
-- Regenerate checked-in completions: `just update-completions`
+- `rip` fish completions are handwritten at `hm-modules/termTools/fish/completions_rip.fish` (flat style, edit by hand)
 - Apply home-manager (new generation, backup previous): `just hm` (needs `FLAKE_MACHINE`)
 - There is no `devShell`/`packages` output and no test runner; only `homeConfigurations.<machine>` exists, so
   `nix flake check` is not the meaningful verification — `just qa` then `just check` is.

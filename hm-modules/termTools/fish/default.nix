@@ -120,7 +120,7 @@
 
     completions = {
       hmr = "complete -f -c hmr";
-      # Checked in to avoid IFD; runCommand would rebuild on every eval.
+      # Handwritten flat style, edit by hand; checked in to avoid IFD (runCommand would rebuild on every eval).
       rip = builtins.readFile ./completions_rip.fish;
     };
   };

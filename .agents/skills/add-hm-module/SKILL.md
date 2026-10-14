@@ -43,8 +43,8 @@ Layout: `hm-modules/default.nix` is the single wiring point; shared code lives i
 - Plugins with `setup()` need a call in `initLua`; previewers/preloaders need entries
   in `prepend_previewers`/`prepend_preloaders` via `mkPreviewer`/`mkPreloader`.
 - Keybinds live in `keymaps.nix`, not `default.nix`.
-- `rip` completions are checked in at `hm-modules/termTools/fish/completions_rip.fish`
-  (regenerate with `just update-completions`); never use `pkgs.runCommand` (IFD) in modules.
+- `rip` completions are handwritten at `hm-modules/termTools/fish/completions_rip.fish`
+  (flat `complete` lines, no `rip completions fish` helpers); never use `pkgs.runCommand` (IFD) in modules.
 
 ## Packages, unfree, theme
 

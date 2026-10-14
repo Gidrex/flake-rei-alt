@@ -91,10 +91,6 @@ vulnix-audit profile="$HOME/.local/state/nix/profiles/home-manager":
       sleep "$delay"
     done
 
-# Regenerate checked-in shell completions (keeps modules free of IFD)
-update-completions:
-    rip completions fish > hm-modules/termTools/fish/completions_rip.fish
-
 # Scan the repo for leaked secrets: full history + staged changes.
 # Exit 1 = findings. sops ENC[...] blobs are ciphertext, gitleaks ignores them;
 # real allow-listing (if ever needed) goes to .gitleaksignore in repo root.
