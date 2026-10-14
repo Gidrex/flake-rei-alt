@@ -12,6 +12,7 @@ environment {
     SDL_VIDEODRIVER "wayland,x11"
     GDK_BACKEND "wayland,x11,*"
     GSK_RENDERER "ngl"
+    WORDCRAFT_WAYLAND "1"
 
     QT_QPA_PLATFORMTHEME "gtk3"
     QT_STYLE_OVERRIDE "kvantum"
