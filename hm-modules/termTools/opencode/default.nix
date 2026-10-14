@@ -76,6 +76,22 @@ in
           options = {
             apiKey = "{file:${config.sops.secrets.gemini_api_key.path}}";
           };
+          # Non-chat models: no generateContent support, only noise in /models.
+          blacklist = [
+            "veo-3.1-generate-preview"
+            "veo-3.1-fast-generate-preview"
+            "veo-3.1-lite-generate-preview"
+            "lyria-3-pro-preview"
+            "lyria-3-clip-preview"
+            "gemini-embedding-001"
+            "gemini-embedding-2"
+            "gemini-2.5-flash-preview-tts"
+            "gemini-2.5-pro-preview-tts"
+            "gemini-3.1-flash-tts-preview"
+            "gemini-3.1-flash-live-preview"
+            "gemini-3.5-live-translate-preview"
+          ];
+          # Temporary override: pinned 1.18.29 snapshot lacks argon; drop when it ships it.
           models = {
             "gemini-4-argon" = {
               name = "Gemini 4 Argon";
