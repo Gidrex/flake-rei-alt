@@ -5,53 +5,22 @@
   pkgs,
   ...
 }:
-let
-  # Pin 1.18.29: .30 crashes (upstream bun bug, nixpkgs#563241).
-  opencodePkg = pkgs.stdenvNoCC.mkDerivation rec {
-    pname = "opencode";
-    version = "1.18.29";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      hash = "sha256-6oALf/ViJrcJUhJsn8HiUXykxLVoL9nT+eh0SWl6EZQ=";
-    };
-
-    sourceRoot = ".";
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 opencode $out/bin/opencode
-      wrapProgram $out/bin/opencode \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.ripgrep ]} \
-        --set OPENCODE_DISABLE_AUTOUPDATE true
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "AI coding agent built for the terminal";
-      homepage = "https://github.com/anomalyco/opencode";
-      mainProgram = "opencode";
-    };
-  };
-in
 {
   programs.mcp = {
     enable = true;
     servers = {
       # Binaries come from AUR (wordcraft/gridcraft), absent in nixpkgs.
-      # WordCraft (Word clone): `wordcraft-cli mcp` serves stdio MCP headlessly.
+      # Rarely used: disabled by default, so opencode neither spawns them
+      # nor injects their tool schemas into context. Flip `enabled` + `just hm`
+      # on the sessions where you need them.
       # No --automation-*-root: defaults already open/save files (verified on .docx).
       wordcraft = {
+        enabled = false;
         command = "/usr/bin/wordcraft-cli";
         args = [ "mcp" ];
       };
-      # GridCraft (Excel clone): `gridcraft-cli mcp` serves stdio MCP headlessly.
       gridcraft = {
+        enabled = false;
         command = "/usr/bin/gridcraft-cli";
         args = [ "mcp" ];
       };
@@ -60,10 +29,14 @@ in
 
   programs.opencode = {
     enable = true;
-    package = opencodePkg;
     enableMcpIntegration = true;
+
+    # node on PATH: ponytail lifecycle hooks are node scripts (non-interactive shell).
+    extraPackages = [ pkgs.nodejs ];
+
     # AGENTS.md auto-loaded by every session
     context = ./AGENTS.md;
+
     # Skills on demand via `skill` tool
     skills = {
       python-uv = ./skills/python-uv;
@@ -76,9 +49,9 @@ in
       jev-agent = ./skills/jev-agent;
     };
     settings = {
-      # Self-update off: nix owns the binary.
-      autoupdate = false;
+      autoupdate = false; # Self-update off: nix owns the binary.
       lsp = true;
+      plugin = [ "@dietrichgebert/ponytail" ];
       provider = {
         "opencode-go" = {
           options = {
@@ -109,16 +82,9 @@ in
             "gemini-3.1-flash-live-preview"
             "gemini-3.5-live-translate-preview"
           ];
-          # Temporary override: pinned 1.18.29 snapshot lacks argon; drop when it ships it.
-          models = {
-            "gemini-4-argon" = {
-              name = "Gemini 4 Argon";
-            };
-          };
         };
       };
     };
-    # TUI theme (mkForce over catppuccin default).
     tui = {
       theme = lib.mkForce "catppuccin-macchiato";
     };
