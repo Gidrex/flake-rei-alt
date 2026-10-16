@@ -49,7 +49,7 @@ layout {
 }
 
 overview {
-    zoom 0.45
+    zoom 0.4
     workspace-shadow {
         // off
         softness 50
