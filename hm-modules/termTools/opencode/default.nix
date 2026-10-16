@@ -1,6 +1,7 @@
 # Declarative opencode; auth resolves at runtime from sops (path only in store).
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -31,7 +32,11 @@
     enableMcpIntegration = true;
 
     # node on PATH: ponytail lifecycle hooks are node scripts (non-interactive shell).
-    extraPackages = [ pkgs.nodejs ];
+    # rtk on PATH: token-saving proxy for agent shell commands (see skills/rtk).
+    extraPackages = [
+      pkgs.nodejs
+      pkgs.rtk
+    ];
 
     # AGENTS.md auto-loaded by every session
     context = ./AGENTS.md;
@@ -46,6 +51,12 @@
       lua-shell = ./skills/lua-shell;
       ctx7-docs = ./skills/ctx7-docs;
       jev-agent = ./skills/jev-agent;
+      rtk = ./skills/rtk;
+    };
+    # TUI theme: macchiato by choice (deliberate drift from global mocha;
+    # mkForce wins over catppuccin autoEnable).
+    tui = {
+      theme = lib.mkForce "catppuccin-macchiato";
     };
     settings = {
       autoupdate = false; # Self-update off: nix owns the binary.
@@ -85,8 +96,6 @@
       };
     };
   };
-
-  # TUI theme: left to catppuccin (mocha), not forced here.
 
   # Force ANSI colors (no `plugins` option, placed directly).
   xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;

@@ -19,6 +19,13 @@
 4. **Verify by execution.** Run code, tests, type checks. On contradiction with an
    earlier claim, state it and trust evidence.
 
+## Shell economy (rtk first)
+
+- Before running any non-interactive shell command, load the `rtk` skill and
+  prefer `rtk <tool> ...` over the bare command (same args pass through).
+- Interactive commands (editors, `lazygit`, `yazi`, anything prompting) run bare.
+- If proxied output looks wrong, rerun bare — a wrong answer costs more tokens.
+
 ## Quality Bar (definition of done)
 
 - Minimum code that solves the asked problem. No speculative features, premature
@@ -49,6 +56,7 @@
 | Lua, shell scripts, `stylua`/`shellcheck` | `lua-shell` |
 | Any third-party framework/SDK/API docs | `ctx7-docs` |
 | Typed decisions (choice/score/noul): routing, gates, review | `jev-agent` |
+| Any non-interactive shell command (token-saving proxy) | `rtk` |
 
 Load the matching skill **before** coding. It owns the full dev cycle and exact QA gates.
 If two apply (e.g. `nix-hm` + repo-local `.agents` skills), load both.
