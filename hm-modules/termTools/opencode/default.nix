@@ -40,6 +40,24 @@ let
   };
 in
 {
+  programs.mcp = {
+    enable = true;
+    servers = {
+      # Binaries come from AUR (wordcraft/gridcraft), absent in nixpkgs.
+      # WordCraft (Word clone): `wordcraft-cli mcp` serves stdio MCP headlessly.
+      # No --automation-*-root: defaults already open/save files (verified on .docx).
+      wordcraft = {
+        command = "/usr/bin/wordcraft-cli";
+        args = [ "mcp" ];
+      };
+      # GridCraft (Excel clone): `gridcraft-cli mcp` serves stdio MCP headlessly.
+      gridcraft = {
+        command = "/usr/bin/gridcraft-cli";
+        args = [ "mcp" ];
+      };
+    };
+  };
+
   programs.opencode = {
     enable = true;
     package = opencodePkg;
