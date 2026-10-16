@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -ne 2 ]; then
+    echo "usage: toggle_output.sh focus|move OUTPUT" >&2
+    exit 1
+fi
 ACTION="$1" # "focus" or "move"
 TARGET="$2"
+case "$ACTION" in
+    focus | move) ;;
+    *)
+        echo "toggle_output.sh: ACTION must be focus|move, got '$ACTION'" >&2
+        exit 1
+        ;;
+esac
 PRIMARY="DP-2"
 
 CURRENT=$(niri msg -j focused-output 2>/dev/null | jq -r .name)

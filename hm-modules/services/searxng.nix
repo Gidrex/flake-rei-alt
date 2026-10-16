@@ -1,8 +1,7 @@
 # Local SearXNG service; secret rendered at activation, never in store.
+# (searx_secret_key is declared centrally in hm-modules/security/sops.nix.)
 { config, pkgs, ... }:
 {
-  sops.secrets.searx_secret_key = { };
-
   sops.templates."searxng-settings.yml" = {
     content = ''
       # google scraping banned from a single IP; use google cse instead.

@@ -46,5 +46,5 @@ For cross-cutting tasks load both (e.g. `add-machine` + `niri-machine-config`).
 - A skill = concrete commands and checks for this repo, not general advice.
   Required: steps, exact commands, gotchas, how to verify the result.
 - Reference files with line numbers (`flake.nix:112`) and verify them by reading
-  before writing — docs in this repo are stale in places (e.g. README still points
-  at GitLab; the canonical remote is Codeberg).
+  before writing — remotes drift: confirm with `git remote -v` (`origin` =
+  `gitlab` canonical, `codeberg` = secondary).

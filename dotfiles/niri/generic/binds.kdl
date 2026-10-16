@@ -1,7 +1,7 @@
 binds {
     Mod+T { spawn "footclient"; }
     Mod+N { spawn "footclient" "--title" "notes" "chora" "open" "note"; }
-    Mod+X { spawn-sh "/home/gidrex/flake-rei/scripts/OCR_select_area.sh"; }
+    Mod+X { spawn-sh "$HOME/flake-rei/scripts/OCR_select_area.sh"; }
 
     Mod+B { toggle-window-floating; }
     Mod+Q { close-window; }
@@ -23,7 +23,7 @@ binds {
     Mod+Shift+S { screenshot-window show-pointer=false write-to-disk=false; }
     Mod+Ctrl+S { screenshot-window show-pointer=false write-to-disk=true; }
     Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+Ctrl+V { spawn-sh "cliphist wipe"; }
+    Mod+Ctrl+V { spawn-sh "printf 'No\nYes\n' | wofi --dmenu --prompt 'Wipe clipboard history?' | grep -qx Yes && cliphist wipe"; }
 
     Mod+Up {  focus-window-up; }
     Mod+Down {  focus-window-down; }

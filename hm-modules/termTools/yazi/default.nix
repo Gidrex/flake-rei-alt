@@ -24,12 +24,6 @@ in
 {
   imports = [ ./keymaps.nix ];
 
-  home.packages =
-    with pkgs;
-    lib.mkIf config.programs.yazi.enable [
-      trash-cli # CLI trash utils (trash-list/put/empty); yazi native Trash VFS needs none of it
-    ];
-
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
@@ -79,7 +73,7 @@ in
           '';
         }
       ];
-      tasks.image_alloc = 1073741824; # 1 Gb
+      tasks.image_alloc = 268435456; # 256 MB, enough for previews
     };
 
     initLua = ''

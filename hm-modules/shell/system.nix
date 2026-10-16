@@ -11,9 +11,9 @@
       settings = {
         max-concurrent-downloads = 5;
         continue = true;
-        max-connection-per-server = 16;
+        max-connection-per-server = 4;
         min-split-size = "10M";
-        split = 10;
+        split = 5;
       };
     };
 

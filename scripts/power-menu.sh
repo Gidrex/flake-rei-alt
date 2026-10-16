@@ -1,6 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 options="Shutdown\nReboot\nLogout\nSuspend\nHibernate\nLock\nExit\nTurn off monitor"
-chosen=$(echo -e "$options" | wofi --dmenu --prompt "Power Menu" --width 10% --height 30% )
+chosen=$(printf '%b' "$options" | wofi --dmenu --prompt "Power Menu" --width 10% --height 30% || true)
+
+# Empty = user pressed Esc, not a choice
+[ -z "$chosen" ] && exit 0
 
 case $chosen in
   "Shutdown") systemctl poweroff ;;

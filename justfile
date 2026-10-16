@@ -5,8 +5,8 @@
 # scripts/hm.sh mirrors this logic in bash (single source for `just hm` / fish `hm`).
 # NOTE: nixvim-rei is a git repo, so a path input only sees committed files —
 # commit there first, or the rebuild silently uses stale content.
-has_local_nixvim := path_exists("/home/gidrex/Projects/nixvim-rei/flake.nix")
-nixvim_override := if has_local_nixvim == "true" { "--override-input nixvim-rei /home/gidrex/Projects/nixvim-rei" } else { "" }
+has_local_nixvim := path_exists(env_var('HOME') + "/Projects/nixvim-rei/flake.nix")
+nixvim_override := if has_local_nixvim == "true" { "--override-input nixvim-rei " + env_var('HOME') + "/Projects/nixvim-rei" } else { "" }
 
 @_default:
     just --list --unsorted
@@ -59,8 +59,9 @@ nvim-smoke:
     fi
     pkg=$(nix build --impure {{ nixvim_override }} --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
     log="$work/smoke.log"
-    XDG_CONFIG_HOME="$work/config" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || true
-    if grep -qE 'E[0-9]+:|Error' "$log"; then echo "nvim-smoke: FAIL"; cat "$log"; exit 1; fi
+    rc=0
+    XDG_CONFIG_HOME="$work/config" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || rc=$?
+    if [ "$rc" -ne 0 ] || grep -qE 'E[0-9]+:|Error' "$log"; then echo "nvim-smoke: FAIL"; cat "$log"; exit 1; fi
     echo "nvim-smoke: OK"
 
 # Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
@@ -118,7 +119,7 @@ audit profile="$HOME/.local/state/nix/profiles/home-manager":
 blur-wallpapers:
     #!/usr/bin/env bash
     set -euo pipefail
-    command -v magick > /dev/null || (echo -e "\\033[0;31mNo found magick\\033[0m" && exit 0)
+    command -v magick > /dev/null || (echo -e "\\033[0;31mmagick not found, cannot blur wallpapers\\033[0m" && exit 1)
     nproc=$(nproc 2>/dev/null || echo 4)
     jobs=$((nproc > 1 ? nproc - 1 : 1))
     for dir in assets/wallpapers/*/; do

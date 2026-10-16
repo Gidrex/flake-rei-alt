@@ -1,7 +1,6 @@
 # Declarative opencode; auth resolves at runtime from sops (path only in store).
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -16,12 +15,12 @@
       # No --automation-*-root: defaults already open/save files (verified on .docx).
       wordcraft = {
         enabled = false;
-        command = "/usr/bin/wordcraft-cli";
+        command = "wordcraft-cli";
         args = [ "mcp" ];
       };
       gridcraft = {
         enabled = false;
-        command = "/usr/bin/gridcraft-cli";
+        command = "gridcraft-cli";
         args = [ "mcp" ];
       };
     };
@@ -85,10 +84,9 @@
         };
       };
     };
-    tui = {
-      theme = lib.mkForce "catppuccin-macchiato";
-    };
   };
+
+  # TUI theme: left to catppuccin (mocha), not forced here.
 
   # Force ANSI colors (no `plugins` option, placed directly).
   xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;
@@ -97,11 +95,4 @@
   home.sessionVariables = {
     JEV_LANGUAGE = "en-US";
   };
-
-  # JEV_API_KEY from the decrypted sops file at shell runtime (path only in store).
-  programs.fish.interactiveShellInit = lib.mkIf config.programs.fish.enable ''
-    if test -z "$JEV_API_KEY"; and test -f "${config.sops.secrets.jev_api_key.path}"
-      set -gx JEV_API_KEY (cat "${config.sops.secrets.jev_api_key.path}")
-    end
-  '';
 }

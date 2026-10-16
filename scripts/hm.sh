@@ -15,8 +15,8 @@ FLAKE_DIR="$(dirname -- "$SCRIPT_DIR")"
 # Local nixvim-rei checkout wins over the remote flake input when present
 # (mirrors the justfile nixvim_override; path input needs committed files).
 override_args=()
-if [ -f "/home/gidrex/Projects/nixvim-rei/flake.nix" ]; then
-    override_args=(--override-input nixvim-rei /home/gidrex/Projects/nixvim-rei)
+if [ -f "$HOME/Projects/nixvim-rei/flake.nix" ]; then
+    override_args=(--override-input nixvim-rei "$HOME/Projects/nixvim-rei")
 fi
 
 exec home-manager switch --flake "$FLAKE_DIR#$FLAKE_MACHINE" "${override_args[@]}" -b backup "$@"

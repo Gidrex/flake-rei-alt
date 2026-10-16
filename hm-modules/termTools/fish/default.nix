@@ -26,11 +26,15 @@
       {
         md = {
           wraps = "mkdir";
-          body = "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
+          body = "mkdir -p -- \$argv; and z \$argv[-1]";
         };
-        e.body = "$EDITOR $argv";
+        e.body = "set -q EDITOR; or set -l EDITOR hx; \$EDITOR \$argv";
         hmr.body = builtins.readFile ./hmr_function.fish;
-        hm.body = "~/flake-rei/scripts/hm.sh $argv";
+        hm.body = "\$HOME/flake-rei/scripts/hm.sh \$argv";
+        # Loads JEV_API_KEY from sops on demand (never exported ambiently,
+        # so child processes do not inherit it). Run `jevkey` before a session
+        # that needs Jev decisions.
+        jevkey.body = ''set -gx JEV_API_KEY (cat "${config.sops.secrets.jev_api_key.path}"); and echo "JEV_API_KEY loaded"'';
       }
 
       (lib.mkIf config.programs.eza.enable {
@@ -57,7 +61,7 @@
         # NOTE: old mapper never appended `$argv`; body reproduced verbatim (byte-identical).
         helixing = lib.mkIf (config.programs.fd.enable && config.programs.skim.enable) ''
           set -l selection (${pkgs.fd}/bin/fd . --type file --type symlink -E '*.{png,jpg,jpeg,webp,docx,svg,pdf}' | ${pkgs.skim}/bin/sk --height=20 --layout=reverse -0 -1)
-          ${pkgs.helix}/bin/hx "$selection" || echo ""
+          test -n "$selection"; and ${pkgs.helix}/bin/hx "$selection"
         '';
       })
 
@@ -113,10 +117,11 @@
       ${lib.optionalString config.programs.lazygit.enable "bind -M insert \\ex 'commandline -f cancel; ${pkgs.lazygit}/bin/lazygit; commandline -f repaint'"}
       bind -M insert \ea 'commandline -f cancel; opencode; commandline -f repaint'
 
-      tuna completion fish | source
+      command -q tuna; and tuna completion fish | source
     '';
 
-    loginShellInit = "tide configure --auto --style=Classic --prompt_colors='16 colors' --show_time=No --classic_prompt_separators=Round --powerline_prompt_heads=Round --powerline_prompt_tails=Round --powerline_prompt_style='Two lines, character' --prompt_connection=Dotted --powerline_right_prompt_frame=No --prompt_spacing=Sparse --icons='Many icons' --transient=Yes";
+    # No loginShellInit: one-time setup (e.g. `tide configure`) runs by hand,
+    # never on every login (it would overwrite the user's prompt config).
 
     completions = {
       hmr = "complete -f -c hmr";

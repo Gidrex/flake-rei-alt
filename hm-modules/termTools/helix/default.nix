@@ -98,10 +98,12 @@
             ":buffer-close!"
             ":redraw"
           ];
+          # Chooser file is per-helix-PID: two instances never share a pick,
+          # and quitting yazi with no pick opens nothing (test -s guard).
           C-y = lib.mkIf config.programs.yazi.enable [
-            ":sh rm -f /tmp/yazi-path"
-            ":insert-output ${pkgs.yazi}/bin/yazi %{buffer_name} --chooser-file=/tmp/yazi-path"
-            ":open %sh{cat /tmp/yazi-path}"
+            ":sh rm -f /tmp/yazi-path-$PPID"
+            ":insert-output ${pkgs.yazi}/bin/yazi %{buffer_name} --chooser-file=/tmp/yazi-path-$PPID"
+            ":open %sh{test -s /tmp/yazi-path-$PPID && cat /tmp/yazi-path-$PPID}"
             ":redraw"
             ":reload-all"
             ":set mouse false"

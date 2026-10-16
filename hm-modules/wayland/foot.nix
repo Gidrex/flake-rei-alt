@@ -8,8 +8,6 @@ let
   inherit (lib) mkIf;
 in
 {
-  xdg.configFile."foot/foot.ini".force = true;
-
   programs.foot = {
     enable = true;
 

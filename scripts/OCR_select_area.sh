@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-
-if [ -z "$LANG" ]; then
-  exit 0
-fi
+set -euo pipefail
 
 tmp_img=$(mktemp /tmp/ocr_XXXXXX.png)
 trap 'rm -f "$tmp_img"' EXIT

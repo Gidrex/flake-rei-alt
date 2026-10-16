@@ -36,7 +36,6 @@
       just
       lazydocker
       lazyjj
-      mosquitto
 
       # apps
       ytfzf

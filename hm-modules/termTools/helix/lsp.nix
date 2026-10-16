@@ -80,14 +80,12 @@ in
       golangci-lint-langserver
       delve
 
-      # python
+      # python (one server: pylsp; ty = types, ruff = lint)
       ty
-      python313Packages.jedi-language-server
       python313Packages.python-lsp-server
 
-      # toml
+      # toml (taplo serves + formats)
       taplo
-      tombi
 
       # html + css + json + js/ts
       vscode-langservers-extracted
@@ -99,9 +97,8 @@ in
       ansible-lint
       yamlfmt
 
-      # markdown
+      # markdown (oxide covers notes + Obsidian-style links)
       markdown-oxide
-      marksman
 
       # just
       just-lsp
@@ -305,7 +302,6 @@ in
             buildScripts = {
               enable = true;
             };
-            features = "all";
           };
           procMacro = {
             enable = true;

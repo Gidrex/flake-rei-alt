@@ -30,7 +30,6 @@
     r repaint-flush
     F forw-forever
     v visual
-    ; shell
     q quit
 
     0 digit

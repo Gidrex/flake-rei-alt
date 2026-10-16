@@ -8,9 +8,12 @@ WP_BLUR="$WP_DIR/blur/blue_sky_with_thunders.jpg"
 last_state=""
 
 update_wallpaper() {
-    # Get the number of focused or visible windows
+    # Get the number of focused or visible windows (assume present on query failure:
+    # flickering to the sharp wallpaper on a niri hiccup is worse than staying blurred).
     local count
-    count=$(niri msg --json windows | jq '[.[] | select(.is_focused or .is_visible)] | length')
+    count=$(niri msg --json windows | jq '[.[] | select(.is_focused or .is_visible)] | length') || count=""
+    # Empty (niri down, jq silent on empty input): stay blurred, never flicker.
+    [ -n "$count" ] || count=1
     
     local new_state
     if [ "$count" -eq 0 ]; then
@@ -39,8 +42,10 @@ fi
 # Initial run
 update_wallpaper
 
-# Listen for events to trigger update
-# This reacts to windows opening, closing, and workspace switching
+# Listen for events to trigger update.
+# One niri event is many lines: drain the burst (0.2s quiet) so each event
+# runs exactly one wallpaper update instead of one per line.
 niri msg event-stream | while read -r _; do
+    while read -r -t 0.2 _; do :; done
     update_wallpaper
 done

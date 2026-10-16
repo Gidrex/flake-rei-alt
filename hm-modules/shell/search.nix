@@ -13,7 +13,6 @@
 
     fd = {
       enable = true;
-      extraOptions = [ "--absolute-path" ];
       ignores = [ ".git/" ];
     };
 

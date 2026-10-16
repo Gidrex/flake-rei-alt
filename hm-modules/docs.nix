@@ -24,7 +24,6 @@
   };
 
   xdg.configFile."glow/glow.yml".text = ''
-    style: "tokyo-night"
     width: 0
     mouse: false
   '';
