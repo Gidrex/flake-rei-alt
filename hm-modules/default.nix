@@ -5,6 +5,7 @@
     ./core/identity.nix
     ./core/packages.nix
     ./core/theme.nix
+    ./core/xdg.nix
 
     ./shell/vcs.nix
     ./shell/search.nix
