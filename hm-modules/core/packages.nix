@@ -36,6 +36,8 @@
       just
       lazydocker
       lazyjj
+      rtk
+      scc
 
       # apps
       ytfzf
