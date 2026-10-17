@@ -24,26 +24,41 @@
         command = "gridcraft-cli";
         args = [ "mcp" ];
       };
-      # Telegram userbot (chigwell/telegram-mcp, pinned). Real account access:
-      # reads, sends, edits as you. Disabled by default like the rest —
-      # enable per session (project opencode.json with the same name overrides
-      # this global entry, see dev.opencode.ai/docs/config).
-      # Secrets resolve from sops at runtime; nothing plaintext in the store.
+      # Telegram userbot (chigwell/telegram-mcp, pinned) via one shared local
+      # daemon: per-session stdio collides on the Telethon session lock
+      # (AuthKeyDuplicatedError), so all sessions share the daemon below
+      # over streamable HTTP. No command/secrets here — just the URL.
       telegram = {
-        enabled = false;
-        command = "uvx";
-        args = [
-          "--from"
-          "git+https://github.com/chigwell/telegram-mcp.git@v3.2.83"
-          "telegram-mcp"
-        ];
-        env = {
-          TELEGRAM_API_ID = "{file:${config.sops.secrets.telegram_api_id.path}}";
-          TELEGRAM_API_HASH = "{file:${config.sops.secrets.telegram_api_hash.path}}";
-          TELEGRAM_SESSION_STRING = "{file:${config.sops.secrets.telegram_session_string.path}}";
-        };
+        enabled = true;
+        url = "http://127.0.0.1:8765/mcp";
       };
     };
+  };
+
+  # Single telegram-mcp instance for every opencode session (streamable HTTP).
+  # Secrets reach the daemon only through the sops-rendered env file (0400);
+  # nothing secret lands in the nix store.
+  sops.templates."telegram-mcp.env" = {
+    content = ''
+      TELEGRAM_API_ID=${config.sops.placeholder.telegram_api_id}
+      TELEGRAM_API_HASH=${config.sops.placeholder.telegram_api_hash}
+      TELEGRAM_SESSION_STRING=${config.sops.placeholder.telegram_session_string}
+    '';
+    path = "${config.xdg.configHome}/telegram-mcp/env";
+  };
+
+  systemd.user.services.telegram-mcp = {
+    Unit = {
+      Description = "Telegram MCP shared daemon (streamable HTTP for opencode)";
+      After = [ "network.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.uv}/bin/uvx --from git+https://github.com/chigwell/telegram-mcp.git@v3.2.83 telegram-mcp";
+      Environment = "MCP_TRANSPORT=http MCP_HOST=127.0.0.1 MCP_PORT=8765";
+      EnvironmentFile = config.sops.templates."telegram-mcp.env".path;
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 
   programs.opencode = {
@@ -52,7 +67,8 @@
 
     # node on PATH: ponytail lifecycle hooks are node scripts (non-interactive shell).
     # rtk on PATH: token-saving proxy for agent shell commands (see skills/rtk).
-    # uv on PATH: spawns uvx-pinned MCP servers (telegram) in agent sessions.
+    # uv on PATH: ad-hoc uvx runs in agent sessions (telegram-mcp itself
+    # runs as the telegram-mcp user daemon, not per-session).
     extraPackages = [
       pkgs.nodejs
       pkgs.rtk
