@@ -14,6 +14,9 @@
       gemini_api_key = { };
       jev_api_key = { };
       searx_secret_key = { };
+      telegram_api_id = { };
+      telegram_api_hash = { };
+      telegram_session_string = { };
     };
   };
 }

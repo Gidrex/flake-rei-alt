@@ -38,6 +38,7 @@
       lazyjj
       rtk
       scc
+      uv
 
       # apps
       ytfzf

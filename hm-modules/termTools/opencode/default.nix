@@ -24,6 +24,25 @@
         command = "gridcraft-cli";
         args = [ "mcp" ];
       };
+      # Telegram userbot (chigwell/telegram-mcp, pinned). Real account access:
+      # reads, sends, edits as you. Disabled by default like the rest —
+      # enable per session (project opencode.json with the same name overrides
+      # this global entry, see dev.opencode.ai/docs/config).
+      # Secrets resolve from sops at runtime; nothing plaintext in the store.
+      telegram = {
+        enabled = false;
+        command = "uvx";
+        args = [
+          "--from"
+          "git+https://github.com/chigwell/telegram-mcp.git@v3.2.83"
+          "telegram-mcp"
+        ];
+        env = {
+          TELEGRAM_API_ID = "{file:${config.sops.secrets.telegram_api_id.path}}";
+          TELEGRAM_API_HASH = "{file:${config.sops.secrets.telegram_api_hash.path}}";
+          TELEGRAM_SESSION_STRING = "{file:${config.sops.secrets.telegram_session_string.path}}";
+        };
+      };
     };
   };
 
@@ -33,9 +52,11 @@
 
     # node on PATH: ponytail lifecycle hooks are node scripts (non-interactive shell).
     # rtk on PATH: token-saving proxy for agent shell commands (see skills/rtk).
+    # uv on PATH: spawns uvx-pinned MCP servers (telegram) in agent sessions.
     extraPackages = [
       pkgs.nodejs
       pkgs.rtk
+      pkgs.uv
     ];
 
     # AGENTS.md auto-loaded by every session

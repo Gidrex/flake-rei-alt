@@ -22,7 +22,6 @@
     nixvim-rei.url = "gitlab:gidrex/nixvim-rei";
     nixvim-rei.inputs.nixpkgs.follows = "nixpkgs";
     nixvim-rei.inputs.home-manager.follows = "home-manager";
-    nixvim-rei.inputs.sops-nix.follows = "sops-nix";
     nixvim-rei.inputs.catppuccin.follows = "catppuccin";
 
     # Yazi plugins
