@@ -9,9 +9,9 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 - **VCS is plain `git` on `main`.** Commit with `git add -A && git commit -m ...`
   (run `git switch main` first — HEAD may be detached) and push straight to `main`:
-  `git push` (Codeberg) + `git push gitlab main` (mirror). Agents never use `jj`.
-  Git remote is **Codeberg** (`git@codeberg.org:Gidrex/flake-rei.git`);
-  the GitLab URL in `README.md` is stale.
+  `git push` (GitLab, primary) + `git push origin main` (Codeberg mirror). Agents never use `jj`.
+  Primary remote is **GitLab** (`git@gitlab.com:gidrex/flake-rei.git`);
+  Codeberg (`origin`) is the mirror.
 - **Nix reads the committed `main` revision, not your working tree.** `nix flake metadata ./` resolves to
   `git+file://...?ref=refs/heads/main&rev=<sha>`, so uncommitted edits are invisible to `nix`/`home-manager`
   unless you commit them or pass `--impure` (`just check` uses `--impure`; `just hm` does not).

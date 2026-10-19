@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: Use when committing, pushing, or fetching in this repo (plain git on main; remotes origin/Codeberg canonical and gitlab mirror).
+description: Use when committing, pushing, or fetching in this repo (plain git on main; gitlab is the primary remote, origin/Codeberg is the mirror).
 ---
 
 # git workflow of this repo
@@ -8,10 +8,10 @@ description: Use when committing, pushing, or fetching in this repo (plain git o
 Plain `git` on branch `main`. Commit and push straight to `main` — agents never use
 Jujutsu (`jj` may stay installed for interactive use, but it is not the agent path).
 
-## Remotes
+## Remotes (pushDefault=gitlab — local config, not committed)
 
-- `origin` = Codeberg (`git@codeberg.org:Gidrex/flake-rei.git`) — canonical, bare `git push` goes here.
-- `gitlab` (`git@gitlab.com:gidrex/flake-rei.git`) — secondary mirror, push explicitly.
+- `gitlab` (`git@gitlab.com:gidrex/flake-rei.git`) — primary, bare `git push` goes here.
+- `origin` = Codeberg (`git@codeberg.org:Gidrex/flake-rei.git`) — secondary mirror, push explicitly.
 
 ## Standard commit cycle
 
@@ -19,8 +19,8 @@ Jujutsu (`jj` may stay installed for interactive use, but it is not the agent pa
 git switch main                               # HEAD may be detached; get on main first
 git status --short                            # what changed
 git add -A && git commit -m "<message>"       # commit on main
-git push                                      # → origin
-git push gitlab main                          # → gitlab mirror
+git push                                      # → gitlab (primary)
+git push origin main                          # → codeberg mirror
 ```
 
 Session ran long? `git fetch --all --prune` before pushing. If push is rejected

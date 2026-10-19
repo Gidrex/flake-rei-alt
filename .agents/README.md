@@ -19,7 +19,7 @@ skills to load.
 
 - Commits: plain `git` on `main` (`git switch main` first — HEAD may be detached),
   push straight to `main`. Agents never use `jj`.
-- No pushes (to `origin` or `gitlab`) without an explicit request.
+- No commits or pushes without an explicit request.
 - Secrets: never write plaintext values into the repo and never print decrypted
   `secrets/secrets.yaml` content into chat. New secrets only via the `sops-add-secret` skill.
 - Do not edit `~/.config/niri` directly — those are symlinks into `dotfiles/niri/`.
@@ -30,7 +30,7 @@ skills to load.
 
 | Task | Skill |
 |---|---|
-| Commit, push, or fetch on `main` (remotes: Codeberg `origin`, GitLab mirror) | `git-workflow` |
+| Commit, push, or fetch on `main` (GitLab primary, Codeberg `origin` mirror) | `git-workflow` |
 | Validate a change: `qa`, eval, build, the committed-revision visibility trap | `verify-hm-change` |
 | Add/change a home-manager module, fish function, yazi plugin, package set | `add-hm-module` |
 | Edit niri layout/binds/autostart (generic vs machine) | `niri-machine-config` |
@@ -47,5 +47,5 @@ For cross-cutting tasks load both (e.g. `add-machine` + `niri-machine-config`).
 - A skill = concrete commands and checks for this repo, not general advice.
   Required: steps, exact commands, gotchas, how to verify the result.
 - Reference files with line numbers (`flake.nix:112`) and verify them by reading
-  before writing — remotes drift: confirm with `git remote -v` (`origin` =
-  Codeberg canonical, `gitlab` = secondary mirror).
+  before writing — remotes drift: confirm with `git remote -v` (`gitlab` =
+  primary, `origin` = Codeberg secondary mirror).
