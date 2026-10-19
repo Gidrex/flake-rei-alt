@@ -32,6 +32,17 @@
         enabled = false;
         url = "http://127.0.0.1:8765/mcp";
       };
+      # Browser automation (ChromeDevTools/chrome-devtools-mcp, npm).
+      # Disabled by default: needs local Chrome, spawns npx per session.
+      # npx comes from pkgs.nodejs in extraPackages below.
+      chrome-devtools = {
+        enabled = false;
+        command = "npx";
+        args = [
+          "-y"
+          "chrome-devtools-mcp@latest"
+        ];
+      };
     };
   };
 
@@ -133,9 +144,6 @@
       };
     };
   };
-
-  # Force ANSI colors (no `plugins` option, placed directly).
-  xdg.configFile."opencode/plugins/force-color.ts".source = ./plugins/force-color.ts;
 
   # Jev decision skill runtime (non-secret default; key itself stays in sops).
   home.sessionVariables = {
