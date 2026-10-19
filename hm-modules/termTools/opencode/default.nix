@@ -35,12 +35,16 @@
       # Browser automation (ChromeDevTools/chrome-devtools-mcp, npm).
       # Disabled by default: needs local Chrome, spawns npx per session.
       # npx comes from pkgs.nodejs in extraPackages below.
+      # Host chromium (Arch /usr/bin/chromium): the MCP defaults to
+      # /opt/google/chrome/chrome (stable channel), absent here.
       chrome-devtools = {
         enabled = false;
         command = "npx";
         args = [
           "-y"
           "chrome-devtools-mcp@latest"
+          "--executablePath"
+          "/usr/bin/chromium"
         ];
       };
     };
