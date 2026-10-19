@@ -29,7 +29,7 @@
       # (AuthKeyDuplicatedError), so all sessions share the daemon below
       # over streamable HTTP. No command/secrets here — just the URL.
       telegram = {
-        enabled = true;
+        enabled = false;
         url = "http://127.0.0.1:8765/mcp";
       };
     };
