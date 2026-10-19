@@ -7,8 +7,10 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 ## Critical gotchas (easy to get wrong)
 
-- **VCS is Jujutsu (`jj`) colocated on git.** Commit with `jj`, not raw `git` (git is only the backend).
-  `trunk()` = `main@origin`. Git remote is **Codeberg** (`git@codeberg.org:Gidrex/flake-rei.git`);
+- **VCS is plain `git` on `main`.** Commit with `git add -A && git commit -m ...`
+  (run `git switch main` first — HEAD may be detached) and push straight to `main`:
+  `git push` (Codeberg) + `git push gitlab main` (mirror). Agents never use `jj`.
+  Git remote is **Codeberg** (`git@codeberg.org:Gidrex/flake-rei.git`);
   the GitLab URL in `README.md` is stale.
 - **Nix reads the committed `main` revision, not your working tree.** `nix flake metadata ./` resolves to
   `git+file://...?ref=refs/heads/main&rev=<sha>`, so uncommitted edits are invisible to `nix`/`home-manager`

@@ -13,11 +13,12 @@ skills to load.
    `nix eval`/`nix build --dry-run` sees the changes (see the `verify-hm-change` skill).
    A task is not closed without verification.
 3. **Say whether applying is allowed.** By default the agent only edits files and
-   verifies via eval. `just hm` (real switch) and `git`/`jj push` — only on explicit request.
+   verifies via eval. `just hm` (real switch) and `git push` — only on explicit request.
 
 ## Hard rules (non-negotiable)
 
-- Commits go through `jj` only, never raw `git` (`git` here is just the backend).
+- Commits: plain `git` on `main` (`git switch main` first — HEAD may be detached),
+  push straight to `main`. Agents never use `jj`.
 - No pushes (to `origin` or `gitlab`) without an explicit request.
 - Secrets: never write plaintext values into the repo and never print decrypted
   `secrets/secrets.yaml` content into chat. New secrets only via the `sops-add-secret` skill.
@@ -29,7 +30,7 @@ skills to load.
 
 | Task | Skill |
 |---|---|
-| Commit, push, or untangle `main`/`main@gitlab`/`main@origin` divergence | `jj-git-workflow` |
+| Commit, push, or fetch on `main` (remotes: Codeberg `origin`, GitLab mirror) | `git-workflow` |
 | Validate a change: `qa`, eval, build, the committed-revision visibility trap | `verify-hm-change` |
 | Add/change a home-manager module, fish function, yazi plugin, package set | `add-hm-module` |
 | Edit niri layout/binds/autostart (generic vs machine) | `niri-machine-config` |
@@ -47,4 +48,4 @@ For cross-cutting tasks load both (e.g. `add-machine` + `niri-machine-config`).
   Required: steps, exact commands, gotchas, how to verify the result.
 - Reference files with line numbers (`flake.nix:112`) and verify them by reading
   before writing — remotes drift: confirm with `git remote -v` (`origin` =
-  `gitlab` canonical, `codeberg` = secondary).
+  Codeberg canonical, `gitlab` = secondary mirror).

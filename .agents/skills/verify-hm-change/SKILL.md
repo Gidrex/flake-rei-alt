@@ -20,10 +20,10 @@ Consequences:
 
 - Edits to **tracked** files are visible to eval with `--impure`, no commit needed.
 - **New (untracked) files** are invisible until they land in the `main` ref.
-- The reliable way to make changes visible: commit the jj way
-  (see the `jj-git-workflow` skill):
-  `jj describe -m ...` + `jj bookmark move main --to @` — this moves the git branch
-  `main`, and nix starts seeing everything, including new files.
+- The reliable way to make changes visible: commit the git way
+  (see the `git-workflow` skill):
+  `git switch main && git add -A && git commit -m ...` — this moves the `main` ref,
+  and nix starts seeing everything, including new files.
 
 ## Targeted and full eval
 
@@ -36,8 +36,8 @@ nix build --impure ".#homeConfigurations.$FLAKE_MACHINE.activationPackage" --dry
 ```
 
 If eval complains `path '.../hm-modules/.../<new-file>' does not exist` while the
-file is on disk — that is the trap above: the file is untracked, move `main` onto
-`@` first. For diagnosis you can copy the tree without `.git`/`.jj` to `/tmp` and
+file is on disk — that is the trap above: the file is not committed on `main` yet,
+commit it first. For diagnosis you can copy the tree without `.git`/`.jj` to `/tmp` and
 eval it as a plain path flake — every file is visible there.
 
 ## Fish specifics

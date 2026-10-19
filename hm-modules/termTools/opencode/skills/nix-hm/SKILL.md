@@ -7,7 +7,7 @@ description: Use when editing a Nix or home-manager flake (modules, packages, op
 
 Generic gates for any Nix flake. In **this** repo (`flake-rei`) also load the
 repo-local `.agents` skills (`verify-hm-change`, plus `add-hm-module` / `add-machine` /
-`niri-machine-config` / `sops-add-secret` / `jj-git-workflow` as matched) — they own
+`niri-machine-config` / `sops-add-secret` / `git-workflow` as matched) — they own
 the repo-specific traps.
 
 ## 1. Full cycle (every change)
@@ -39,7 +39,7 @@ Nix resolves the flake to committed `main`, not the working tree:
 - Tracked-file edits: visible to eval with `--impure` (`just check` uses it), no commit needed.
 - **New untracked files**: invisible until they land in `main` — eval fails with
   `path '.../<new-file>' does not exist` while the file is on disk.
-- Fix the jj way: `jj describe -m ...` + `jj bookmark move main --to @`, then re-eval.
+- Fix the git way: `git switch main && git add -A && git commit -m ...`, then re-eval.
 
 ## 4. Rules
 
