@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: Use when committing, pushing, or fetching in this repo (plain git on main; gitlab is the primary remote, origin/Codeberg is the mirror).
+description: Use when committing, pushing, or fetching in this repo (plain git on main; origin pushes to GitLab+Codeberg via dual pushurls, alt is the Codeberg-only spare).
 ---
 
 # git workflow of this repo
@@ -8,10 +8,12 @@ description: Use when committing, pushing, or fetching in this repo (plain git o
 Plain `git` on branch `main`. Commit and push straight to `main` — agents never use
 Jujutsu (`jj` may stay installed for interactive use, but it is not the agent path).
 
-## Remotes (pushDefault=gitlab — local config, not committed)
+## Remotes (pushDefault=origin + dual pushurls — local config, not committed)
 
-- `gitlab` (`git@gitlab.com:gidrex/flake-rei.git`) — primary, bare `git push` goes here.
-- `origin` = Codeberg (`git@codeberg.org:Gidrex/flake-rei.git`) — secondary mirror, push explicitly.
+- `origin` (`git@gitlab.com:gidrex/flake-rei.git`) — primary. Two push URLs
+  (GitLab, then Codeberg), so bare `git push` publishes to both mirrors at once.
+- `alt` = Codeberg (`git@codeberg.org:Gidrex/flake-rei.git`) — spare for
+  Codeberg-only fetch/push; normally unused since `origin` already pushes there.
 
 ## Standard commit cycle
 
@@ -19,8 +21,7 @@ Jujutsu (`jj` may stay installed for interactive use, but it is not the agent pa
 git switch main                               # HEAD may be detached; get on main first
 git status --short                            # what changed
 git add -A && git commit -m "<message>"       # commit on main
-git push                                      # → gitlab (primary)
-git push origin main                          # → codeberg mirror
+git push                                      # → origin: GitLab + Codeberg (dual pushurl)
 ```
 
 Session ran long? `git fetch --all --prune` before pushing. If push is rejected
@@ -36,4 +37,6 @@ git log --oneline --graph --all --decorate -15
 ## Gotchas
 
 - Push only on explicit user request.
+- Dual push is not atomic: if one mirror rejects, the other may still succeed —
+  fix with `git pull --rebase`, push again, verify both with `git ls-remote`.
 - Commits must not contain plaintext secrets.
