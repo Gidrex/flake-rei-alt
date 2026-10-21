@@ -10,9 +10,18 @@
   pkgs,
   ...
 }:
+let
+  # Crush has no plugin API and no option to hide the sidebar logo
+  # ("Charm" wordmark is hardcoded in internal/ui/model/sidebar.go), so
+  # patch it out at build time.
+  crush-no-logo = pkgs.crush.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./no-sidebar-logo.patch ];
+  });
+in
 {
   programs.crush = {
     enable = true;
+    package = crush-no-logo;
     enableMcpIntegration = true;
 
     settings = {
