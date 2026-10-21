@@ -13,6 +13,7 @@
     "unrar"
     "obsidian"
     "rtk"
+    "crush" # fsl11Mit; terminal agent like opencode
   ];
 
   # Do not bump without a home-manager migration.
