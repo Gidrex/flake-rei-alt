@@ -21,7 +21,7 @@ skills to load.
   push straight to `main`. Agents never use `jj`.
 - No commits or pushes without an explicit request.
 - Secrets: never write plaintext values into the repo and never print decrypted
-  `secrets/secrets.yaml` content into chat. New secrets only via the `sops-add-secret` skill.
+  `sops/secrets.yaml` content into chat. New secrets only via the `sops-add-secret` skill.
 - Do not edit `~/.config/niri` directly — those are symlinks into `dotfiles/niri/`.
 - Do not touch `dotfiles/.unused/` (archive of old configs).
 - Do not invent URLs or facts about external services — verify by reading files/command output.

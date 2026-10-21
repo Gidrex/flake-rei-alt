@@ -54,9 +54,9 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 ## Secrets (sops-nix + age)
 
-- Encrypted store: `secrets/secrets.yaml`; policy in `.sops.yaml` (single age recipient for `secrets/*.yaml`).
+- Encrypted store: `sops/secrets.yaml`; policy in `.sops.yaml` (single age recipient for `sops/*.yaml`).
   Decrypt target is `$XDG_CONFIG_HOME/sops/...`; identity key must live at `~/.config/sops/age/keys.txt`.
-  Convert a public ssh key to age: `ssh-to-age < ~/.ssh/id_ed25519.pub`. Edit/re-encrypt with `sops secrets/secrets.yaml`.
+  Convert a public ssh key to age: `ssh-to-age < ~/.ssh/id_ed25519.pub`. Edit/re-encrypt with `sops sops/secrets.yaml`.
   Declare a new secret in `hm-modules/security/sops.nix`. Never write plaintext secret values into the repo.
 
 ## Quirks
