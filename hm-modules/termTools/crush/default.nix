@@ -23,23 +23,9 @@
           type = "openai-compat";
           base_url = "https://opencode.ai/inference/go/openai/v1";
           api_key = "$(cat ${config.sops.secrets.opencode_api_key.path})";
-          # Pinned catalog like pi: no discovery round-trip at startup.
-          discover_models = false;
-          # Costs/context from the pi model catalog (models-store.json).
-          models = [
-            {
-              id = "muse-spark-1.3-contributor";
-              name = "Muse Spark 1.3 Contributor";
-              cost_per_1m_in = 0.1;
-              cost_per_1m_out = 0.2;
-              cost_per_1m_in_cached = 0.002;
-              cost_per_1m_out_cached = 0;
-              context_window = 1048576;
-              default_max_tokens = 131072;
-              can_reason = true;
-              supports_attachments = true;
-            }
-          ];
+          # No pinned catalog: crush discovers models natively from
+          # the provider's /models endpoint using this key.
+          discover_models = true;
         };
         openrouter = {
           name = "OpenRouter";
