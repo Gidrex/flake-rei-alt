@@ -1,9 +1,10 @@
 # Declarative crush; mirrors hm-modules/termTools/opencode (same providers,
 # same MCP servers via programs.mcp, same skills, same global AGENTS.md).
 # Auth resolves at runtime via $(cat ...) (path only in store).
+# Theme: catppuccin-mocha user theme (matches foot/catppuccin-mocha in
+# terminal), selected via options.tui.active_theme.
 # Deliberate drift: no ponytail (opencode plugin API has no crush equivalent),
-# no TUI theme (crush.json has no theme key), LSP via crush auto_lsp + nil
-# already on PATH.
+# LSP via crush auto_lsp + nil already on PATH.
 {
   config,
   pkgs,
@@ -47,8 +48,10 @@
         };
       };
       # Same global instructions as opencode sessions.
+      # Theme matches foot catppuccin-mocha (global mocha, accent blue).
       options = {
         global_context_paths = [ "${config.programs.opencode.context}" ];
+        tui.active_theme = "catppuccin-mocha";
       };
     };
 
@@ -69,4 +72,8 @@
   # npx for chrome-devtools MCP (rtk/uv are already global in core/packages).
   # Crush has no extraPackages; home.packages lands on the same PATH.
   home.packages = [ pkgs.nodejs ];
+
+  # Crush user themes live in <config>/crush/themes/<name>.json (no HM option
+  # covers them, so lay the file out directly next to crush.json).
+  xdg.configFile."crush/themes/catppuccin-mocha.json".source = ./themes/catppuccin-mocha.json;
 }
