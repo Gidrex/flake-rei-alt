@@ -30,11 +30,13 @@
 
     models = {
       providers = {
+        # No `models` list here: a bare `{ id = ...; }` replaces the catalog entry
+        # and resets contextWindow to pi's 128k default (modelFromJson).
+        # The catalog already knows muse-spark-1.3 (1048576 ctx / 131072 max).
         opencode-go = {
           baseUrl = "https://opencode.ai/inference/go/v1";
           api = "openai-responses";
           apiKey = "!cat ${config.sops.secrets.opencode_api_key.path}";
-          models = [ { id = "muse-spark-1.3-contributor"; } ];
         };
         openrouter = {
           baseUrl = "https://openrouter.ai/api/v1";
