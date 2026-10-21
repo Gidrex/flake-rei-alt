@@ -15,6 +15,7 @@
     settings = {
       defaultProvider = "opencode-go";
       defaultModel = "muse-spark-1.3-contributor";
+      defaultThinkingLevel = "xhigh";
       skills = [
         "${../opencode/skills/python-uv}"
         "${../opencode/skills/typescript-biome}"
