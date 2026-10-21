@@ -18,6 +18,8 @@
     ./termTools/helix
     ./termTools/nixvim-rei.nix
     ./termTools/opencode
+    ./termTools/codex
+    ./termTools/pi
     ./termTools/yazi
     ./termTools/less.nix
 

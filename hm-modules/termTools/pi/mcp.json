@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "wordcraft": {
+      "command": "wordcraft-cli",
+      "args": ["mcp"],
+      "enabled": false,
+      "description": "Word document automation (AUR binary, rarely used)"
+    },
+    "gridcraft": {
+      "command": "gridcraft-cli",
+      "args": ["mcp"],
+      "enabled": false,
+      "description": "Spreadsheet automation (AUR binary, rarely used)"
+    },
+    "telegram": {
+      "url": "http://127.0.0.1:8765/mcp",
+      "enabled": false,
+      "description": "Personal Telegram userbot via local shared daemon"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--executablePath", "/usr/bin/chromium"],
+      "enabled": false,
+      "description": "Browser automation (needs local Chrome)"
+    }
+  }
+}

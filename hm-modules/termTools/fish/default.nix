@@ -35,6 +35,9 @@
         # so child processes do not inherit it). Run `jevkey` before a session
         # that needs Jev decisions.
         jevkey.body = ''set -gx JEV_API_KEY (cat "${config.sops.secrets.jev_api_key.path}"); and echo "JEV_API_KEY loaded"'';
+        # Loads agent provider keys from sops on demand (codex env_key).
+        # Run `aikeys` before a codex session.
+        aikeys.body = ''set -gx OPENCODE_API_KEY (cat "${config.sops.secrets.opencode_api_key.path}"); set -gx OPENROUTER_API_KEY (cat "${config.sops.secrets.openrouter_api_key.path}"); and echo "agent keys loaded"'';
       }
 
       (lib.mkIf config.programs.eza.enable {
