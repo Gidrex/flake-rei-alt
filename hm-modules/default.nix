@@ -14,6 +14,7 @@
 
     ./sound/mpv.nix
 
+    ./termTools/crush
     ./termTools/fish
     ./termTools/helix
     ./termTools/nixvim-rei.nix
