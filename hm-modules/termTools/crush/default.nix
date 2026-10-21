@@ -12,8 +12,8 @@
 }:
 let
   # Crush has no plugin API and no option to hide the sidebar logo
-  # ("Charm" wordmark is hardcoded in internal/ui/model/sidebar.go), so
-  # patch it out at build time.
+  # ("Charm" wordmark) or the skills section (both hardcoded in
+  # internal/ui/model/sidebar.go), so patch them out at build time.
   crush-no-logo = pkgs.crush.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [ ./no-sidebar-logo.patch ];
   });

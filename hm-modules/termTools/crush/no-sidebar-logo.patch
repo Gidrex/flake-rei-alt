@@ -1,5 +1,5 @@
---- a/internal/ui/model/sidebar.go	2026-10-21 20:28:24.778534657 +0300
-+++ b/internal/ui/model/sidebar.go	2026-10-21 20:28:24.788881800 +0300
+--- a/internal/ui/model/sidebar.go	2026-10-21 20:44:46.446016146 +0300
++++ b/internal/ui/model/sidebar.go	2026-10-21 20:45:03.727057705 +0300
 @@ -10,9 +10,7 @@
  	mcp "github.com/charmbracelet/crush/internal/agent/tools/mcp"
  	"github.com/charmbracelet/crush/internal/config"
@@ -10,7 +10,7 @@
  )
  
  // modelInfo renders the current model information including reasoning
-@@ -68,30 +66,15 @@
+@@ -68,35 +66,19 @@
  		return
  	}
  
@@ -42,7 +42,21 @@
  
  	// Render all items without truncation; virtual scrolling handles overflow.
  	lspSection := m.lspInfo(contentWidth, len(m.lspStates), true)
-@@ -122,7 +105,7 @@
+ 	mcpSection := m.mcpInfo(contentWidth, mcpCount(m.com.Config().MCP.Sorted(), m.mcpStates), true)
+-	skillsSection := m.skillsInfo(contentWidth, len(m.skillStatusItems()), true)
+ 	filesSection := m.filesInfo(m.com.Workspace.WorkingDir(), contentWidth, fileChangeCount(m.sessionFiles), true)
+ 
+ 	// Build the scrollable content.
+@@ -113,8 +95,6 @@
+ 		lspSection,
+ 		"",
+ 		mcpSection,
+-		"",
+-		skillsSection,
+ 	)
+ 
+ 	totalLines := strings.Count(content, "\n") + 1
+@@ -122,7 +102,7 @@
  	m.sidebarTotalLines = totalLines
  	m.sidebarContentWidth = contentWidth
  	m.sidebarContentHeight = contentHeight
@@ -51,7 +65,7 @@
  	m.sidebarScrollable = totalLines > contentHeight
  	m.sidebarMaxOffsetVal = max(0, totalLines-contentHeight)
  
-@@ -147,16 +130,11 @@
+@@ -147,16 +127,11 @@
  		return
  	}
  
@@ -69,7 +83,7 @@
  
  	// Slice visible lines.
  	end := min(m.sidebarOffset+contentHeight, totalLines)
-@@ -168,14 +146,6 @@
+@@ -168,14 +143,6 @@
  	// auto-hide.
  	scrollbarVisible := totalLines > contentHeight && (m.sidebarScrollbarVisible || m.focus == uiFocusSidebar)
  
@@ -84,8 +98,8 @@
  	// Draw the visible content in the scrollable area.
  	uv.NewStyledString(
  		lipgloss.NewStyle().
---- a/internal/ui/model/ui.go	2026-10-21 20:28:24.778574265 +0300
-+++ b/internal/ui/model/ui.go	2026-10-21 20:28:24.788916206 +0300
+--- a/internal/ui/model/ui.go	2026-10-21 20:44:46.446093973 +0300
++++ b/internal/ui/model/ui.go	2026-10-21 20:45:03.718808370 +0300
 @@ -5016,7 +5016,7 @@
  
  // cacheSidebarLogo renders and caches the sidebar logo at the specified width.
