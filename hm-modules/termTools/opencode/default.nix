@@ -63,6 +63,14 @@
     };
   };
 
+  # TUI prefs (theme, keybinds): HM has no programs.opencode option for
+  # cli.json, so the file is managed directly. force replaces the previous
+  # hand-maintained ~/.config/opencode/cli.json one time.
+  xdg.configFile."opencode/cli.json" = {
+    source = ./cli.json;
+    force = true;
+  };
+
   # Jev decision skill runtime (non-secret default; key itself stays in sops).
   home.sessionVariables = {
     JEV_LANGUAGE = "en-US";
