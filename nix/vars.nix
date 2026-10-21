@@ -12,6 +12,7 @@
   allowUnfree = [
     "unrar"
     "obsidian"
+    "rtk"
   ];
 
   # Do not bump without a home-manager migration.
