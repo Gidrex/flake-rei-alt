@@ -1,6 +1,10 @@
 #ENC[AES256_GCM,data:4EAx3LEXt4olquXLAfnH,iv:bbnrcVwwnL6g4lLYTapZu7E01sp9lfcs2J3GLiQc4KQ=,tag:eLo59156g83gAwU7s8B1hw==,type:comment]
 pneumo_login: ENC[AES256_GCM,data:uP0FcIkxFFhn,iv:i6cLelwRHjxhCCySg1m8+M7YWsbAlVm/q4A+kaSX+tc=,tag:WLztCldLtGa0BvQESBgXrQ==,type:str]
 pneumo_password: ENC[AES256_GCM,data:k+Y5K33GAUs=,iv:qFZ3R0taISfqE0cBkwg3t5KCurVZjgZvk/0PuFnRTPE=,tag:3WxhsUXfekdRj2tjB3OMyg==,type:str]
+#ENC[AES256_GCM,data:sDvvTlX6unQ=,iv:jSZoz1mubXDJhs7xdz8RcIhoNf1x7AOdYawj1UYMgac=,tag:+8OepdU6RaKUYy2gTuaQUg==,type:comment]
+latum_login: ENC[AES256_GCM,data:wNDkNuFi+A==,iv:LzJZrVedSOc+RGYnbNGfuO3Tnv40CWKrjZFICx0YOXE=,tag:xndRGuv4dmasodE2Wl3Lbw==,type:str]
+latum_password: ENC[AES256_GCM,data:ktUniVkV,iv:aW0C0XBPi6hXSPwYHh7qwepuvJOHmduswmd2C1WJBGo=,tag:7f8Zy6N2BDY/EVAvoWq3uQ==,type:str]
+latum_admin: ENC[AES256_GCM,data:QgdnlI/ZLa0=,iv:1PIPJDwAhNet+ErQ0odHmDwaAq4eZnHWagHInLKGGPo=,tag:bWDsoxOYb963hr3UHQ0jjg==,type:str]
 sops:
     age:
         - enc: |
@@ -12,7 +16,7 @@ sops:
             uLfKCB/lHsOOb6mnCK02Wc3UJC9RU0Ep8v2aWTPGN8pzZLlkNjG3sg==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1h8xssn2p4tjjgp5ac99m6cy0elgss7mkzpp8j9s5antj69geev9s7pkac4
-    lastmodified: "2026-10-06T11:59:14Z"
-    mac: ENC[AES256_GCM,data:wuI2KUGtocw3G9htlos0GAI4kcFVOW4PEJTWsSTStfDzWdx06oyZHNpIkzS7qky1+gR57oXztGM82TjIVTPtLcmE8tQx0AzJTanAtP58vKWviPD1hS1iP5/eCU8mXusMuGOPOJYQ+K+VOX7i8FYD40RozfAdSp+J5jOKmqdK2XI=,iv:1eFNboYbtIL9m5ghR/KQB6ZEa9YsqoBH8yNgldOWU6k=,tag:3so8OoSglewYPtAN6irEvA==,type:str]
+    lastmodified: "2026-10-21T13:12:06Z"
+    mac: ENC[AES256_GCM,data:CN0EHiE3Z50SMltAXLY8ZElRT964ENKhOY/hc3HMa3/5C0HTXfY6/oceTH3LqHnuiHp6u8+ubf+QERYuHOq5HWKwKqjereVMgw7XlckiY7dQEkgKUzbKj1XtBVSpUnMyq26l7taRcY5U5GiVR23zis2vGIqb5jGfN7U57uajebU=,iv:2/iESVZYc0Wn81P2HLV0JvNwMM5sWiJlvRLvXGvsT2I=,tag:VMTIszDtFcU11kg2x5iGvA==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
