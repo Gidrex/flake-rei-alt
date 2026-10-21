@@ -31,8 +31,8 @@
     models = {
       providers = {
         opencode-go = {
-          baseUrl = "https://opencode.ai/inference/go/openai/v1";
-          api = "openai-completions";
+          baseUrl = "https://opencode.ai/inference/go/v1";
+          api = "openai-responses";
           apiKey = "!cat ${config.sops.secrets.opencode_api_key.path}";
           models = [ { id = "muse-spark-1.3-contributor"; } ];
         };

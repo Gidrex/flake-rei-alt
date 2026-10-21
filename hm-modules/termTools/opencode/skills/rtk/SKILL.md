@@ -1,6 +1,9 @@
 ---
 name: rtk
-description: Use before running any non-interactive shell command from an AI coding agent: route it through the rtk token-saving proxy (rtk git/diff/rg/find/ls/read/json/log/test/pytest/ruff/...) instead of the bare command. Fall back to the bare command only when rtk has no proxy for it.
+description: >-
+  Use before running any non-interactive shell command from an AI coding agent:
+  route it through the rtk token-saving proxy instead of the bare command.
+  Fall back to the bare command only when rtk has no proxy for it.
 ---
 
 # rtk — token-saving shell proxy

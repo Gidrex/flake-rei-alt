@@ -8,6 +8,9 @@
   programs.codex = {
     enable = true;
     enableMcpIntegration = true;
+    # Writable config.toml so `codex` can persist project trust (batchWrite)
+    # instead of failing against the immutable /nix/store copy.
+    mutableSettings = true;
 
     # Same global instructions as opencode sessions.
     context = ../opencode/AGENTS.md;
