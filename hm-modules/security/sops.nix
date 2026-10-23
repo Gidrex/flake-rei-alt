@@ -4,7 +4,6 @@ let
   apiSecrets = [
     "opencode_api_key"
     "openrouter_api_key"
-    "gemini_api_key"
     "jev_api_key"
     "searx_secret_key"
     "telegram_api_id"
