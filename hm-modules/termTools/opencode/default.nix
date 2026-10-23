@@ -11,6 +11,9 @@
     ./plugins
   ];
 
+  # Catppuccin targets tui.json, ignored by OpenCode 2; theme lives in programs.opencode.cli.
+  catppuccin.opencode.enable = false;
+
   programs.opencode = {
     enable = true;
     enableMcpIntegration = true;
@@ -40,10 +43,51 @@
       jev-agent = ./skills/jev-agent;
       rtk = ./skills/rtk;
     };
-    # TUI theme: macchiato by choice (deliberate drift from global mocha;
-    # mkForce wins over catppuccin autoEnable).
-    tui = {
-      theme = lib.mkForce "catppuccin-macchiato";
+    # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the
+    # app-owned cli.json at merge time; HM owns the file, TUI edits do not persist.
+    cli = {
+      # Macchiato by choice (deliberate drift from global mocha;
+      # mkForce wins over catppuccin autoEnable).
+      theme = lib.mkForce { name = "catppuccin-macchiato"; };
+      plugins = [ "-internal:sidebar-context" ];
+      diffs = {
+        wrap = "word";
+        view = "auto";
+      };
+      session = {
+        sidebar = "auto";
+        scrollbar = false;
+        thinking = "hide";
+        permissions = "prompt";
+        tps = true;
+      };
+      animations = true;
+      keybinds = {
+        "app.exit" = "ctrl+c,ctrl+d";
+        "session.queued_prompts" = "ctrl+q";
+        "opencode.status" = "ctrl+s";
+        "session.new" = "ctrl+n";
+        "session.list" = "ctrl+l";
+        "messages.copy" = "ctrl+y";
+        "model.list" = "ctrl+m";
+        "session.undo" = "ctrl+u";
+        "session.timeline" = "ctrl+g";
+        "session.export" = "none";
+        "terminal.toggle" = "none";
+        "terminal.select" = "none";
+        "prompt.editor" = "ctrl+e";
+        "agent.list" = "ctrl+a";
+        "session.sidebar.toggle" = "ctrl+b";
+        "session.background" = "none";
+        "input.move.left" = "left";
+        "prompt.queue" = "none";
+      };
+      tabs = {
+        mode = "off";
+        layout = "horizontal";
+        indicators = "status";
+        scope = "cwd";
+      };
     };
     settings = {
       autoupdate = false; # Self-update off: nix owns the binary.
