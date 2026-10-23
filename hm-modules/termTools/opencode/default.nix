@@ -59,6 +59,11 @@
             apiKey = "{file:${config.sops.secrets.openrouter_api_key.path}}";
           };
         };
+        "inception" = {
+          options = {
+            apiKey = "{file:${config.sops.secrets.inceptionlabs_api_key.path}}";
+          };
+        };
       };
     };
   };
