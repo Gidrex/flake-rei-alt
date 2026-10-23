@@ -121,6 +121,7 @@
       bind -M insert \ea 'commandline -f cancel; opencode --continue; commandline -f repaint'
 
       command -q tuna; and tuna completion fish | source
+      command -q chora; and chora completion fish | source
     '';
 
     # No loginShellInit: one-time setup (e.g. `tide configure`) runs by hand,
