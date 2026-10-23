@@ -98,10 +98,4 @@ binds {
     Mod+F7 { spawn "niri" "msg" "action" "focus-column" "7"; }
     Mod+F8 { spawn "niri" "msg" "action" "focus-column" "8"; }
     Mod+F9 { spawn "niri" "msg" "action" "focus-column" "9"; }
-    
-    // unused
-    Mod+Home { focus-column-first; }
-    Mod+End { focus-column-last; }
-    Mod+Shift+Home { move-column-to-first; }
-    Mod+Shift+End { move-column-to-last; }
 }

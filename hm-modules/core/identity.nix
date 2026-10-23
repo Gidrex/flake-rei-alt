@@ -20,26 +20,33 @@
       XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/screenshots";
     };
 
-    sessionPath = [
-      "${config.home.homeDirectory}/.local/bin"
-      "${config.home.homeDirectory}/.nix-profile/bin"
-      "${config.home.homeDirectory}/.kimi-code/bin"
-      "/usr/bin"
+    # Keep only existing dirs: a missing PATH entry silently shadows commands
+    # and stays broken until a rebuild happens after the tool is installed.
+    sessionPath =
+      let
+        inherit (config.home) homeDirectory;
+        filterExisting = builtins.filter (p: builtins.pathExists p);
+      in
+      filterExisting [
+        "${homeDirectory}/.local/bin"
+        "${homeDirectory}/.nix-profile/bin"
+        "${homeDirectory}/.kimi-code/bin"
+        "/usr/bin"
 
-      # Package managers
-      "${config.home.homeDirectory}/.volta/bin"
-      "${config.home.homeDirectory}/.cargo/bin"
-      "${config.home.homeDirectory}/.npm-global/bin"
-      "${config.home.homeDirectory}/.deno/bin"
-      "${config.home.homeDirectory}/go/bin"
+        # Package managers
+        "${homeDirectory}/.volta/bin"
+        "${homeDirectory}/.cargo/bin"
+        "${homeDirectory}/.npm-global/bin"
+        "${homeDirectory}/.deno/bin"
+        "${homeDirectory}/go/bin"
 
-      # Flutter dev
-      "/opt/flutter/bin"
-      "/opt/android-sdk/tools/bin"
-      "${config.home.homeDirectory}/Android/Sdk/cmdline-tools/latest/bin"
-      "${config.home.homeDirectory}/Android/Sdk/platform-tools"
-      "${config.home.homeDirectory}/Android/Sdk/emulator"
-    ];
+        # Flutter dev
+        "/opt/flutter/bin"
+        "/opt/android-sdk/tools/bin"
+        "${homeDirectory}/Android/Sdk/cmdline-tools/latest/bin"
+        "${homeDirectory}/Android/Sdk/platform-tools"
+        "${homeDirectory}/Android/Sdk/emulator"
+      ];
   };
 
   fonts.fontconfig.enable = true;
