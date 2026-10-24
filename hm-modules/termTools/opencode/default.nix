@@ -115,28 +115,17 @@
           (deny "read" "~/.config/chora/*")
           (deny "edit" "~/.config/chora/*")
         ];
-      provider = {
-        "opencode-go" = {
-          options = {
-            apiKey = "{file:${config.sops.secrets.opencode_api_key.path}}";
+      provider =
+        builtins.mapAttrs
+          (_: secret: {
+            options.apiKey = "{file:${config.sops.secrets.${secret}.path}}";
+          })
+          {
+            "opencode-go" = "opencode_api_key";
+            "openrouter" = "openrouter_api_key";
+            "inception" = "inceptionlabs_api_key";
+            "vercel" = "vercel_gateway_api_key";
           };
-        };
-        "openrouter" = {
-          options = {
-            apiKey = "{file:${config.sops.secrets.openrouter_api_key.path}}";
-          };
-        };
-        "inception" = {
-          options = {
-            apiKey = "{file:${config.sops.secrets.inceptionlabs_api_key.path}}";
-          };
-        };
-        "vercel" = {
-          options = {
-            apiKey = "{file:${config.sops.secrets.vercel_gateway_api_key.path}}";
-          };
-        };
-      };
     };
   };
 
