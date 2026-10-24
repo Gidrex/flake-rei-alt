@@ -130,7 +130,5 @@
   };
 
   # Jev decision skill runtime (non-secret default; key itself stays in sops).
-  home.sessionVariables = {
-    JEV_LANGUAGE = "en-US";
-  };
+  home.sessionVariables.JEV_LANGUAGE = "en-US";
 }
