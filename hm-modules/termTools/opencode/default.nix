@@ -14,6 +14,9 @@
   # Catppuccin targets tui.json, ignored by OpenCode 2; theme lives in programs.opencode.cli.
   catppuccin.opencode.enable = false;
 
+  # HM owns cli.json; overwrite the app-owned file instead of failing on backup collision.
+  xdg.configFile."opencode/cli.json".force = true;
+
   programs.opencode = {
     enable = true;
     enableMcpIntegration = true;
@@ -42,6 +45,7 @@
       ctx7-docs = ./skills/ctx7-docs;
       jev-agent = ./skills/jev-agent;
       rtk = ./skills/rtk;
+      chora = ./skills/chora;
     };
     # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the
     # app-owned cli.json at merge time; HM owns the file, TUI edits do not persist.
@@ -92,6 +96,25 @@
     settings = {
       autoupdate = false; # Self-update off: nix owns the binary.
       lsp = true;
+      # CHORA storage is agent-readable only through the `chora` CLI (see
+      # skills/chora); direct file tools stay denied so --max-access cannot
+      # be bypassed and index-first navigation is enforced. The chora config
+      # itself is denied too, so the configured path is not discoverable
+      # through file tools.
+      permissions =
+        let
+          deny = action: resource: {
+            inherit action resource;
+            effect = "deny";
+          };
+        in
+        [
+          (deny "read" "~/CHORA/*")
+          (deny "edit" "~/CHORA/*")
+          (deny "glob" "*CHORA*")
+          (deny "read" "~/.config/chora/*")
+          (deny "edit" "~/.config/chora/*")
+        ];
       provider = {
         "opencode-go" = {
           options = {
@@ -106,6 +129,11 @@
         "inception" = {
           options = {
             apiKey = "{file:${config.sops.secrets.inceptionlabs_api_key.path}}";
+          };
+        };
+        "vercel" = {
+          options = {
+            apiKey = "{file:${config.sops.secrets.vercel_gateway_api_key.path}}";
           };
         };
       };
