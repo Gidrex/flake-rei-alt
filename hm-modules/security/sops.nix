@@ -10,8 +10,6 @@ let
     "telegram_api_id"
     "telegram_api_hash"
     "telegram_session_string"
-    "antigravity_account_email"
-    "antigravity_account_refresh_token"
     "inceptionlabs_api_key"
   ];
 in
