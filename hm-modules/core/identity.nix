@@ -31,6 +31,9 @@
         "${homeDirectory}/.local/bin"
         "${homeDirectory}/.nix-profile/bin"
         "${homeDirectory}/.kimi-code/bin"
+        # FVM default SDK before /usr/bin: bare dart/flutter must come from
+        # the pinned SDK, not distro /usr/bin/dart.
+        "${homeDirectory}/fvm/default/bin"
         "/usr/bin"
 
         # Package managers

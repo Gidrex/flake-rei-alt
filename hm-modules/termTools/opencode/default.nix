@@ -29,6 +29,7 @@
       pkgs.nodejs
       pkgs.rtk
       pkgs.uv
+      pkgs.android-tools # adb for the (disabled by default) android MCP server
     ];
 
     # AGENTS.md auto-loaded by every session

@@ -31,6 +31,14 @@
         enabled = false;
         url = "http://127.0.0.1:8765/mcp";
       };
+      # Android automation (minhalvp/android-mcp-server, PyPI).
+      # Disabled by default: needs a device/emulator reachable over ADB.
+      # uv comes from programs.opencode extraPackages.
+      android = {
+        enabled = false;
+        command = "uvx";
+        args = [ "android-mcp-server" ];
+      };
       # Browser automation (ChromeDevTools/chrome-devtools-mcp, npm).
       # Disabled by default: needs local Chrome, spawns npx per session.
       # npx comes from pkgs.nodejs in programs.opencode extraPackages.

@@ -33,6 +33,7 @@
 
       # dev
       deno
+      fvm
       just
       lazydocker
       lazyjj

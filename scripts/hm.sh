@@ -19,4 +19,7 @@ if [ -f "$HOME/Projects/nixvim-rei/flake.nix" ]; then
     override_args=(--override-input nixvim-rei "$HOME/Projects/nixvim-rei")
 fi
 
-exec home-manager switch --flake "$FLAKE_DIR#$FLAKE_MACHINE" "${override_args[@]}" -b backup "$@"
+# NOTE: --impure is required: identity.nix filters sessionPath with
+# builtins.pathExists (/home/...), which is always false under pure eval,
+# silently dropping the entire PATH (see generations <=353 with no PATH export).
+exec home-manager switch --impure --flake "$FLAKE_DIR#$FLAKE_MACHINE" "${override_args[@]}" -b backup "$@"
