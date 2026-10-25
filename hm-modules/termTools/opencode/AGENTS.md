@@ -58,7 +58,7 @@
 | Typed decisions (choice/score/noul): routing, gates, review | `jev-agent` |
 | Any non-interactive shell command (token-saving proxy) | `rtk` |
 | Markdown notes or day events | `chora` |
-| Start of every session (always active, level ultra) | `ponytail` |
+| Start of every session (always active, level full) | `ponytail` |
 
 Load `ponytail` (ultra) at session start and follow it for the whole session;
 it stays active until the user says "stop ponytail" or "normal mode".
