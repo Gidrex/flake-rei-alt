@@ -11,7 +11,8 @@
       # Google OAuth via Antigravity proxy. Auth data is managed manually via
       # `opencode auth login` (the plugin updates tokens in the accounts file
       # in place); nothing agy-related is rendered from sops.
-      "opencode-antigravity-auth@latest"
+      # Temporarily disabled.
+      # "opencode-antigravity-auth@latest"
     ];
   };
 }

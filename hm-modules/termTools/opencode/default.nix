@@ -66,7 +66,10 @@ in
       # Macchiato by choice (deliberate drift from global mocha;
       # mkForce wins over catppuccin autoEnable).
       theme = lib.mkForce { name = "catppuccin-macchiato"; };
-      plugins = [ "-internal:sidebar-context" "./herdr-opencode" ];
+      plugins = [
+        "-internal:sidebar-context"
+        "./herdr-opencode"
+      ];
       diffs = {
         wrap = "word";
         view = "auto";
@@ -137,7 +140,8 @@ in
             "opencode-go" = "opencode_api_key";
             "openrouter" = "openrouter_api_key";
             "inception" = "inceptionlabs_api_key";
-            "vercel" = "vercel_gateway_api_key";
+            # Temporarily disabled.
+            # "vercel" = "vercel_gateway_api_key";
           };
     };
   };
