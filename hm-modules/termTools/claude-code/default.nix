@@ -1,10 +1,10 @@
 # Declarative Claude Code; mirrors hm-modules/termTools/opencode (same skills,
-# same MCP servers via programs.mcp, same global AGENTS.md).
+# same global AGENTS.md). MCP servers are kept out of nix by choice: they live in
+# ~/.claude.json (user scope, `claude mcp`), toggled per project via `/mcp`.
 # Deliberate drift: no providers (Anthropic login), no antigravity-auth, no
 # opencode TUI settings; ponytail comes as its native Claude plugin.
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -42,19 +42,6 @@
 
     # Same on-demand skill set as opencode.
     inherit (config.programs.opencode) skills;
-
-    # Same servers as opencode, but only the enabled ones. Claude Code ignores
-    # `disabledMcpjsonServers` for plugin-provided servers (checked on 2.1.310
-    # with `claude mcp list`), so enableMcpIntegration would spawn every
-    # disabled server each session. Enable = flip `enabled` in ../opencode/mcp + `just hm`.
-    mcpServers = lib.mapAttrs (
-      name: server:
-      lib.hm.mcp.transformMcpServer {
-        inherit server;
-        exclude = [ "enabled" ];
-        extraTransforms = [ (lib.hm.mcp.wrapEnvFilesCommand { inherit pkgs name; }) ];
-      }
-    ) (lib.filterAttrs (_: server: server.enabled != false) config.programs.mcp.servers);
   };
 
   # ponytail ships a native Claude plugin (session hooks, skills, band); its
@@ -69,7 +56,7 @@
     hash = "sha256-IJlhfkdXI6pMZZCZO7XBRg88LBiNfzc5Gnm4ofGybL8=";
   };
 
-  # node/npx on PATH: ponytail hooks are node scripts, MCP servers and ctx7 run
+  # node/npx on PATH: ponytail hooks are node scripts, npx MCP servers and ctx7 run
   # via npx (rtk/uv are already global in core/packages).
   home.packages = [ pkgs.nodejs ];
 }

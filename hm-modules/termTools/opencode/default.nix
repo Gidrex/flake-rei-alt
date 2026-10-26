@@ -5,6 +5,17 @@
   pkgs,
   ...
 }:
+let
+  # Archify skill bundle (v3.2.0); sparse checkout keeps the store small.
+  # Bump rev to update.
+  archifySkill = pkgs.fetchFromGitHub {
+    owner = "tt-a1i";
+    repo = "archify";
+    tag = "v3.2.0";
+    hash = "sha256-XG4I34/7FR9LVoOQn1S7dBJOFvmemWNLPrSdj+8O01Q=";
+    sparseCheckout = [ "archify" ];
+  };
+in
 {
   imports = [
     ./mcp
@@ -47,6 +58,7 @@
       jev-agent = ./skills/jev-agent;
       rtk = ./skills/rtk;
       chora = ./skills/chora;
+      archify = "${archifySkill}/archify";
     };
     # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the
     # app-owned cli.json at merge time; HM owns the file, TUI edits do not persist.
@@ -54,7 +66,7 @@
       # Macchiato by choice (deliberate drift from global mocha;
       # mkForce wins over catppuccin autoEnable).
       theme = lib.mkForce { name = "catppuccin-macchiato"; };
-      plugins = [ "-internal:sidebar-context" ];
+      plugins = [ "-internal:sidebar-context" "./herdr-opencode" ];
       diffs = {
         wrap = "word";
         view = "auto";
