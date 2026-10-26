@@ -14,6 +14,7 @@
 
     ./sound/mpv.nix
 
+    ./termTools/claude-code
     ./termTools/crush
     ./termTools/fish
     ./termTools/helix
