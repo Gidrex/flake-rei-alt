@@ -59,6 +59,7 @@ in
       rtk = ./skills/rtk;
       chora = ./skills/chora;
       archify = "${archifySkill}/archify";
+      background-agent = ./skills/background-agent;
     };
     # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the
     # app-owned cli.json at merge time; HM owns the file, TUI edits do not persist.

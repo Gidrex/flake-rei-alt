@@ -107,6 +107,24 @@
           body = "cd ../../../../..";
         };
       }
+
+      # herdr, mirrors the old zellij set (zl/zln/zla/zlk, see 8f664ec).
+      {
+        hd = {
+          wraps = "herdr";
+          body = "herdr $argv";
+        };
+        hdn = {
+          wraps = "herdr";
+          body = "herdr --session $argv";
+        };
+      }
+
+      (lib.mkIf config.programs.skim.enable {
+        __hd_pick.body = "herdr session list | tail -n +2 | awk '{print $1}' | ${pkgs.skim}/bin/sk";
+        hda.body = "herdr session attach (__hd_pick)";
+        hdk.body = "herdr session stop (__hd_pick)";
+      })
     ];
 
     interactiveShellInit = ''

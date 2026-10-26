@@ -59,6 +59,7 @@
 | Any non-interactive shell command (token-saving proxy) | `rtk` |
 | Markdown notes or day events | `chora` |
 | Interactive architecture diagrams (standalone HTML) | `archify` |
+| Launch an agent in the background with a prompt | `background-agent` |
 | Start of every session (always active, level full) | `ponytail` |
 
 Load `ponytail` (ultra) at session start and follow it for the whole session;
