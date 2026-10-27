@@ -1,6 +1,8 @@
 binds {
     Mod+T { spawn "footclient"; }
-    Mod+N { spawn "footclient" "--title" "notes" "chora" "open" "note"; }
+    Mod+N { spawn "footclient" "chora" "open" "note"; }
+    Mod+Shift+N { spawn "footclient" "--title" "notes" "chora" "open" "note"; }
+    Mod+O { spawn-sh "footclient --title daemons $HOME/flake-rei/scripts/daemons.sh"; }
     Mod+X { spawn-sh "$HOME/flake-rei/scripts/OCR_select_area.sh"; }
 
     Mod+B { toggle-window-floating; }
