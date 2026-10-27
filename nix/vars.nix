@@ -8,6 +8,11 @@
     homeDirectory = "/home/gidrex";
   };
 
+  github = {
+    mail = "Gidrex0@proton.me";
+    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKjmm5IkD+dmNMv/GvpTMdOI++NtltjSxhaIpmI3a7NI github@cp508";
+  };
+
   # Unfree allow-list (deny-by-default, see nix/pkgs.nix).
   allowUnfree = [
     "unrar"

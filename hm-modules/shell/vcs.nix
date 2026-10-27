@@ -1,5 +1,5 @@
 # Version control: git + jujutsu + lazygit.
-{ vars, ... }:
+{ config, vars, ... }:
 {
   # Upstream catppuccin/lazygit theme is stale (gui.authorColors at the old location):
   # lazygit >= 0.44 tries to auto-migrate the read-only store file and fails on every
@@ -7,9 +7,54 @@
   catppuccin.lazygit.enable = false;
 
   programs = {
+    ssh = {
+      enable = true;
+      # Defaults were implicit (enableDefaultConfig); declared explicitly to add
+      # the main key as the default identity. Everything else is github-only.
+      enableDefaultConfig = false;
+      settings = {
+        "*" = {
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+          IdentityFile = config.sops.secrets.private_ssh.path;
+        };
+        "github.com" = {
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = config.sops.secrets.private_ssh_github.path;
+          IdentitiesOnly = true;
+        };
+        # Migrated from the manual ~/.ssh/config so managing it via home-manager doesn't drop them.
+        "github-cp508" = {
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = config.sops.secrets.private_ssh_github.path;
+          IdentitiesOnly = true;
+        };
+      };
+    };
+
     git = {
       enable = true;
       lfs.enable = true;
+      includes = [
+        {
+          condition = "hasconfig:remote.*.url:git@github.com:*/**";
+          contents.user.email = vars.github.mail;
+        }
+        {
+          condition = "hasconfig:remote.*.url:https://github.com/**";
+          contents.user.email = vars.github.mail;
+        }
+      ];
       settings = {
         user.name = vars.user.displayName;
         user.email = vars.user.mail;
@@ -20,7 +65,6 @@
         push.autoSetupRemote = true;
         commit.gpgsign = false;
         rerere.enabled = true;
-        user.signingkey = "~/.ssh/id_rsa.pub";
         core.whitespace = "trailing-space,space-before-tab";
         core.editor = "hx";
         safe.directory = "/opt/flutter";
