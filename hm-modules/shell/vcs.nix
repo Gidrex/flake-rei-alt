@@ -32,13 +32,6 @@
           IdentityFile = config.sops.secrets.private_ssh_github.path;
           IdentitiesOnly = true;
         };
-        # Migrated from the manual ~/.ssh/config so managing it via home-manager doesn't drop them.
-        "github-cp508" = {
-          HostName = "github.com";
-          User = "git";
-          IdentityFile = config.sops.secrets.private_ssh_github.path;
-          IdentitiesOnly = true;
-        };
       };
     };
 
