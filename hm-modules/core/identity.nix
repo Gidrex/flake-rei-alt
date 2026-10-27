@@ -16,6 +16,11 @@
 
       QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
 
+      # OpenCode discovers ~/.claude/skills and ~/.agents/skills by default;
+      # keep only repo-declared ~/.config/opencode/skills.
+      OPENCODE_DISABLE_EXTERNAL_SKILLS = "1";
+      OPENCODE_DISABLE_CLAUDE_CODE_SKILLS = "1";
+
       XDG_CONFIG_HOME = config.xdg.configHome;
       XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/screenshots";
     };
