@@ -9,7 +9,6 @@ let
     "telegram_api_id"
     "telegram_api_hash"
     "telegram_session_string"
-    "inceptionlabs_api_key"
   ];
 in
 {

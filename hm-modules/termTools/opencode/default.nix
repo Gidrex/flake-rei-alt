@@ -114,8 +114,9 @@ in
       };
     };
     settings = {
+      model = "opencode-go/muse-spark-1.3-contributor";
       autoupdate = false; # Self-update off: nix owns the binary.
-      lsp = true;
+      lsp = false; # Disabled upstream in v2 (no servers run); use lint/typecheck instead.
       # CHORA storage is agent-readable only through the `chora` CLI (see
       # skills/chora); direct file tools stay denied so --max-access cannot
       # be bypassed and index-first navigation is enforced. The chora config
@@ -143,7 +144,6 @@ in
           {
             "opencode-go" = "opencode_api_key";
             "openrouter" = "openrouter_api_key";
-            "inception" = "inceptionlabs_api_key";
             # Temporarily disabled.
             # "vercel" = "vercel_gateway_api_key";
           };

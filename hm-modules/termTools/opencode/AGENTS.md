@@ -69,5 +69,6 @@ If two apply (e.g. `nix-hm` + repo-local `.agents` skills), load both.
 ## Conventions
 
 - `just`: never create a `justfile` unless asked. If created, include `@_default` with
-  `just --list --unsorted`. `qa` = full pipeline, `test` = tests only.
+  `just --list --unsorted`. `qa` = full pipeline, always: fmt + lint + test checks,
+  no exceptions. `test` = tests only.
 - Env: Linux + Wayland (`niri`), Nix via `home-manager`. Prefer CLI gates runnable headless/in CI.
