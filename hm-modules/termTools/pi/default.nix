@@ -24,7 +24,6 @@
         "${../opencode/skills/nix-hm}"
         "${../opencode/skills/lua-shell}"
         "${../opencode/skills/ctx7-docs}"
-        "${../opencode/skills/jev-agent}"
         "${../opencode/skills/rtk}"
       ];
     };

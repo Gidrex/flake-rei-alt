@@ -31,10 +31,6 @@
         e.body = "set -q EDITOR; or set -l EDITOR hx; \$EDITOR \$argv";
         hmr.body = builtins.readFile ./hmr_function.fish;
         hm.body = "\$HOME/flake-rei/scripts/hm.sh \$argv";
-        # Loads JEV_API_KEY from sops on demand (never exported ambiently,
-        # so child processes do not inherit it). Run `jevkey` before a session
-        # that needs Jev decisions.
-        jevkey.body = ''set -gx JEV_API_KEY (cat "${config.sops.secrets.jev_api_key.path}"); and echo "JEV_API_KEY loaded"'';
         # Loads agent provider keys from sops on demand (pi !cat apiKey).
         # Run `aikeys` before a pi session.
         aikeys.body = ''set -gx OPENCODE_API_KEY (cat "${config.sops.secrets.opencode_api_key.path}"); set -gx OPENROUTER_API_KEY (cat "${config.sops.secrets.openrouter_api_key.path}"); and echo "agent keys loaded"'';

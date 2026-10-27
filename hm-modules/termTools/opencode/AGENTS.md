@@ -55,7 +55,6 @@
 | Nix/home-managerflake change, `nixfmt`, `just qa/check` | `nix-hm` |
 | Lua, shell scripts, `stylua`/`shellcheck` | `lua-shell` |
 | Any third-party framework/SDK/API docs | `ctx7-docs` |
-| Typed decisions (choice/score/noul): routing, gates, review | `jev-agent` |
 | Any non-interactive shell command (token-saving proxy) | `rtk` |
 | Markdown notes or day events | `chora` |
 | Interactive architecture diagrams (standalone HTML) | `archify` |

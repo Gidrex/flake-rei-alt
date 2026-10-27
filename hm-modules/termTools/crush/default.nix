@@ -73,7 +73,6 @@ in
       nix-hm = ../opencode/skills/nix-hm;
       lua-shell = ../opencode/skills/lua-shell;
       ctx7-docs = ../opencode/skills/ctx7-docs;
-      jev-agent = ../opencode/skills/jev-agent;
       rtk = ../opencode/skills/rtk;
     };
   };

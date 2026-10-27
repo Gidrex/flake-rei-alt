@@ -55,7 +55,6 @@ in
       nix-hm = ./skills/nix-hm;
       lua-shell = ./skills/lua-shell;
       ctx7-docs = ./skills/ctx7-docs;
-      jev-agent = ./skills/jev-agent;
       rtk = ./skills/rtk;
       chora = ./skills/chora;
       archify = "${archifySkill}/archify";
@@ -151,6 +150,4 @@ in
     };
   };
 
-  # Jev decision skill runtime (non-secret default; key itself stays in sops).
-  home.sessionVariables.JEV_LANGUAGE = "en-US";
 }
