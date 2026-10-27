@@ -40,14 +40,16 @@ interface GlideSearchEngines {
 	add(engine: SearchEngine): void;
 }
 
+type GlideModeName = "normal" | "insert" | "visual" | "hint" | "command" | "ignore" | "op-pending";
+
 interface GlideKeymaps {
 	set(
-		mode: "normal" | "insert" | "visual" | "hint" | "command" | "ignore",
+		mode: GlideModeName | GlideModeName[],
 		key: string,
 		action: string | ((context: KeymapContext) => void | Promise<void>),
 	): void;
 	del(
-		mode: "normal" | "insert" | "visual" | "hint" | "command" | "ignore",
+		mode: GlideModeName | GlideModeName[],
 		key: string,
 	): void;
 }
@@ -156,6 +158,5 @@ glide.search_engines.add({
 });
 
 // Keymaps
-glide.keymaps.set("normal", "<C-space>", () => {
-	glide.commandline.show({ input: "tab " });
-});
+glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", "commandline_show tab ");
+glide.keymaps.del("normal", "<leader><leader>");
