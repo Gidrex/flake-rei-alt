@@ -23,6 +23,8 @@ in
       gdrive_client_id = { };
       gdrive_secret = { };
       gdrive_token = { };
+      private_ssh = { };
+      private_ssh_github = { };
     }
     // builtins.listToAttrs (
       map (name: {
