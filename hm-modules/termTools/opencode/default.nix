@@ -84,7 +84,11 @@ in
       };
       animations = true;
       keybinds = {
-        "app.exit" = "ctrl+c,ctrl+d";
+        "app.exit" = "ctrl+c";
+        "command.palette.show" = "none"; # hides the "ctrl+p commands" footer hint
+        "diff.open" = "ctrl+d";
+        "session.delete" = "none";
+        "input.delete" = "delete,shift+delete";
         "session.queued_prompts" = "ctrl+q";
         "opencode.status" = "ctrl+s";
         "session.new" = "ctrl+n";
