@@ -1,3 +1,4 @@
 spawn-sh-at-startup "swaybg -m fill -o '*' -i /home/gidrex/flake-rei/assets/wallpapers/3440x1440/blur/Moonlit_Mountain_Night.jpg"
 spawn-sh-at-startup "flatpak run com.github.wwmm.easyeffects --gapplication-service"
 spawn-sh-at-startup "noctalia"
+// spawn-sh-at-startup "clash-verge"
