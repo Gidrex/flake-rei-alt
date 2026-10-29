@@ -64,16 +64,15 @@ status)
 picklist) # id|display lines for tv --source-command
   for d in "${DAEMONS[@]}"; do echo "$d|$(status_line "$d")"; done
   for a in "${ACTIONS[@]}"; do echo "$a|▷ $(label_"$a") [oneshot]"; done
-  echo "quit|Quit"
   exit 0
   ;;
 toggle)
-  toggle "${2:?usage: daemons.sh toggle <id>}"
+  toggle "${2:?usage: scripts_menu.sh toggle <id>}"
   exit 0
   ;;
 "") ;;
 *)
-  echo "usage: daemons.sh [status|picklist|toggle <id>]" >&2
+  echo "usage: scripts_menu.sh [status|picklist|toggle <id>]" >&2
   exit 1
   ;;
 esac
@@ -85,7 +84,7 @@ command -v tv >/dev/null || {
 SCRIPT="${BASH_SOURCE[0]}"
 while true; do
   pick=$(tv --source-command "\"$SCRIPT\" picklist" --source-display '{split:|:1}' --source-output '{split:|:0}' --no-sort --no-preview --no-remote --input-prompt "daemons (Enter=toggle/run, Esc=close) > ") || exit 0
-  [ -z "$pick" ] || [ "$pick" = "quit" ] && exit 0
+  [ -z "$pick" ] && exit 0
   # toggle/run failures must not kill the panel (set -e): swallow, reloop.
   for a in "${ACTIONS[@]}"; do if [ "$pick" = "$a" ]; then "run_$pick" || true; fi; done
   for d in "${DAEMONS[@]}"; do if [ "$pick" = "$d" ]; then toggle "$pick" || true; fi; done
