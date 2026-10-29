@@ -121,15 +121,24 @@
         hda.body = "herdr session attach (__hd_pick)";
         hdk.body = "herdr session stop (__hd_pick)";
       })
+
+      (lib.mkIf (config.programs.zoxide.enable && config.programs.television.enable) {
+        # Thin wrapper over scripts/ztv.sh (single source for fish Alt+Z and
+        # niri Mod+T); the script prints the picked dir, Esc prints nothing.
+        __ztv.body = ''
+          set -l dest ("$HOME/flake-rei/scripts/ztv.sh")
+          test -n "$dest"; and z $dest
+        '';
+      })
     ];
 
     interactiveShellInit = ''
       set -g fish_greeting ""
       set -g fish_key_bindings fish_hybrid_key_bindings
 
-      ${lib.optionalString (config.programs.zoxide.enable && config.programs.television.enable)
-        "bind -M insert \\ez 'commandline -f cancel; z $(${config.programs.television.package}/bin/tv --source-command \"${pkgs.zoxide}/bin/zoxide query -l\" --preview-command \"${pkgs.eza}/bin/eza -la --color=always --icons=always --group-directories-first \\\"{}\\\"\" --preview-size 60 --layout landscape); commandline -f repaint'"
-      }
+      ${lib.optionalString (
+        config.programs.zoxide.enable && config.programs.television.enable
+      ) "bind -M insert \\ez 'commandline -f cancel; __ztv; commandline -f repaint'"}
       ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\et 'commandline -f cancel; z ..; commandline -f repaint'"}
       ${lib.optionalString config.programs.helix.enable "bind -M insert \\ee 'commandline -f cancel; helixing; commandline -f repaint'"}
       ${lib.optionalString config.programs.yazi.enable "bind -M insert \\ey 'commandline -f cancel; ${pkgs.yazi}/bin/yazi; commandline -f repaint'"}

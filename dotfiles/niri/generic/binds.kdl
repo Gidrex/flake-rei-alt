@@ -1,5 +1,5 @@
 binds {
-    Mod+T { spawn "footclient"; }
+    Mod+T { spawn-sh "footclient --title jump fish -c 'set -l d ($HOME/flake-rei/scripts/ztv.sh); test -n \"$d\"; and cd $d; exec fish'"; }
     Mod+N { spawn "footclient" "chora" "open" "note"; }
     Mod+Shift+N { spawn "footclient" "--title" "notes" "chora" "open" "note"; }
     Mod+O { spawn-sh "footclient --title daemons $HOME/flake-rei/scripts/daemons.sh"; }
