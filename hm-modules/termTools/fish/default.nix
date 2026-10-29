@@ -128,7 +128,7 @@
       set -g fish_key_bindings fish_hybrid_key_bindings
 
       ${lib.optionalString (config.programs.zoxide.enable && config.programs.television.enable)
-        "bind -M insert \\ez 'commandline -f cancel; z $(${pkgs.zoxide}/bin/zoxide query -l | ${config.programs.television.package}/bin/tv); commandline -f repaint'"
+        "bind -M insert \\ez 'commandline -f cancel; z $(${config.programs.television.package}/bin/tv --source-command \"${pkgs.zoxide}/bin/zoxide query -l\" --preview-command \"${pkgs.eza}/bin/eza -la --color=always --icons=always --group-directories-first \\\"{}\\\"\" --preview-size 60 --layout landscape); commandline -f repaint'"
       }
       ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\et 'commandline -f cancel; z ..; commandline -f repaint'"}
       ${lib.optionalString config.programs.helix.enable "bind -M insert \\ee 'commandline -f cancel; helixing; commandline -f repaint'"}
