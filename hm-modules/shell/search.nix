@@ -11,7 +11,24 @@
 
     skim.enable = true;
 
-    television.enable = true;
+    television = {
+      enable = true;
+      # Upstream prototype (cable/unix/fish-history.toml): feeds the Ctrl+R
+      # history picker wired by `tv init fish`. Without it tv errors with
+      # "Channel not found: fish-history".
+      channels."fish-history" = {
+        metadata = {
+          name = "fish-history";
+          description = "A channel to select from your fish history";
+          requirements = [ "fish" ];
+        };
+        source = {
+          command = "fish -c 'history'";
+          no_sort = true;
+          frecency = false;
+        };
+      };
+    };
 
     fd = {
       enable = true;
