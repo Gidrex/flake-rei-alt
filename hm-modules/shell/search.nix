@@ -11,6 +11,8 @@
 
     skim.enable = true;
 
+    television.enable = true;
+
     fd = {
       enable = true;
       ignores = [ ".git/" ];

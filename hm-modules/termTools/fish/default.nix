@@ -127,7 +127,9 @@
       set -g fish_greeting ""
       set -g fish_key_bindings fish_hybrid_key_bindings
 
-      ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\ez 'commandline -f cancel; z $(${pkgs.zoxide}/bin/zoxide query -l | ${pkgs.skim}/bin/sk --height=20 --layout=reverse); commandline -f repaint'"}
+      ${lib.optionalString (config.programs.zoxide.enable && config.programs.television.enable)
+        "bind -M insert \\ez 'commandline -f cancel; z $(${pkgs.zoxide}/bin/zoxide query -l | ${config.programs.television.package}/bin/tv); commandline -f repaint'"
+      }
       ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\et 'commandline -f cancel; z ..; commandline -f repaint'"}
       ${lib.optionalString config.programs.helix.enable "bind -M insert \\ee 'commandline -f cancel; helixing; commandline -f repaint'"}
       ${lib.optionalString config.programs.yazi.enable "bind -M insert \\ey 'commandline -f cancel; ${pkgs.yazi}/bin/yazi; commandline -f repaint'"}
