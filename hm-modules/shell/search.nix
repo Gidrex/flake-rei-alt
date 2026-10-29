@@ -13,6 +13,16 @@
 
     television = {
       enable = true;
+      # NOTE: any non-empty settings makes HM own
+      # ~/.config/television/config.toml, so the hand-set theme is mirrored here.
+      settings = {
+        ui = {
+          theme = "catppuccin-mocha-blue";
+          status_bar.hidden = true;
+          help_panel.hidden = true;
+          remote_control.hidden = true;
+        };
+      };
       # Upstream prototype (cable/unix/fish-history.toml): feeds the Ctrl+R
       # history picker wired by `tv init fish`. Without it tv errors with
       # "Channel not found: fish-history".

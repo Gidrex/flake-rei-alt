@@ -136,6 +136,8 @@
       set -g fish_greeting ""
       set -g fish_key_bindings fish_hybrid_key_bindings
 
+      ${lib.optionalString config.programs.television.enable "bind -M insert \\t tv_smart_autocomplete"}
+      ${lib.optionalString config.programs.television.enable "bind -M default \\t tv_smart_autocomplete"}
       ${lib.optionalString (
         config.programs.zoxide.enable && config.programs.television.enable
       ) "bind -M insert \\ez 'commandline -f cancel; __ztv; commandline -f repaint'"}
