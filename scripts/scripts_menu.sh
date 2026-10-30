@@ -7,7 +7,7 @@ set -euo pipefail
 RUNTIME="${XDG_RUNTIME_DIR:-/tmp}/daemons"
 PIDFILE="$RUNTIME/scrcpy-audio.pid"
 
-DAEMONS=(phone_audio)
+DAEMONS=(phone_audio float_sticky)
 ACTIONS=(lightstrip_wallpaper)
 
 label_phone_audio() { echo "Phone audio (scrcpy)"; }
@@ -31,6 +31,21 @@ stop_phone_audio() {
   pkill -f "scrcpy .*--audio-source" 2>/dev/null || true # only matches our flag, not plain mirroring
   rm -f "$PIDFILE"
   notify-send "Phone audio" "OFF"
+}
+
+label_float_sticky() { echo "Float sticky (Picture-in-Picture)"; }
+is_on_float_sticky() { pgrep -f "niri-float-sticky" >/dev/null; }
+start_float_sticky() {
+  command -v niri-float-sticky >/dev/null || {
+    notify-send "Float sticky" "niri-float-sticky not found"
+    return 1
+  }
+  setsid niri-float-sticky -app-id glide-glide -title '^Picture-in-Picture$' </dev/null >/dev/null 2>&1 &
+  notify-send "Float sticky" "ON"
+}
+stop_float_sticky() {
+  pkill -f "niri-float-sticky" 2>/dev/null || true
+  notify-send "Float sticky" "OFF"
 }
 
 label_lightstrip_wallpaper() { echo "Light-strip: paint LEDs from wallpaper (DP-2)"; }

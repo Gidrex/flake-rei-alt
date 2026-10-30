@@ -42,6 +42,11 @@ window-rule {
 }
 
 window-rule {
+    match app-id="glide-glide" title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
     open-on-workspace "mini"
     match app-id="foot-mini"
     match app-id="kitty-mini"
