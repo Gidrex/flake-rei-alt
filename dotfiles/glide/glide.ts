@@ -125,6 +125,7 @@ interface GlideAPI {
 	styles: GlideStyles;
 	addons: GlideAddons;
 	prefs: GlidePrefs;
+	tabs: GlideTabs;
 	commandline: {
 		show(opts?: CommandLineShowOpts): Promise<void>;
 		close(): Promise<boolean>;
@@ -132,6 +133,24 @@ interface GlideAPI {
 	};
 	include(path: string): void;
 }
+
+interface GlideTab {
+	id?: number;
+	pinned?: boolean;
+	active?: boolean;
+	lastAccessed?: number;
+}
+
+interface GlideTabs {
+	query(query?: Record<string, unknown>): Promise<GlideTab[]>;
+	unload(...tabs: Array<number | GlideTab>): Promise<void>;
+}
+
+declare const browser: {
+	tabs: {
+		remove(tabIds: number | number[]): Promise<void>;
+	};
+};
 
 declare const glide: GlideAPI;
 
@@ -160,3 +179,42 @@ glide.search_engines.add({
 // Keymaps
 glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", "commandline_show tab ");
 glide.keymaps.del("normal", "<leader><leader>");
+
+// --- Stale tabs ---
+// Native Firefox auto-unload after 3h of inactivity (ms).
+glide.prefs.set("browser.tabs.min_inactive_duration_before_unload", 3 * 3600 * 1000);
+
+const TAB_UNLOAD_AFTER_MS = 3 * 3600 * 1000;
+const TAB_CLOSE_AFTER_MS = 3 * 24 * 3600 * 1000;
+
+// Unload tabs idle >3h, close tabs untouched >3d. Pinned and active tabs are
+// never touched. Runs on startup and on every tab switch (no timers).
+async function sweep_stale_tabs(): Promise<void> {
+	try {
+		const now = Date.now();
+		const to_unload: number[] = [];
+		const to_close: number[] = [];
+		for (const tab of await glide.tabs.query({})) {
+			if (tab.id == null || tab.pinned || tab.active) {
+				continue;
+			}
+			const idle = now - (tab.lastAccessed ?? now);
+			if (idle >= TAB_CLOSE_AFTER_MS) {
+				to_close.push(tab.id);
+			} else if (idle >= TAB_UNLOAD_AFTER_MS) {
+				to_unload.push(tab.id);
+			}
+		}
+		if (to_unload.length > 0) {
+			await glide.tabs.unload(...to_unload);
+		}
+		if (to_close.length > 0) {
+			await browser.tabs.remove(to_close);
+		}
+	} catch {
+		// Stale-tab sweep must never break the config; ignore failures.
+	}
+}
+
+glide.autocmds.create("ConfigLoaded", /.*/, () => void sweep_stale_tabs());
+glide.autocmds.create("TabEnter", /.*/, () => void sweep_stale_tabs());
