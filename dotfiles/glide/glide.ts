@@ -139,6 +139,8 @@ interface GlideTab {
 	pinned?: boolean;
 	active?: boolean;
 	lastAccessed?: number;
+	title?: string;
+	url?: string;
 }
 
 interface GlideTabs {
@@ -149,6 +151,7 @@ interface GlideTabs {
 declare const browser: {
 	tabs: {
 		remove(tabIds: number | number[]): Promise<void>;
+		update(tabId: number, props: { active: boolean }): Promise<unknown>;
 	};
 };
 
@@ -177,7 +180,29 @@ glide.search_engines.add({
 });
 
 // Keymaps
-glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", "commandline_show tab ");
+glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", async () => {
+	// MRU tab switcher: most recently used first (built-in `tab` picker
+	// follows tab-bar order and has no recency sort).
+	const tabs = (await glide.tabs.query({ currentWindow: true })).sort(
+		(a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0),
+	);
+	await glide.commandline.show({
+		title: "tabs (recent first)",
+		options: tabs.map((tab) => ({
+			label: tab.title ?? tab.url ?? `#${tab.id}`,
+			description: tab.pinned ? `📌 ${tab.url ?? ""}` : (tab.url ?? ""),
+			matches: (props: { input: string }) => {
+				const q = props.input.toLowerCase();
+				return ((tab.title ?? "") + " " + (tab.url ?? "")).toLowerCase().includes(q) || null;
+			},
+			execute: async () => {
+				if (tab.id != null) {
+					await browser.tabs.update(tab.id, { active: true });
+				}
+			},
+		})),
+	});
+});
 glide.keymaps.del("normal", "<leader><leader>");
 
 // --- Stale tabs ---
