@@ -132,24 +132,43 @@
       })
     ];
 
-    interactiveShellInit = ''
-      set -g fish_greeting ""
-      set -g fish_key_bindings fish_hybrid_key_bindings
+    interactiveShellInit = lib.mkMerge [
+      ''
+          set -g fish_greeting ""
+          set -g fish_key_bindings fish_hybrid_key_bindings
 
-      ${lib.optionalString config.programs.television.enable "bind -M insert \\t tv_smart_autocomplete"}
-      ${lib.optionalString config.programs.television.enable "bind -M default \\t tv_smart_autocomplete"}
-      ${lib.optionalString (
-        config.programs.zoxide.enable && config.programs.television.enable
-      ) "bind -M insert \\ez 'commandline -f cancel; __ztv; commandline -f repaint'"}
-      ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\et 'commandline -f cancel; z ..; commandline -f repaint'"}
-      ${lib.optionalString config.programs.helix.enable "bind -M insert \\ee 'commandline -f cancel; helixing; commandline -f repaint'"}
-      ${lib.optionalString config.programs.yazi.enable "bind -M insert \\ey 'commandline -f cancel; ${pkgs.yazi}/bin/yazi; commandline -f repaint'"}
-      ${lib.optionalString config.programs.lazygit.enable "bind -M insert \\ex 'commandline -f cancel; ${pkgs.lazygit}/bin/lazygit; commandline -f repaint'"}
-      bind -M insert \ea 'commandline -f cancel; opencode --continue; commandline -f repaint'
+          # Tab: skim picker everywhere, except z/zi keep normal path completion.
+          function __smart_tab --description 'skim-file-widget, except z/zi use default completion'
+            set -l first (string split -m 1 -f 1 ' ' -- (string trim -l -- (commandline -p)))
+            switch $first
+              case z zi __zoxide_z __zoxide_zi
+                commandline -f complete
+              case '*'
+                skim-file-widget
+            end
+          end
+          ${lib.optionalString config.programs.skim.enable "bind -M insert \\t __smart_tab"}
+          ${lib.optionalString config.programs.skim.enable "bind -M default \\t __smart_tab"}
+          ${lib.optionalString config.programs.skim.enable "bind -M insert \\cr skim-history-widget"}
+          ${lib.optionalString config.programs.skim.enable "bind -M default \\cr skim-history-widget"}
+        ${lib.optionalString (
+          config.programs.zoxide.enable && config.programs.television.enable
+        ) "bind -M insert \\ez 'commandline -f cancel; __ztv; commandline -f repaint'"}
+        ${lib.optionalString config.programs.zoxide.enable "bind -M insert \\et 'commandline -f cancel; z ..; commandline -f repaint'"}
+        ${lib.optionalString config.programs.helix.enable "bind -M insert \\ee 'commandline -f cancel; helixing; commandline -f repaint'"}
+        ${lib.optionalString config.programs.yazi.enable "bind -M insert \\ey 'commandline -f cancel; ${pkgs.yazi}/bin/yazi; commandline -f repaint'"}
+        ${lib.optionalString config.programs.lazygit.enable "bind -M insert \\ex 'commandline -f cancel; ${pkgs.lazygit}/bin/lazygit; commandline -f repaint'"}
+        bind -M insert \ea 'commandline -f cancel; opencode --continue; commandline -f repaint'
 
-      command -q tuna; and tuna completion fish | source
-      command -q chora; and chora completion fish | source
-    '';
+        command -q tuna; and tuna completion fish | source
+          command -q chora; and chora completion fish | source
+      ''
+      # zoxide init erases `z` completions, so re-wrap after it (mkAfter).
+      (lib.mkAfter ''
+        complete -c z -w __zoxide_z
+        complete -c zi -w cd
+      '')
+    ];
 
     # No loginShellInit: one-time setup (e.g. `tide configure`) runs by hand,
     # never on every login (it would overwrite the user's prompt config).

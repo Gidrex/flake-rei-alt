@@ -6,13 +6,18 @@
 
     fzf = {
       enable = true;
+      enableFishIntegration = false;
       defaultCommand = "${pkgs.fd}/bin/fd --type f";
     };
 
-    skim.enable = true;
+    skim = {
+      enable = true;
+      enableFishIntegration = true;
+    };
 
     television = {
       enable = true;
+      enableFishIntegration = false;
       # NOTE: any non-empty settings makes HM own
       # ~/.config/television/config.toml, so the hand-set theme is mirrored here.
       settings = {
