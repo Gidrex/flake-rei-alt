@@ -141,7 +141,12 @@ interface GlideTab {
 	lastAccessed?: number;
 	title?: string;
 	url?: string;
+	favIconUrl?: string;
 }
+
+declare const DOM: {
+	create_element(tag: string, props?: unknown): unknown;
+};
 
 interface GlideTabs {
 	query(query?: Record<string, unknown>): Promise<GlideTab[]>;
@@ -190,7 +195,77 @@ glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "o
 		title: "tabs (recent first)",
 		options: tabs.map((tab) => ({
 			label: tab.title ?? tab.url ?? `#${tab.id}`,
-			description: tab.pinned ? `📌 ${tab.url ?? ""}` : (tab.url ?? ""),
+			description: tab.url ?? "",
+			// Two even columns: a fixed-width inner block is centered on
+			// screen, name cell (icon + ellipsis-clipped title) and URL
+			// cell keep stable edges inside it regardless of URL length.
+			render: () =>
+				DOM.create_element("div", {
+					style: {
+						display: "flex",
+						justifyContent: "center",
+						width: "100%",
+					},
+					children: [
+						DOM.create_element("div", {
+							style: {
+								display: "flex",
+								alignItems: "center",
+								gap: "16px",
+								width: "1100px",
+								maxWidth: "100%",
+							},
+							children: [
+								DOM.create_element("div", {
+									style: {
+										display: "flex",
+										alignItems: "center",
+										gap: "8px",
+										width: "480px",
+										flexShrink: "0",
+									},
+									children: [
+										...(tab.favIconUrl != null
+											? [
+													DOM.create_element("img", {
+														src: tab.favIconUrl,
+														alt: "",
+														style: {
+															width: "16px",
+															height: "16px",
+															flexShrink: "0",
+														},
+													}),
+												]
+											: []),
+										DOM.create_element("span", {
+											title: tab.title ?? tab.url ?? "",
+											style: {
+												flex: "1",
+												minWidth: "0",
+												overflow: "hidden",
+												textOverflow: "ellipsis",
+												whiteSpace: "nowrap",
+											},
+											children: [tab.title ?? tab.url ?? ""],
+										}),
+									],
+								}),
+								DOM.create_element("span", {
+									style: {
+										flex: "1",
+										minWidth: "0",
+										opacity: "0.6",
+										overflow: "hidden",
+										textOverflow: "ellipsis",
+										whiteSpace: "nowrap",
+									},
+									children: [tab.url ?? ""],
+								}),
+							],
+						}),
+					],
+				}),
 			matches: (props: { input: string }) => {
 				const q = props.input.toLowerCase();
 				return ((tab.title ?? "") + " " + (tab.url ?? "")).toLowerCase().includes(q) || null;
