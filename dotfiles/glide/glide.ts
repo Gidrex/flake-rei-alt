@@ -76,16 +76,11 @@ interface GlideExcmds {
 	): void;
 }
 
-interface StyleOptions {
-	id: string;
-	css: string;
-	overwrite?: boolean;
-}
-
 interface GlideStyles {
-	add(type: "css", options: StyleOptions): void;
+	add(styles: string, opts?: { id: string; overwrite?: boolean }): void;
+	remove(id: string): boolean;
 	has(id: string): boolean;
-	get(id: string): string | null;
+	get(id: string): string | undefined;
 }
 
 interface GlideAddons {
@@ -279,6 +274,48 @@ glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "o
 	});
 });
 glide.keymaps.del("normal", "<leader><leader>");
+
+// --- Commandline as a centered floating panel (wofi-like) ---
+// Same background as dotfiles/wofi/style.css #window.
+glide.styles.add(
+	[
+		"glide-commandline {",
+		"  top: 50% !important;",
+		"  bottom: auto !important;",
+		"  left: 50% !important;",
+		"  transform: translate(-50%, -50%) !important;",
+		"  width: min(1150px, 92%) !important;",
+		"}",
+		"glide-commandline .glide-commandline-container {",
+		"  background: linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(59, 66, 82, 0.95) 100%) !important;",
+		"  border: 1px solid rgba(255, 255, 255, 0.1) !important;",
+		"  border-radius: 16px !important;",
+		"  overflow: hidden !important;",
+		"  box-shadow: none !important;",
+		"}",
+		'glide-commandline [anonid="glide-commandline-holder"] {',
+		"  background: transparent !important;",
+		"  border-top: none !important;",
+		"  padding: 10px 15px !important;",
+		"}",
+		'glide-commandline [anonid="glide-commandline-completions"] {',
+		"  background: transparent !important;",
+		"  border-top: none !important;",
+		"}",
+		'glide-commandline [anonid="glide-commandline-completions"] > div {',
+		"  min-height: 50vh !important;",
+		"  max-height: 70vh !important;",
+		"}",
+		"glide-commandline input {",
+		"  background: linear-gradient(to right, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;",
+		"  border: 1px solid rgba(255, 255, 255, 0.2) !important;",
+		"  border-radius: 8px !important;",
+		"  padding: 10px !important;",
+		"  color: #ffffff !important;",
+		"}",
+	].join("\n"),
+	{ id: "centered-commandline", overwrite: true },
+);
 
 // --- Stale tabs ---
 // Native Firefox auto-unload after 3h of inactivity (ms).
