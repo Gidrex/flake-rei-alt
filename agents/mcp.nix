@@ -9,8 +9,8 @@
     enable = true;
     servers = {
       # Binaries come from AUR (wordcraft/gridcraft), absent in nixpkgs.
-      # Rarely used: disabled by default, so opencode neither spawns them
-      # nor injects their tool schemas into context. Flip `enabled` + `just hm`
+      # Rarely used: disabled by default, so agents neither spawn them
+      # nor inject their tool schemas into context. Flip `enabled` + `just hm`
       # on the sessions where you need them.
       # No --automation-*-root: defaults already open/save files (verified on .docx).
       wordcraft = {
@@ -33,8 +33,7 @@
       };
       # Mobile automation, iOS + Android (mobile-next/mobile-mcp, npm).
       # Disabled by default: needs a simulator/emulator or a real device
-      # (Android: adb; iOS: Xcode/simctl). npx comes from pkgs.nodejs in
-      # programs.opencode extraPackages.
+      # (Android: adb; iOS: Xcode/simctl). Agent adapters provide npx.
       mobile-mcp = {
         enabled = false;
         command = "npx";
@@ -45,7 +44,7 @@
       };
       # Browser automation (ChromeDevTools/chrome-devtools-mcp, npm).
       # Disabled by default: needs local Chrome, spawns npx per session.
-      # npx comes from pkgs.nodejs in programs.opencode extraPackages.
+      # Agent adapters provide npx.
       # Host chromium (Arch /usr/bin/chromium): the MCP defaults to
       # /opt/google/chrome/chrome (stable channel), absent here.
       chrome-devtools = {
@@ -61,7 +60,7 @@
     };
   };
 
-  # Single telegram-mcp instance for every opencode session (streamable HTTP).
+  # Single telegram-mcp instance shared by every agent session (streamable HTTP).
   # Secrets reach the daemon only through the sops-rendered env file (0400);
   # nothing secret lands in the nix store.
   sops.templates."telegram-mcp.env" = {
@@ -75,7 +74,7 @@
 
   systemd.user.services.telegram-mcp = {
     Unit = {
-      Description = "Telegram MCP shared daemon (streamable HTTP for opencode)";
+      Description = "Telegram MCP shared daemon (streamable HTTP for coding agents)";
       After = [ "network.target" ];
     };
     Service = {

@@ -11,6 +11,7 @@
     ./shell/search.nix
     ./shell/system.nix
     ./docs.nix
+    ../agents/mcp.nix
 
     ./sound/mpv.nix
 
@@ -18,6 +19,7 @@
     ./termTools/crush
     ./termTools/fish
     ./termTools/helix
+    ./termTools/kimi
     ./termTools/nixvim-rei.nix
     ./termTools/opencode
     ./termTools/pi

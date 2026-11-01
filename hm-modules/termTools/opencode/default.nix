@@ -6,21 +6,14 @@
   ...
 }:
 let
-  # Archify skill bundle (v3.2.0); sparse checkout keeps the store small.
-  # Bump rev to update.
-  archifySkill = pkgs.fetchFromGitHub {
-    owner = "tt-a1i";
-    repo = "archify";
-    tag = "v3.2.0";
-    hash = "sha256-XG4I34/7FR9LVoOQn1S7dBJOFvmemWNLPrSdj+8O01Q=";
-    sparseCheckout = [ "archify" ];
+  sharedSkills = import ../../../agents/skills.nix { inherit pkgs; };
+  sharedContext = import ../../../agents/context.nix {
+    inherit pkgs;
+    extra = builtins.readFile ./AGENTS.md;
   };
 in
 {
-  imports = [
-    ./mcp
-    ./plugins
-  ];
+  imports = [ ./plugins ];
 
   # Catppuccin targets tui.json, ignored by OpenCode 2; theme lives in programs.opencode.cli.
   catppuccin.opencode.enable = false;
@@ -44,20 +37,10 @@ in
     ];
 
     # AGENTS.md auto-loaded by every session
-    context = ./AGENTS.md;
+    context = "${sharedContext}";
 
     # Skills on demand via `skill` tool
-    skills = {
-      python-uv = ./skills/python-uv;
-      typescript-biome = ./skills/typescript-biome;
-      rust-cargo = ./skills/rust-cargo;
-      flutter-dart = ./skills/flutter-dart;
-      nix-hm = ./skills/nix-hm;
-      lua-shell = ./skills/lua-shell;
-      ctx7-docs = ./skills/ctx7-docs;
-      rtk = ./skills/rtk;
-      chora = ./skills/chora;
-      archify = "${archifySkill}/archify";
+    skills = sharedSkills // {
       background-agent = ./skills/background-agent;
     };
     # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the

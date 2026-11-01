@@ -36,10 +36,13 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 - `flake.nix` → slim outputs: `nix/vars.nix` (user/keys/theme constants) + `nix/pkgs.nix`
   (locked nixpkgs instantiation) + `nix/yazi-plugins.nix` (cleaned external plugins) compose
-  `commonModules` (`hm-modules/` + sops-nix + catppuccin + nixvim-rei) with `machines/<name>/default.nix`.
+  `commonModules` (`hm-modules/` + sops-nix + catppuccin) with `machines/<name>/default.nix`.
   Machines are an **explicit map** (`flake.nix:48-51`) that `genAttrs` turns into `homeConfigurations`
   (flake.nix:54) — adding a machine needs a flake edit, see `.agents/skills/add-machine/`.
 - `hm-modules/default.nix` = single wiring point for shared modules (add new modules there, not in `flake.nix`).
+- `agents/` = shared user-level agent resources: global `AGENTS.md`, portable `skills/` + `skills.nix`, and MCP
+  declarations/renderers (`mcp.nix`, `mcp-json.nix`). Agent modules in `hm-modules/termTools/` inherit these;
+  keep agent-specific context and skills in their own module instead of adding them to the shared set.
 - `hm-modules/` grouped by area: `core/{nix,identity,packages,theme}`, `shell/{vcs,search,system}`,
   `docs.nix`, `termTools/{fish,helix,nixvim-rei,yazi}`, `security/`, `wayland/`, `themes/`, `sound/`.
 - Modules get `vars`, `inputs`, `yazi-plugins`, `machineName` via `extraSpecialArgs` in `flake.nix` — declare them
@@ -67,7 +70,6 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
   adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
 - `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
 - Global theme: catppuccin `mocha`, `autoEnable = true`. `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
-- Neovim config lives in the standalone `nixvim-rei` flake (`/home/gidrex/Projects/nixvim-rei`,
-  input in `flake.nix`); this repo only sets `programs.nixvim-rei.enable = true`
-  (`hm-modules/termTools/nixvim-rei.nix`). Its Lua + `.luarc.json` (`undefined-global`
-  disabled — Neovim provides those globals, not a bug) live there too.
+- Neovim config lives in `hm-modules/termTools/nixvim-rei/`; the wrapper `nixvim-rei.nix` imports the direct
+  `nixvim` input and sets `programs.nixvim-rei.enable = true`. Lua + `.luarc.json` (`undefined-global`
+  disabled — Neovim provides those globals, not a bug) live there too. Update `doc/binds.md` with keybind changes.

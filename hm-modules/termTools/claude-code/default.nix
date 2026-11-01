@@ -1,6 +1,4 @@
-# Declarative Claude Code; mirrors hm-modules/termTools/opencode (same skills,
-# same global AGENTS.md). MCP servers are kept out of nix by choice: they live in
-# ~/.claude.json (user scope, `claude mcp`), toggled per project via `/mcp`.
+# Declarative Claude Code; shared context, skills and MCP live in agents/.
 # Deliberate drift: no providers (Anthropic login), no antigravity-auth, no
 # opencode TUI settings; ponytail comes as its native Claude plugin.
 {
@@ -8,9 +6,17 @@
   pkgs,
   ...
 }:
+let
+  sharedSkills = import ../../../agents/skills.nix { inherit pkgs; };
+  sharedContext = import ../../../agents/context.nix {
+    inherit pkgs;
+    extra = builtins.readFile ./AGENTS.md;
+  };
+in
 {
   programs.claude-code = {
     enable = true;
+    enableMcpIntegration = true;
     # Native installer owns the binary (~/.local/bin/claude, `claude update`):
     # nixpkgs lags it and is unfree-gated. HM manages only ~/.claude.
     package = null;
@@ -37,11 +43,8 @@
       };
     };
 
-    # Same global instructions as opencode sessions.
-    context = ../opencode/AGENTS.md;
-
-    # Same on-demand skill set as opencode.
-    inherit (config.programs.opencode) skills;
+    context = "${sharedContext}";
+    skills = sharedSkills;
   };
 
   # ponytail ships a native Claude plugin (session hooks, skills, band); its

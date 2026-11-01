@@ -1,5 +1,4 @@
-# Declarative crush; mirrors hm-modules/termTools/opencode (same providers,
-# same MCP servers via programs.mcp, same skills, same global AGENTS.md).
+# Declarative crush; shared context, skills and MCP live in agents/.
 # Auth resolves at runtime via $(cat ...) (path only in store).
 # Theme: catppuccin-mocha user theme (matches foot/catppuccin-mocha in
 # terminal), selected via options.tui.active_theme.
@@ -11,6 +10,9 @@
   ...
 }:
 let
+  sharedSkills = import ../../../agents/skills.nix { inherit pkgs; };
+  sharedContext = import ../../../agents/context.nix { inherit pkgs; };
+
   # Crush has no plugin API and no option to hide the sidebar logo
   # ("Charm" wordmark) or the skills section (both hardcoded in
   # internal/ui/model/sidebar.go), so patch them out at build time.
@@ -56,25 +58,14 @@ in
           provider = "opencode-go";
         };
       };
-      # Same global instructions as opencode sessions.
       # Theme matches foot catppuccin-mocha (global mocha, accent blue).
       options = {
-        global_context_paths = [ "${config.programs.opencode.context}" ];
+        global_context_paths = [ "${sharedContext}" ];
         tui.active_theme = "catppuccin-mocha";
       };
     };
 
-    # Same on-demand skill set as opencode.
-    skills = {
-      python-uv = ../opencode/skills/python-uv;
-      typescript-biome = ../opencode/skills/typescript-biome;
-      rust-cargo = ../opencode/skills/rust-cargo;
-      flutter-dart = ../opencode/skills/flutter-dart;
-      nix-hm = ../opencode/skills/nix-hm;
-      lua-shell = ../opencode/skills/lua-shell;
-      ctx7-docs = ../opencode/skills/ctx7-docs;
-      rtk = ../opencode/skills/rtk;
-    };
+    skills = sharedSkills;
   };
 
   # npx for chrome-devtools MCP (rtk/uv are already global in core/packages).
