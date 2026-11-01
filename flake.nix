@@ -16,13 +16,9 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Neovim config as a standalone flake. scripts/hm.sh and the justfile
-    # rebuild recipes (`check`, `nvim-smoke`) override this with the local checkout
-    # when /home/gidrex/Projects/nixvim-rei exists (see justfile).
-    nixvim-rei.url = "gitlab:gidrex/nixvim-rei";
-    nixvim-rei.inputs.nixpkgs.follows = "nixpkgs";
-    nixvim-rei.inputs.home-manager.follows = "home-manager";
-    nixvim-rei.inputs.catppuccin.follows = "catppuccin";
+    # NixVim (Neovim as Nix modules, tracks nixpkgs).
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
     # Yazi plugins
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";

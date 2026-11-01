@@ -1,13 +1,5 @@
 # Justfile for flake-rei (home-manager dotfiles flake)
 
-# Local nixvim-rei checkout wins over the remote flake input when present.
-# Rebuild recipes below pass this as `--override-input` (empty = locked remote).
-# scripts/hm.sh mirrors this logic in bash (single source for `just hm` / fish `hm`).
-# NOTE: nixvim-rei is a git repo, so a path input only sees committed files —
-# commit there first, or the rebuild silently uses stale content.
-has_local_nixvim := path_exists(env_var('HOME') + "/Projects/nixvim-rei/flake.nix")
-nixvim_override := if has_local_nixvim == "true" { "--override-input nixvim-rei " + env_var('HOME') + "/Projects/nixvim-rei" } else { "" }
-
 @_default:
     just --list --unsorted
 
@@ -36,14 +28,12 @@ check machine="all":
     if [ "$hosts" = "all" ]; then hosts="icelake tigerlake"; fi
     for h in $hosts; do
       echo "==> dry-run eval: $h"
-      nix build --impure {{ nixvim_override }} ".#homeConfigurations.$h.activationPackage" --dry-run
+      nix build --impure ".#homeConfigurations.$h.activationPackage" --dry-run
     done
 
-# Headless startup check of the nixvim config from the nixvim-rei input
-# (catches Lua errors like E5113 that eval can't see). Plugins come from the
-# wrapper itself, so no per-plugin assembly. Requires FLAKE_MACHINE.
-# Not part of `qa` (slow). Develop the config in /home/gidrex/Projects/nixvim-rei
-# (it has its own `just nvim-smoke` against a minimal smoke host).
+# Headless startup check of the local nixvim config (catches Lua errors like
+# E5113 that eval can't see). Plugins come from the wrapper itself, so no
+# per-plugin assembly. Requires FLAKE_MACHINE. Not part of `qa` (slow).
 nvim-smoke:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -51,13 +41,13 @@ nvim-smoke:
     work=$(mktemp -d)
     trap 'rm -rf "$work"' EXIT
     mkdir -p "$work/config/nvim"
-    initfile=$(nix build --impure {{ nixvim_override }} --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.initSource" | tail -1)
+    initfile=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.initSource" | tail -1)
     ln -s "$initfile" "$work/config/nvim/init.lua"
-    extrafiles=$(nix build --impure {{ nixvim_override }} --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.extraFiles" | tail -1)
+    extrafiles=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.extraFiles" | tail -1)
     if [ -d "$extrafiles/lua" ]; then
       ln -s "$extrafiles/lua" "$work/config/nvim/lua"
     fi
-    pkg=$(nix build --impure {{ nixvim_override }} --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
+    pkg=$(nix build --impure --no-link --print-out-paths ".#homeConfigurations.$FLAKE_MACHINE.config.programs.nixvim.build.package" | tail -1)
     log="$work/smoke.log"
     rc=0
     XDG_CONFIG_HOME="$work/config" "$pkg/bin/nvim" --headless -i NONE -c 'qa!' > "$log" 2>&1 || rc=$?

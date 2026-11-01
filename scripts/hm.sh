@@ -12,14 +12,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 FLAKE_DIR="$(dirname -- "$SCRIPT_DIR")"
 
-# Local nixvim-rei checkout wins over the remote flake input when present
-# (mirrors the justfile nixvim_override; path input needs committed files).
-override_args=()
-if [ -f "$HOME/Projects/nixvim-rei/flake.nix" ]; then
-    override_args=(--override-input nixvim-rei "$HOME/Projects/nixvim-rei")
-fi
-
 # NOTE: --impure is required: identity.nix filters sessionPath with
 # builtins.pathExists (/home/...), which is always false under pure eval,
 # silently dropping the entire PATH (see generations <=353 with no PATH export).
-exec home-manager switch --impure --flake "$FLAKE_DIR#$FLAKE_MACHINE" "${override_args[@]}" -b backup "$@"
+exec home-manager switch --impure --flake "$FLAKE_DIR#$FLAKE_MACHINE" -b backup "$@"

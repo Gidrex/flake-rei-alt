@@ -39,7 +39,6 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "nixvim-rei",
           "nixvim",
           "nixpkgs"
         ]
@@ -98,7 +97,6 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "nixpkgs": [
-          "nixvim-rei",
           "nixpkgs"
         ],
         "systems": "systems"
@@ -115,33 +113,6 @@
         "owner": "nix-community",
         "repo": "nixvim",
         "type": "github"
-      }
-    },
-    "nixvim-rei": {
-      "inputs": {
-        "catppuccin": [
-          "catppuccin"
-        ],
-        "home-manager": [
-          "home-manager"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixvim": "nixvim"
-      },
-      "locked": {
-        "lastModified": 1792384604,
-        "narHash": "sha256-41MF7qnaWquNcbdsx+odJwaq1R7bryENvPqJfiTR0Sk=",
-        "owner": "gidrex",
-        "repo": "nixvim-rei",
-        "rev": "c64693d5aeed5370b162b3913b8f3b6d44edcf92",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "gidrex",
-        "repo": "nixvim-rei",
-        "type": "gitlab"
       }
     },
     "open-with-cmd": {
@@ -166,7 +137,7 @@
         "close-and-restore-tab": "close-and-restore-tab",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixvim-rei": "nixvim-rei",
+        "nixvim": "nixvim",
         "open-with-cmd": "open-with-cmd",
         "sops-nix": "sops-nix"
       }

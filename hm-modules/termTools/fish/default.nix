@@ -65,7 +65,7 @@
       })
 
       (lib.mkIf config.programs.nixvim.enable {
-        # nixvim itself is enabled via programs.nixvim-rei (nixvim-rei input).
+        # nixvim itself is enabled via the local programs.nixvim-rei module.
         # NOTE: vanilla ${pkgs.neovim} must NOT be used here: it reads the
         # nixvim-generated init.lua without the pack-dir on rtp, so
         # require("lz.n") fails with E5113. build.package is the wrapper

@@ -1,17 +1,19 @@
 ---
-description: Add a Neovim feature via the standalone nixvim-rei flake (plugins, LSP, keybinds via Nix only).
+description: Add a Neovim feature in the local nixvim-rei module (plugins, LSP, keybinds via Nix only).
 ---
 
 Add this Neovim feature: $ARGUMENTS
 
-Scope: the Neovim config no longer lives here. It is the standalone flake at
-`/home/gidrex/Projects/nixvim-rei` (`modules/`; keybind docs in `doc/binds.md`;
-own `.opencode/command/neovim.md` with the full rules). This repo only enables it:
-`hm-modules/termTools/nixvim-rei.nix` (`programs.nixvim-rei.enable = true`).
+Scope: `hm-modules/termTools/nixvim-rei/` contains the full configuration;
+`hm-modules/termTools/nixvim-rei.nix` imports NixVim and enables it.
 
-Work in `/home/gidrex/Projects/nixvim-rei` following its neovim command
-(hard rules, `doc/binds.md` update, `just qa` / `just check` / `just nvim-smoke` there).
-Then return here and verify the wiring still holds: `just qa`, `just check`
-(both machines). If the feature changes startup-relevant Lua:
-`FLAKE_MACHINE=<machine> just nvim-smoke` here too (integration check).
-Never run `just hm` unless explicitly asked.
+Hard rules:
+
+- Everything strictly via Nix: nixvim plugin modules (or `extraPlugins` from
+  `pkgs.vimPlugins`), binaries in `extraPackages`. No mason.nvim, no lazy.nvim,
+  nothing downloaded at runtime. Lazy-load heavy plugins via `plugins.lz-n`.
+- Leader is space. Update `hm-modules/termTools/nixvim-rei/doc/binds.md` with
+  every keybind change.
+- Run `just qa` and `just check` for both machines. If startup-relevant Lua
+  changed, also run `FLAKE_MACHINE=<machine> just nvim-smoke`.
+- Never run `just hm` unless explicitly asked.
