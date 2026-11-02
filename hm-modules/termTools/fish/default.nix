@@ -137,7 +137,8 @@
       ''
           set -g fish_greeting ""
           set -g fish_key_bindings fish_hybrid_key_bindings
-
+          # NOTE: Tab stays native fish completion (commands/flags/files).
+          # skim-file-widget on Tab drowned commands in recursive files; it remains on Ctrl+T.
           ${lib.optionalString config.programs.skim.enable "bind -M insert \\cr skim-history-widget"}
           ${lib.optionalString config.programs.skim.enable "bind -M default \\cr skim-history-widget"}
         ${lib.optionalString (
