@@ -19,6 +19,7 @@
         [
           tide
           colored-man-pages
+          fifc # Tab: fzf over native fish completions, with previews (needs fzf/fd/eza/bat)
         ];
 
     # Plain functions take `$argv`; `wraps` gives completions.
@@ -137,18 +138,6 @@
           set -g fish_greeting ""
           set -g fish_key_bindings fish_hybrid_key_bindings
 
-          # Tab: skim picker everywhere, except z/zi keep normal path completion.
-          function __smart_tab --description 'skim-file-widget, except z/zi use default completion'
-            set -l first (string split -m 1 -f 1 ' ' -- (string trim -l -- (commandline -p)))
-            switch $first
-              case z zi __zoxide_z __zoxide_zi
-                commandline -f complete
-              case '*'
-                skim-file-widget
-            end
-          end
-          ${lib.optionalString config.programs.skim.enable "bind -M insert \\t __smart_tab"}
-          ${lib.optionalString config.programs.skim.enable "bind -M default \\t __smart_tab"}
           ${lib.optionalString config.programs.skim.enable "bind -M insert \\cr skim-history-widget"}
           ${lib.optionalString config.programs.skim.enable "bind -M default \\cr skim-history-widget"}
         ${lib.optionalString (
