@@ -41,6 +41,20 @@ in
           "Edit(~/.config/chora/**)"
         ];
       };
+      # Every Bash call goes through rtk (`git x` -> `rtk git x`), subagents included,
+      # so nobody has to remember the rtk skill. The jq merge of mutableSettings is
+      # deep: herdr's runtime SessionStart hook survives next to this one.
+      hooks.PreToolUse = [
+        {
+          matcher = "Bash";
+          hooks = [
+            {
+              type = "command";
+              command = "${pkgs.rtk}/bin/rtk hook claude";
+            }
+          ];
+        }
+      ];
     };
 
     context = "${sharedContext}";
@@ -57,6 +71,24 @@ in
     repo = "ponytail";
     tag = "v5.3.2";
     hash = "sha256-IJlhfkdXI6pMZZCZO7XBRg88LBiNfzc5Gnm4ofGybL8=";
+  };
+
+  # Commands the rtk hook must leave bare (matched per command, also inside `&&`
+  # chains): `just` (rtk truncates the middle of recipe output, hiding which test
+  # failed; agents use `rtk err just qa` explicitly), `biome` (rewritten to the
+  # ESLint filter), and secret readers (`sops`, `age`, `env`, `printenv`): rtk keeps
+  # elided output in its recall store for 30 days. Read-only: tune here, not via
+  # `rtk config`.
+  xdg.configFile."rtk/config.toml".source = (pkgs.formats.toml { }).generate "rtk-config.toml" {
+    hooks.exclude_commands = [
+      "just"
+      "biome"
+      "sops"
+      "age"
+      "env"
+      "printenv"
+    ];
+    telemetry.enabled = false;
   };
 
   # node/npx on PATH: ponytail hooks are node scripts, npx MCP servers and ctx7 run
