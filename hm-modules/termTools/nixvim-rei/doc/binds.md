@@ -51,6 +51,7 @@
 - `Space G p` — preview hunk
 - `Space G b` — blame line
 - `Space G d` — diff current buffer
+- `Space G i` — toggle inline diff (added = green bg, deleted = red virtual lines, word diff)
 - `Space G D` — side-by-side diff (Diffview, `q` to quit)
 - `Space G l` — file history (Diffview, `q` to quit)
 - `]c` / `[c` — next / prev hunk (same: `]g` / `[g`)

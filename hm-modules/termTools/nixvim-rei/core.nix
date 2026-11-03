@@ -11,10 +11,6 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    # Host theme module would double-apply nvim colors; nixvim's own
-    # colorschemes.catppuccin below is the single source.
-    catppuccin.nvim.enable = false;
-
     programs.nixvim = {
       enable = true;
       viAlias = true;
@@ -71,6 +67,16 @@ in
           # Foot bg shows through everywhere.
           transparent_background = true;
           float.transparent = true;
+          # Inline diff (<leader>Gi) as red/green: changed lines read as added (default ChangeLn is
+          # near-invisible on mocha), deleted virtual lines get a red bg instead of red text only.
+          custom_highlights.__raw = ''
+            function()
+              return {
+                GitSignsChangeLn = { link = "GitSignsAddLn" },
+                GitSignsDeleteVirtLn = { link = "DiffDelete" },
+              }
+            end
+          '';
         };
       };
 

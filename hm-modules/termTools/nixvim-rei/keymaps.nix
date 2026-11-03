@@ -286,6 +286,20 @@ in
       (mkN "<leader>Gp" "<cmd>Gitsigns preview_hunk<CR>" "Preview Hunk")
       (mkN "<leader>Gb" "<cmd>Gitsigns blame_line<CR>" "Blame Line")
       (mkN "<leader>Gd" "<cmd>Gitsigns diffthis<CR>" "Diff This")
+      {
+        mode = "n";
+        key = "<leader>Gi";
+        # linehl drives the state so the three toggles never drift apart.
+        action.__raw = ''
+          function()
+            local gs = require("gitsigns")
+            local on = gs.toggle_linehl()
+            gs.toggle_deleted(on)
+            gs.toggle_word_diff(on)
+          end
+        '';
+        options.desc = "Inline Diff";
+      }
       (mkN "<leader>GD" "<cmd>DiffviewOpen<CR>" "Side-by-side Diff")
       (mkN "<leader>Gl" "<cmd>DiffviewFileHistory<CR>" "File History")
       {
