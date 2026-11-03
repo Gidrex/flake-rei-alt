@@ -4,7 +4,6 @@
     ./core/nix.nix
     ./core/identity.nix
     ./core/packages.nix
-    ./core/theme.nix
     ./core/xdg.nix
 
     ./shell/vcs.nix
@@ -36,6 +35,7 @@
     ./wayland/foot.nix
     ./wayland/kitty.nix
 
+    ./themes/catppuccin
     ./themes/qt.nix
   ];
 }

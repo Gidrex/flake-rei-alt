@@ -10,8 +10,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Theming
-    catppuccin.url = "github:catppuccin/nix";
-    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -42,7 +40,6 @@
       commonModules = [
         ./hm-modules
         inputs.sops-nix.homeManagerModules.sops
-        inputs.catppuccin.homeModules.catppuccin
       ];
 
       # New machine: one line here + machines/<name>/default.nix.

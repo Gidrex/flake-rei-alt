@@ -36,7 +36,7 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 - `flake.nix` → slim outputs: `nix/vars.nix` (user/keys/theme constants) + `nix/pkgs.nix`
   (locked nixpkgs instantiation) + `nix/yazi-plugins.nix` (cleaned external plugins) compose
-  `commonModules` (`hm-modules/` + sops-nix + catppuccin) with `machines/<name>/default.nix`.
+  `commonModules` (`hm-modules/` + sops-nix) with `machines/<name>/default.nix`.
   Machines are an **explicit map** (`flake.nix:48-51`) that `genAttrs` turns into `homeConfigurations`
   (flake.nix:54) — adding a machine needs a flake edit, see `.agents/skills/add-machine/`.
 - `hm-modules/default.nix` = single wiring point for shared modules (add new modules there, not in `flake.nix`).
@@ -69,7 +69,7 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 - Unfree packages are allow-listed via `allowUnfree` in `nix/vars.nix` (only `unrar`, `obsidian`) —
   adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
 - `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
-- Global theme: catppuccin `mocha`, `autoEnable = true`. `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
+- Global theme: catppuccin `mocha` (accent blue), vendored per app in `hm-modules/themes/catppuccin/` (no catppuccin/nix input). `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.
 - Neovim config lives in `hm-modules/termTools/nixvim-rei/`; the wrapper `nixvim-rei.nix` imports the direct
   `nixvim` input and sets `programs.nixvim-rei.enable = true`. Lua + `.luarc.json` (`undefined-global`
   disabled — Neovim provides those globals, not a bug) live there too. Update `doc/binds.md` with keybind changes.

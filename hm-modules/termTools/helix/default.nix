@@ -28,8 +28,6 @@
     ]; # .ignore and .git/ already included
 
     settings = {
-      theme = lib.mkDefault "catppuccin_mocha";
-
       editor = {
         line-number = "relative";
         bufferline = "never";

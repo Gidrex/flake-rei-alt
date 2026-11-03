@@ -1,7 +1,6 @@
 # Declarative opencode; auth resolves at runtime from sops (path only in store).
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -14,9 +13,6 @@ let
 in
 {
   imports = [ ./plugins ];
-
-  # Catppuccin targets tui.json, ignored by OpenCode 2; theme lives in programs.opencode.cli.
-  catppuccin.opencode.enable = false;
 
   # HM owns cli.json; overwrite the app-owned file instead of failing on backup collision.
   xdg.configFile."opencode/cli.json".force = true;
@@ -46,9 +42,8 @@ in
     # CLI client settings (OpenCode 2; tui.json is ignored). Mirrors the
     # app-owned cli.json at merge time; HM owns the file, TUI edits do not persist.
     cli = {
-      # Macchiato by choice (deliberate drift from global mocha;
-      # mkForce wins over catppuccin autoEnable).
-      theme = lib.mkForce { name = "catppuccin-macchiato"; };
+      # Macchiato by choice (deliberate drift from global mocha).
+      theme.name = "catppuccin-macchiato";
       plugins = [
         "-internal:sidebar-context"
         "./herdr-opencode"

@@ -1,5 +1,5 @@
 # System monitoring, downloads, image viewing, shell helpers.
-{ lib, ... }:
+{ ... }:
 {
   programs = {
     home-manager.enable = true;
@@ -20,7 +20,7 @@
     btop = {
       enable = true;
       settings = {
-        color_theme = lib.mkForce "horizon";
+        color_theme = "horizon";
         show_gpu_info = true;
         vim_keys = true;
         proc_sorting = "memory";

@@ -59,5 +59,4 @@
     };
   };
 
-  catppuccin.mpv.enable = true;
 }

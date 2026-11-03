@@ -172,8 +172,6 @@
     };
   };
 
-  catppuccin.fish.enable = true;
-
   programs = {
     zoxide.enableFishIntegration = true;
     yazi.enableFishIntegration = true;

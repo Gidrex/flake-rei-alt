@@ -1,15 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}:
-let
-  inherit (lib) mkIf;
-in
+{ pkgs, ... }:
 {
   qt = {
-    platformTheme.name = mkIf config.catppuccin.enable "kvantum";
+    platformTheme.name = "kvantum";
     style.name = "kvantum";
     style.package = pkgs.libsForQt5.qtstyleplugins;
   };

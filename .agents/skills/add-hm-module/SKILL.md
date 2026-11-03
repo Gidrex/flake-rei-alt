@@ -52,7 +52,7 @@ Layout: `hm-modules/default.nix` is the single wiring point; shared code lives i
   `machines/<name>`.
 - A non-free package beyond `unrar`/`obsidian` means editing `nix/vars.nix:allowUnfree`
   while `allowUnfree = false` (see `nix/pkgs.nix`).
-- The theme is global: catppuccin `mocha`, `autoEnable = true` (`hm-modules/core/theme.nix`).
+- Theme: catppuccin `mocha`, accent blue. No auto theming — add the app's upstream catppuccin port to `hm-modules/themes/catppuccin/`.
   Do not hand-roll colors per app.
 - Do not bump `stateVersion` (`nix/vars.nix`) without a migration.
   On a real NixOS host, turn off `targets.genericLinux.enable` (`hm-modules/core/identity.nix`).

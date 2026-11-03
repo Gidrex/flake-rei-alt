@@ -23,9 +23,4 @@
 
   # Do not bump without a home-manager migration.
   stateVersion = "26.05";
-
-  theme = {
-    flavor = "mocha";
-    accent = "blue";
-  };
 }

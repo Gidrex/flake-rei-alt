@@ -1,11 +1,6 @@
 # Version control: git + jujutsu + lazygit.
 { config, vars, ... }:
 {
-  # Upstream catppuccin/lazygit theme is stale (gui.authorColors at the old location):
-  # lazygit >= 0.44 tries to auto-migrate the read-only store file and fails on every
-  # launch (LG_CONFIG_FILE points into /nix/store). Manual theme until upstream fixes it.
-  catppuccin.lazygit.enable = false;
-
   programs = {
     ssh = {
       enable = true;
