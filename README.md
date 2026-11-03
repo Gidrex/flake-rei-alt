@@ -6,7 +6,10 @@
 ## Nix installing on non-NixOS systems
 Install nix via a script or your system's package manager and sometimes you will optionally need to:
 ```sh
+sudo groupadd nix-users
 sudo usermod -aG nix-users $(whoami) # nix-users group must be
+sudo mkdir -p -m 0755 /nix/store
+sudo chown -R root:nixbld /nix
 sudo systemctl start nix-daemon
 sudo systemctl enable --now nix-daemon.socket nix-daemon.service
 ```
