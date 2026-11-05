@@ -5,7 +5,7 @@
     ssh = {
       enable = true;
       # Defaults were implicit (enableDefaultConfig); declared explicitly to add
-      # the main key as the default identity. Everything else is github-only.
+      # the main key as the default identity. Extra hosts are listed explicitly below.
       enableDefaultConfig = false;
       settings = {
         "*" = {
@@ -20,6 +20,12 @@
           ControlPath = "~/.ssh/master-%r@%n:%p";
           ControlPersist = "no";
           IdentityFile = config.sops.secrets.private_ssh.path;
+        };
+        "gidrex-tuna" = {
+          HostName = "a.2na.am";
+          Port = 37064;
+          User = "gidrex";
+          IdentitiesOnly = true;
         };
         "github.com" = {
           HostName = "github.com";
