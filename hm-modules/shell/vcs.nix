@@ -65,6 +65,16 @@
       };
     };
 
+    # Also sets git credential helpers for github.com + gist.github.com (gitCredentialHelper, default on).
+    # hosts.yml (auth) stays unmanaged.
+    gh = {
+      enable = true;
+      settings = {
+        git_protocol = "https";
+        aliases.co = "pr checkout";
+      };
+    };
+
     jujutsu = {
       enable = true;
       settings = {
