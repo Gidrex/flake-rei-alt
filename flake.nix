@@ -23,6 +23,10 @@
     open-with-cmd.flake = false;
     close-and-restore-tab.url = "github:MasouShizuka/close-and-restore-tab.yazi";
     close-and-restore-tab.flake = false;
+
+    # Live terminal diffs (Rust TUI).
+    livediff.url = "github:SoCkEt7/Livediff";
+    livediff.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
