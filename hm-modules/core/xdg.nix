@@ -40,12 +40,12 @@ in
         "application/xhtml+xml" = "userapp-Glide-RMIPQ3.desktop";
         "application/x-extension-xhtml" = "userapp-Glide-RMIPQ3.desktop";
         "application/x-extension-xht" = "userapp-Glide-RMIPQ3.desktop";
-        "image/png" = "imv.desktop";
-        "image/jpeg" = "imv.desktop";
-        "image/jpg" = "imv.desktop";
-        "image/gif" = "imv.desktop";
-        "image/webp" = "imv.desktop";
-        "image/bmp" = "imv.desktop";
+        "image/png" = "feh.desktop";
+        "image/jpeg" = "feh.desktop";
+        "image/jpg" = "feh.desktop";
+        "image/gif" = "feh.desktop";
+        "image/webp" = "feh.desktop";
+        "image/bmp" = "feh.desktop";
         "application/pdf" = "org.kde.okular.desktop";
       };
 

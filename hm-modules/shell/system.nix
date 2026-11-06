@@ -33,6 +33,8 @@
       };
     };
 
+    feh.enable = true;
+
     imv = {
       settings.options = {
         list_files_at_exit = true;
