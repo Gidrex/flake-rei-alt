@@ -1,5 +1,6 @@
 vercel: ENC[AES256_GCM,data:jzKkc423Prq6Le/pg+048JoAikBE1GcsIezX90kBa5Xbo27Drng8E7mIJIZr9ugx54Nvb7eTBfQyLLv1Ih0aVFN2OyA9pekQYD/N0mHpErWOtJ99sIdzAc9rCSQoJgTqzZUKe+oJdL/P7dY=,iv:uK6hC9idhCIPgZ37E3iz4z+APQSv1OWoLA3JsBP/Mm8=,tag:kYKgKjwNikT4x7Pk8Woa8Q==,type:str]
 firefox: ENC[AES256_GCM,data:7ohsEUKKk8aoROcWU483XcmFQ/LWhfusW7wrwpGB1nYaHZ6wyLk9,iv:lhPtumi43qCsl14PbyCZYZ2ANt+zQ3OQ8lTBJ9EUGF0=,tag:m9O0rKuLFSBNATBl/LdUYA==,type:str]
+telegram: ENC[AES256_GCM,data:0ZgAsEIPVp7+kfyX+NP9jMss41k=,iv:RhAt+0sVDN9MVZeIfQmdumqEaAGREHPSGyBMVFkByLo=,tag:H54W8c2nmeLoVp2Y27uc1g==,type:str]
 sops:
     age:
         - enc: |
@@ -11,7 +12,7 @@ sops:
             e1MIw5FzjtzdmCAU8y1T3xcjDaCW1l2mFXocFuRYQQcjjkrxr6ZtWw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1h8xssn2p4tjjgp5ac99m6cy0elgss7mkzpp8j9s5antj69geev9s7pkac4
-    lastmodified: "2026-10-23T20:41:08Z"
-    mac: ENC[AES256_GCM,data:n4dckdrFgjmjQvF6s0XbWnR+YpbgZiMSlZQRkpN9s2/4/SXdLUAqzEU6mnGabyN5hzIvS/OXy/3Oh/Z5JS68cWIFikBoUnfVilePcHugaWy/rE3HMDglqGgHTl+FN68GNxRk+Ts+OmJYgu+g5eP0xOO+z86MHenzs5A7aUlUg/Q=,iv:eGbQi755Hx2ZB14+gQSb+EGfFXKpDr+MnwZ2ZA4vOzQ=,tag:Umw2mZQQ44mTn/p/HdjVdA==,type:str]
+    lastmodified: "2026-11-06T19:45:27Z"
+    mac: ENC[AES256_GCM,data:9G9x4My7UnPChgGjKXymsj6YamRdVhBLtvWn2GvY9JbfPJlJ67OI4Q3C25gMeRy8qypir+0A6fP2HsylkiVupTuwUuJSiJW3PbDe0foC8TO4nI+BNiZgP0a059y0Pa5YgOPOklVW8/WQPJoWkClViGDfUFL4qjVvDyxxEp5hOZY=,iv:+4h2o0NxL+ULONRGQbNhCiF763zBGvZP8QzZCL4sSYY=,tag:gm3CfP9Z8GnoQZHkgxI3+Q==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
