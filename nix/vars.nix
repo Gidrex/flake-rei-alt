@@ -23,6 +23,31 @@
     "crush" # fsl11Mit; terminal agent like opencode
   ];
 
+  # systemd sandbox for network-facing user daemons (merge into `Service`).
+  # No PrivateTmp/ProtectHome here: per-service, they can break shared /tmp locks or home writes.
+  serviceHardening = {
+    NoNewPrivileges = true;
+    ProtectSystem = "strict";
+    PrivateDevices = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectKernelLogs = true;
+    ProtectControlGroups = true;
+    ProtectClock = true;
+    ProtectHostname = true;
+    ProtectProc = "invisible";
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    SystemCallArchitectures = "native";
+    SystemCallFilter = "@system-service";
+    RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+    CapabilityBoundingSet = "";
+    UMask = "0077";
+  };
+
   # Do not bump without a home-manager migration.
   stateVersion = "26.05";
 }

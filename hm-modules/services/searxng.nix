@@ -1,6 +1,11 @@
 # Local SearXNG service; secret rendered at activation, never in store.
 # (searx_secret_key is declared centrally in hm-modules/security/sops.nix.)
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  vars,
+  ...
+}:
 {
   sops.templates."searxng-settings.yml" = {
     content = ''
@@ -83,7 +88,11 @@
       ExecStart = "${pkgs.searxng}/bin/searxng-run";
       Environment = "SEARXNG_SETTINGS_PATH=${config.xdg.configHome}/searxng/settings.yml";
       Restart = "on-failure";
-    };
+      # Parses untrusted web HTML; needs only network + read of its settings.
+      PrivateTmp = true;
+      ProtectHome = "read-only";
+    }
+    // vars.serviceHardening;
     Install.WantedBy = [ "default.target" ];
   };
 }

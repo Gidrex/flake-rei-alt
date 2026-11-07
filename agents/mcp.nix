@@ -2,6 +2,7 @@
 {
   config,
   pkgs,
+  vars,
   ...
 }:
 {
@@ -82,7 +83,9 @@
       Environment = "MCP_TRANSPORT=http MCP_HOST=127.0.0.1 MCP_PORT=8765";
       EnvironmentFile = config.sops.templates."telegram-mcp.env".path;
       Restart = "on-failure";
-    };
+      # Home stays writable (downloads go to client roots); shared /tmp keeps the session singleton locks.
+    }
+    // vars.serviceHardening;
     Install.WantedBy = [ "graphical-session.target" ];
   };
 }
