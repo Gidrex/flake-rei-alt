@@ -13,6 +13,7 @@
     ../agents/mcp.nix
 
     ./sound/mpv.nix
+    ./sound/pipewire.nix
 
     ./termTools/claude-code
     # ./termTools/crush
