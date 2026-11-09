@@ -1,19 +1,11 @@
-# Version control: git + jujutsu + lazygit + livediff.
+# Version control: git + jujutsu + lazygit (livediff: tigerlake only, see machines/tigerlake).
 {
   config,
   pkgs,
-  inputs,
   vars,
   ...
 }:
 {
-  # livediff has no config file; theme only via flag, so wrap the binary.
-  home.packages = [
-    (pkgs.writeShellScriptBin "livediff" ''
-      exec ${inputs.livediff.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/livediff --theme catppuccin "$@"
-    '')
-  ];
-
   programs = {
     ssh = {
       enable = true;
