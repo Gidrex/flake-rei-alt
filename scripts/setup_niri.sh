@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+. "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/lib/log.sh"
 
 # Symlink niri config for the current machine.
 # Usage:
@@ -7,8 +8,8 @@ set -euo pipefail
 #   ./scripts/setup_niri.sh
 
 if [ -z "${FLAKE_MACHINE:-}" ]; then
-    echo "Error: FLAKE_MACHINE environment variable not set." >&2
-    echo 'Run: export FLAKE_MACHINE=<machine name>  # icelake | tigerlake' >&2
+    error "FLAKE_MACHINE environment variable not set."
+    warn 'Run: export FLAKE_MACHINE=<machine name>  # icelake | tigerlake'
     exit 1
 fi
 
@@ -22,8 +23,8 @@ SRC_MACHINE="$FLAKE_DIR/dotfiles/niri/${FLAKE_MACHINE}"
 
 for src in "$SRC_CONFIG" "$SRC_GENERIC" "$SRC_MACHINE"; do
     if [ ! -e "$src" ]; then
-        echo "Error: source not found: $src" >&2
-        echo "Check that FLAKE_MACHINE='$FLAKE_MACHINE' is correct." >&2
+        error "source not found: $src"
+        warn "Check that FLAKE_MACHINE='$FLAKE_MACHINE' is correct."
         exit 1
     fi
 done
@@ -31,7 +32,7 @@ done
 # Backup existing config dir (or symlink) before overwriting
 if [ -e "$NIRI_DIR" ] || [ -L "$NIRI_DIR" ]; then
     backup="$HOME/.config/niri.bak.$(date +%Y%m%d-%H%M%S)"
-    echo "Backing up existing $NIRI_DIR -> $backup"
+    warn "Backing up existing $NIRI_DIR -> $backup"
     mv -- "$NIRI_DIR" "$backup"
 fi
 
@@ -40,5 +41,5 @@ ln -sfn -- "$SRC_CONFIG" "$NIRI_DIR/config.kdl"
 ln -sfn -- "$SRC_GENERIC" "$NIRI_DIR/generic"
 ln -sfn -- "$SRC_MACHINE" "$NIRI_DIR/$FLAKE_MACHINE"
 
-echo "Niri config linked for machine '$FLAKE_MACHINE':"
+green "Niri config linked for machine '$FLAKE_MACHINE':"
 ls -l -- "$NIRI_DIR"

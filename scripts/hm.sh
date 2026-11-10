@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+. "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/lib/log.sh"
 
 # Real home-manager switch. Requires FLAKE_MACHINE (icelake|tigerlake).
 # Usage:
@@ -7,7 +8,11 @@ set -euo pipefail
 #   ./scripts/hm.sh [extra home-manager args...]
 # Called by `just hm` and the fish `hm` function (single source of truth).
 
-: "${FLAKE_MACHINE:?Set FLAKE_MACHINE=icelake|tigerlake}"
+[ -n "${FLAKE_MACHINE:-}" ] || {
+  error "FLAKE_MACHINE is not set"
+  warn "Run: export FLAKE_MACHINE=icelake|tigerlake"
+  exit 1
+}
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 FLAKE_DIR="$(dirname -- "$SCRIPT_DIR")"

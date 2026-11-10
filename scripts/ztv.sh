@@ -7,9 +7,10 @@
 # modifiers without kitty keyboard protocol, so Shift+Left arrives as plain
 # Left and would hijack cursor movement (verified in a pty).
 set -euo pipefail
+. "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/lib/log.sh"
 
 command -v tv >/dev/null || {
-  echo "ztv: television (tv) not found" >&2
+  error "ztv: television (tv) not found"
   exit 1
 }
 

@@ -3,6 +3,7 @@
 # Add a daemon:  1 entry in DAEMONS + label_/is_on_/start_/stop_ functions (copy phone_audio).
 # Add an action (one-shot): 1 entry in ACTIONS + label_/run_ functions (copy lightstrip_wallpaper).
 set -euo pipefail
+. "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/lib/log.sh"
 
 RUNTIME="${XDG_RUNTIME_DIR:-/tmp}/daemons"
 PIDFILE="$RUNTIME/scrcpy-audio.pid"
@@ -87,13 +88,13 @@ toggle)
   ;;
 "") ;;
 *)
-  echo "usage: scripts_menu.sh [status|picklist|toggle <id>]" >&2
+  error "usage: scripts_menu.sh [status|picklist|toggle <id>]"
   exit 1
   ;;
 esac
 
 command -v tv >/dev/null || {
-  echo "television (tv) not found" >&2
+  error "television (tv) not found"
   exit 1
 }
 SCRIPT="${BASH_SOURCE[0]}"

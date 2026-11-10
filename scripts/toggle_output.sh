@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+. "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/lib/log.sh"
 
 if [ "$#" -ne 2 ]; then
-    echo "usage: toggle_output.sh focus|move OUTPUT" >&2
+    error "usage: toggle_output.sh focus|move OUTPUT"
     exit 1
 fi
 ACTION="$1" # "focus" or "move"
@@ -10,7 +11,7 @@ TARGET="$2"
 case "$ACTION" in
     focus | move) ;;
     *)
-        echo "toggle_output.sh: ACTION must be focus|move, got '$ACTION'" >&2
+        error "toggle_output.sh: ACTION must be focus|move, got '$ACTION'"
         exit 1
         ;;
 esac
