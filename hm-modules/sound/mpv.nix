@@ -18,12 +18,11 @@
       video-sync = "display-resample";
       tscale = "oversample";
 
-      # Audio (High-End FLAC)
-      ao = "pipewire,alsa";
+      # Audio: bit-perfect straight to the KA11 hw device (no PipeWire mixing / FP3 AutoEq, no resample or
+      # format forcing). Falls back to PipeWire when the DAC is absent or busy. Keep volume at 100 for bit-perfect.
+      ao = "alsa,pipewire";
+      audio-device = "alsa/hw:CARD=KA11,DEV=0";
       audio-channels = "stereo";
-      audio-format = "s32";
-      audio-samplerate = 0;
-      af = "lavfi=[aresample=resampler=soxr:precision=28]";
       gapless-audio = "yes";
 
       # General
