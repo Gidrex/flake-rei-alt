@@ -1,6 +1,6 @@
-# Declarative xdg defaults (mimeapps.list). Verbatim port of the hand-maintained
-# file, plus foot as the folder handler (foot ships no MimeType of its own,
-# so kitty-open.desktop would win inode/directory by cache order).
+# Declarative xdg defaults (mimeapps.list), merged into a mutable file on activation
+# (our keys win, entries added by apps stay). Foot is the folder handler (foot ships no
+# MimeType of its own, so kitty-open.desktop would win inode/directory by cache order).
 {
   pkgs,
   lib,
@@ -9,8 +9,22 @@
 }:
 let
   inherit (lib) mkIf;
+  generated = config.xdg.configFile."mimeapps.list".source;
 in
 {
+  # Don't symlink the read-only store file; merge it into the real ones instead.
+  xdg.configFile."mimeapps.list".enable = false;
+  xdg.dataFile."applications/mimeapps.list".enable = false;
+
+  home.activation.mergeMimeapps = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    for f in ${config.xdg.configHome}/mimeapps.list ${config.xdg.dataHome}/applications/mimeapps.list; do
+      # leftover link from the old symlinked setup
+      if [[ -L $f && $(readlink "$f") == /nix/store/* ]]; then run rm "$f"; fi
+      run mkdir -p "$(dirname "$f")"
+      run ${pkgs.crudini}/bin/crudini --ini-options=nospace --merge "$f" < ${generated}
+    done
+  '';
+
   xdg = {
     mimeApps = {
       enable = true;
