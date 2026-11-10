@@ -30,8 +30,9 @@
           body = "mkdir -p -- \$argv; and z \$argv[-1]";
         };
         e.body = "set -q EDITOR; or set -l EDITOR hx; \$EDITOR \$argv";
-        hmr.body = builtins.readFile ./hmr_function.fish;
         hm.body = "\$HOME/flake-rei/scripts/hm.sh \$argv";
+        hmr.body = builtins.readFile ./hmr_function.fish;
+        hmu.body = builtins.readFile ./hmu_function.fish;
         # Loads agent provider keys from sops on demand (pi !cat apiKey).
         # Run `aikeys` before a pi session.
         aikeys.body = ''set -gx OPENCODE_API_KEY (cat "${config.sops.secrets.opencode_api_key.path}"); set -gx OPENROUTER_API_KEY (cat "${config.sops.secrets.openrouter_api_key.path}"); and echo "agent keys loaded"'';
@@ -165,6 +166,7 @@
 
     completions = {
       hmr = "complete -f -c hmr";
+      hmu = "complete -f -c hmu";
       # Handwritten flat style, edit by hand; checked in to avoid IFD (runCommand would rebuild on every eval).
       rip = builtins.readFile ./completions_rip.fish;
       # Handwritten: `opencode completion` emits bash-only yargs (complete -F), unusable in fish.
