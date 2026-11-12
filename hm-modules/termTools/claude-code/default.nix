@@ -30,6 +30,9 @@ in
       model = "opus";
       # ANSI palette follows the terminal's catppuccin-mocha.
       theme = "dark-ansi";
+      # Flicker-free renderer with virtualized scrollback.
+      tui = "fullscreen";
+      cleanupPeriodDays = 14;
       # No Co-Authored-By trailer, "Generated with" PR line or session link (needs v2.1.281+).
       attribution = false;
       permissions = {
@@ -61,6 +64,8 @@ in
 
     context = "${sharedContext}";
     skills = sharedSkills;
+    # /fableplan: Fable plans, Opus/Sonnet/Haiku subagents execute by difficulty.
+    commands.fableplan = ./commands/fableplan.md;
   };
 
   # ponytail ships a native Claude plugin (session hooks, skills, band); its
