@@ -14,6 +14,9 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
   (`origin`); Codeberg (`alt`) is the mirror.
 - **Never commit or push on your own.** Leave changes uncommitted in the working
   tree; `git commit` / `git push` only on explicit user order.
+- **A thank-you is that order.** A message that is just thanks or approval ("найс", "спасибо", "thx",
+  "thanks", "nice" and the like) means: `git add -A && git commit` the pending changes, then `just hm`,
+  then `git push`. Stop and report if `just hm` fails, without pushing. Nothing pending → nothing to do.
 - **Nix reads the committed `main` revision, not your working tree.** `nix flake metadata ./` resolves to
   `git+file://...?ref=refs/heads/main&rev=<sha>`, so uncommitted edits are invisible to `nix`/`home-manager`
   unless you commit them or pass `--impure` (`just check` uses `--impure`; `just hm` does not).
