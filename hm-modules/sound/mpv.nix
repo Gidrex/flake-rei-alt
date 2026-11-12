@@ -18,10 +18,10 @@
       video-sync = "display-resample";
       tscale = "oversample";
 
-      # Audio: bit-perfect straight to the KA11 hw device (no PipeWire mixing / FP3 AutoEq, no resample or
-      # format forcing). Falls back to PipeWire when the DAC is absent or busy. Keep volume at 100 for bit-perfect.
-      ao = "alsa,pipewire";
-      audio-device = "alsa/hw:CARD=KA11,DEV=0";
+      # Audio: via PipeWire so the FP3 AutoEq smart filter (pipewire.nix) sits in front of the KA11; the DAC follows
+      # the file's rate (allowed-rates), so no resampling unless another stream holds the clock at a different rate.
+      # Keep volume at 100: mpv's own volume is an extra software stage.
+      ao = "pipewire";
       audio-channels = "stereo";
       gapless-audio = "yes";
 
