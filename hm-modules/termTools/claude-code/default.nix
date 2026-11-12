@@ -30,6 +30,8 @@ in
       model = "opus";
       # ANSI palette follows the terminal's catppuccin-mocha.
       theme = "dark-ansi";
+      # No Co-Authored-By trailer, "Generated with" PR line or session link (needs v2.1.281+).
+      attribution = false;
       permissions = {
         defaultMode = "auto";
         # Mirrors opencode: CHORA storage only through the `chora` CLI (see
