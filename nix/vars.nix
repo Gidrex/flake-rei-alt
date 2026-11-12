@@ -11,7 +11,6 @@
   };
 
   github = {
-    mail = "Gidrex0@proton.me";
     sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKjmm5IkD+dmNMv/GvpTMdOI++NtltjSxhaIpmI3a7NI github@gidrex";
   };
 

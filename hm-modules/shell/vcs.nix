@@ -44,21 +44,6 @@
     git = {
       enable = true;
       lfs.enable = true;
-      includes = [
-        {
-          condition = "hasconfig:remote.*.url:git@github.com:*/**";
-          contents.user.email = vars.github.mail;
-        }
-        {
-          condition = "hasconfig:remote.*.url:https://github.com/**";
-          contents.user.email = vars.github.mail;
-        }
-        # This flake mirrors to GitHub only via pushurl, which hasconfig can't match.
-        {
-          condition = "gitdir:~/flake-rei/";
-          contents.user.email = vars.github.mail;
-        }
-      ];
       settings = {
         user.name = vars.user.displayName;
         user.email = vars.user.mail;
