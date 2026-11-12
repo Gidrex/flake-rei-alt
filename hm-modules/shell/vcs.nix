@@ -1,4 +1,4 @@
-# Version control: git + jujutsu + lazygit (livediff: tigerlake only, see machines/tigerlake).
+# Version control: git + jujutsu + lazygit.
 {
   config,
   pkgs,
