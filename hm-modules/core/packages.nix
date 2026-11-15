@@ -5,7 +5,9 @@
     (with pkgs; [
       # secrets & nix tooling
       age
+      nix-output-monitor
       nix-prefetch-github
+      nvd
       sops
       ssh-to-age
 
