@@ -48,6 +48,8 @@
         user.name = vars.user.displayName;
         user.email = vars.user.mail;
         init.defaultBranch = "main";
+        fetch.prune = true;
+        merge.conflictStyle = "zdiff3";
         pull.rebase = true;
         rebase.autostash = true;
         rebase.autosquash = true;
