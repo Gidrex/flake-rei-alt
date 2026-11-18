@@ -20,5 +20,6 @@ in
   ctx7-docs = ./skills/ctx7-docs;
   rtk = ./skills/rtk;
   chora = ./skills/chora;
+  git-task-flow = ./skills/git-task-flow;
   archify = "${archifySkill}/archify";
 }

@@ -42,7 +42,9 @@
 - Unrelated dead code/bugs: report, do not fix silently.
 - File ops: Read/Edit/Write, Glob, Grep. Bash is for system commands, not file reads.
   Never `cd`; use `workdir`. Search with `rg`, files with `fd`.
-- Commits/pushes/PRs, global installs, new deps, unverified libs: only on explicit approval.
+- Global installs, new deps, unverified libs, PRs: only on explicit approval.
+- Git: follow the `git-task-flow` skill (task branch: commit/push freely; `main`: only on the user's
+  approval; never force-push). A repo's own `AGENTS.md` overrides it.
 
 ## Skill Router (load on demand via `skill` tool)
 
@@ -56,6 +58,7 @@
 | Lua, shell scripts, `stylua`/`shellcheck` | `lua-shell` |
 | Any third-party framework/SDK/API docs | `ctx7-docs` |
 | Any non-interactive shell command (token-saving proxy) | `rtk` |
+| Start, commit, push, or finish a task in a git repo | `git-task-flow` |
 | Markdown notes or day events | `chora` |
 | Interactive architecture diagrams (standalone HTML) | `archify` |
 
