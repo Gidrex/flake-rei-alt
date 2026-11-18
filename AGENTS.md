@@ -69,7 +69,7 @@ Agent steering (how to task the agent + skills): `.agents/README.md`.
 
 ## Quirks
 
-- Unfree packages are allow-listed via `allowUnfree` in `nix/vars.nix` (only `unrar`, `obsidian`) —
+- Unfree packages are allow-listed via `allowUnfree` in `nix/vars.nix` (`unrar`, `obsidian`, `rtk`, `claude-code`, `crush`) —
   adding another non-free pkg means editing that list (enforced in `nix/pkgs.nix`).
 - `targets.genericLinux.enable = true` in `hm-modules/core/identity.nix` — **disable on an actual NixOS host**.
 - Global theme: catppuccin `mocha` (accent blue), vendored per app in `hm-modules/themes/catppuccin/` (no catppuccin/nix input). `home.stateVersion = "26.05"`; nixpkgs is ~`26.11pre`.

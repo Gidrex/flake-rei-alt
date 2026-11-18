@@ -17,9 +17,8 @@ in
   programs.claude-code = {
     enable = true;
     enableMcpIntegration = true;
-    # Native installer owns the binary (~/.local/bin/claude, `claude update`):
-    # nixpkgs lags it and is unfree-gated. HM manages only ~/.claude.
-    package = null;
+    # Binary comes from nixpkgs (default package; unfree, allow-listed in
+    # nix/vars.nix): update via `nix flake update nixpkgs`, not `claude update`.
 
     # Claude Code (/model, /theme) and herdr (its SessionStart hook) write
     # settings.json at runtime, so merge the declared keys on activation instead

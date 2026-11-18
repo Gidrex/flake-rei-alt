@@ -19,6 +19,7 @@
     "unrar"
     "obsidian"
     "rtk"
+    "claude-code"
     "crush" # fsl11Mit; terminal agent like opencode
   ];
 
