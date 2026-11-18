@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 let
-  ripdrag = "${pkgs.ripdrag}/bin/ripdrag";
+  # Selected files -> clipboard as text/uri-list (paste files with Ctrl+V). `%%` is yazi's escaped `%`.
+  # shortcut: only % space # ? are percent-encoded and newlines in names break it; enough for real filenames.
+  copy-uri-list = ''for f in %s; do printf 'file://%%s\r\n' "$f"; done | sed 's/%%/%%25/g; s/ /%%20/g; s/#/%%23/g; s/?/%%3F/g' | ${pkgs.wl-clipboard}/bin/wl-copy -t text/uri-list'';
 
   # Bind func
   mkBind = on: run: desc: { inherit on run desc; };
@@ -27,8 +29,8 @@ in
     (mkBind [ "g" "r" ] "cd ~/gdrive/" "Go to rclone gdrive mount")
 
     # File operations
-    (mkBind [ "e" "D" ] "shell --orphan -- ${ripdrag} -a -x %s" "Drag & Drop file with list of selected files")
-    (mkBind [ "e" "d" ] "shell --orphan -- ${ripdrag} -A -x %s" "Drag & Drop file all select files as one")
+    # `drag` = blobdrop that follows niri workspaces (hm-modules/core/drag.sh).
+    (mkBind [ "e" "d" ] "shell --orphan -- drag %s" "Drag & Drop selected files")
     (mkBind [ "e" "g" ] "shell --block -- glow -t %s" "Open file with glow")
 
     # Native Trash VFS: g t opens the bin, O (open --interactive) restores/empties.
@@ -36,6 +38,7 @@ in
     # (trash-restore rejects home-trash absolute Paths), so u just opens the bin.
     (mkBind [ "u" ] "plugin trash" "Open trash bin (restore with O)")
     (mkBind [ "c" "m" ] "plugin chmod" "Chmod on selected files")
+    (mkBind [ "c" "u" ] "shell -- ${copy-uri-list}" "Copy selected files to clipboard (paste as files)")
     # O stays free for `open --interactive` (trash restore UI); custom opener lives on e o.
     (mkBind [ "e" "o" ] "plugin open-with-cmd block" "Open with command in the terminal")
     (mkBind [ "t" "c" ] "close" "Close current tab")

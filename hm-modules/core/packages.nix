@@ -19,7 +19,15 @@
       mediainfo
       poppler
       rip2
-      ripdrag
+      (writeShellApplication {
+        name = "drag";
+        # niri comes from the host (not nixpkgs), found via the inherited PATH.
+        runtimeInputs = [
+          blobdrop
+          jq
+        ];
+        text = builtins.readFile ./drag.sh;
+      })
       tldr
       ueberzugpp
       unrar

@@ -48,6 +48,17 @@ window-rule {
     }
 }
 
+// blobdrop via `drag` (yazi `e d`): empty app-id, so match the title; opens tiled fullscreen-size otherwise.
+// Following workspaces is done by the `drag` wrapper (hm-modules/core/drag.sh).
+window-rule {
+    match app-id="^$" title="^Blobdrop$"
+    open-floating true
+    open-focused true
+    default-column-width { fixed 360; }
+    default-window-height { fixed 260; }
+    default-floating-position x=16 y=16 relative-to="bottom-right"
+}
+
 window-rule {
     match title="Glow Preview"
     open-floating true
