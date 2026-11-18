@@ -75,8 +75,8 @@ in
   home.file."${config.programs.claude-code.configDir}/skills/ponytail".source = pkgs.fetchFromGitHub {
     owner = "DietrichGebert";
     repo = "ponytail";
-    tag = "v5.3.2";
-    hash = "sha256-IJlhfkdXI6pMZZCZO7XBRg88LBiNfzc5Gnm4ofGybL8=";
+    tag = "v5.3.3";
+    hash = "sha256-CY0EifTY0UVc6/FPGVJjEfYEf/8QLsINQmoYYKZYh98=";
   };
 
   # Commands the rtk hook must leave bare (matched per command, also inside `&&`
