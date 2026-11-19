@@ -122,6 +122,7 @@ in
           {
             "opencode-go" = "opencode_api_key";
             "openrouter" = "openrouter_api_key";
+            "deepseek" = "deepseek_api_key";
             # Temporarily disabled.
             # "vercel" = "vercel_gateway_api_key";
           };
