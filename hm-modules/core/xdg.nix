@@ -93,5 +93,19 @@ in
       mimeType = [ "inode/directory" ];
       noDisplay = true;
     };
+
+    # Shadows /usr/share/applications/anydesk.desktop: native Wayland GTK renders the
+    # remote view into a corner at fractional scale (icelake 1.5), XWayland is fine.
+    desktopEntries.anydesk = {
+      name = "AnyDesk";
+      genericName = "AnyDesk";
+      exec = "env GDK_BACKEND=x11 /usr/bin/anydesk %u";
+      icon = "anydesk";
+      categories = [
+        "Network"
+        "GTK"
+      ];
+      mimeType = [ "x-scheme-handler/anydesk" ];
+    };
   };
 }
