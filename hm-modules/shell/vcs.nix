@@ -6,6 +6,19 @@
   ...
 }:
 {
+  # No home-manager module for glab; token comes from sops via env (GITLAB_TOKEN beats config/keyring).
+  # config.yml stays unmanaged (glab rewrites it); defaults already match (gitlab.com, ssh git protocol).
+  home.packages = [
+    (pkgs.symlinkJoin {
+      name = "glab";
+      paths = [ pkgs.glab ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/glab --run 'export GITLAB_TOKEN="$(< ${config.sops.secrets.gitlab_pat.path})"'
+      '';
+    })
+  ];
+
   programs = {
     ssh = {
       enable = true;

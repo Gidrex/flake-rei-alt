@@ -24,6 +24,7 @@ in
       gdrive_token = { };
       private_ssh = { };
       private_ssh_github = { };
+      gitlab_pat = { };
     }
     // builtins.listToAttrs (
       map (name: {
