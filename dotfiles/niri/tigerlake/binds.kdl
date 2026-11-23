@@ -10,7 +10,7 @@ binds {
     Mod+Shift+D { spawn-sh "noctalia msg session lock"; }
     Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Shift+T { spawn-sh "foot -a 'foot-mini' -f 'GeistMono Nerd Font:size=23'"; }
-    Mod+M { spawn-sh "kitty --app-id=\"kitty-mini\" -o font_size=14 riptide"; }
+    Mod+M { spawn-sh "com.github.taiko2k.tauonmb"; }
 
     XF86AudioRaiseVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
     XF86AudioLowerVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
