@@ -24,7 +24,7 @@ binds {
     Mod+S { screenshot; }
     Mod+Shift+S { screenshot-window show-pointer=false write-to-disk=false; }
     Mod+Ctrl+S { screenshot-window show-pointer=false write-to-disk=true; }
-    Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
+    Mod+Ctrl+Y { spawn-sh "c=$(niri msg pick-color | sed -n 's/^Hex: //p') && [ -n \"$c\" ] && wl-copy \"$c\""; }
     Mod+Ctrl+V { spawn-sh "printf 'No\nYes\n' | wofi --dmenu --prompt 'Wipe clipboard history?' | grep -qx Yes && cliphist wipe"; }
 
     Mod+Up {  focus-window-up; }
