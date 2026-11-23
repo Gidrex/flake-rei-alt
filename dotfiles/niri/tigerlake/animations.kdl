@@ -1,0 +1,76 @@
+// Minimal motion: only shader open/close/resize; everything else stays off.
+animations {
+    on
+
+    workspace-switch { off; }
+    horizontal-view-movement { off; }
+    window-movement { off; }
+
+    // Resize: old and new content crossfade at 1:1 pixels (anchored top-left), never stretched.
+    window-resize {
+        duration-ms 120
+        curve "ease-out-cubic"
+        custom-shader r"
+            vec4 sample_1to1(sampler2D tex, mat3 geo_to_tex, vec3 coords_geo) {
+                if (coords_geo.x < 0.0 || coords_geo.x > 1.0 || coords_geo.y < 0.0 || coords_geo.y > 1.0)
+                    return vec4(0.0);
+                return texture2D(tex, (geo_to_tex * coords_geo).st);
+            }
+            vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
+                // shader area is bigger than the window; keep everything outside transparent
+                if (coords_curr_geo.x < 0.0 || coords_curr_geo.x > 1.0 || coords_curr_geo.y < 0.0 || coords_curr_geo.y > 1.0)
+                    return vec4(0.0);
+                vec4 prev = sample_1to1(niri_tex_prev, niri_geo_to_tex_prev, niri_curr_geo_to_prev_geo * coords_curr_geo);
+                vec4 next = sample_1to1(niri_tex_next, niri_geo_to_tex_next, niri_curr_geo_to_next_geo * coords_curr_geo);
+                return mix(prev, next, niri_clamped_progress);
+            }
+        "
+    }
+    config-notification-open-close { off; }
+    exit-confirmation-open-close { off; }
+    screenshot-ui-open { off; }
+    overview-open-close { off; }
+
+    // Window is revealed top to bottom behind a soft wavy edge (amplitude 18px, wavelength ~140px).
+    window-open {
+        duration-ms 220
+        curve "ease-out-cubic"
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                if (coords_geo.x < 0.0 || coords_geo.x > 1.0 || coords_geo.y < 0.0 || coords_geo.y > 1.0)
+                    return vec4(0.0);
+                vec2 px = coords_geo.xy * size_geo.xy;
+                float amp = 18.0;
+                float soft = 20.0;
+                // front runs from fully hidden (-amp) to fully shown (height + amp + soft)
+                float front = niri_clamped_progress * (size_geo.y + 2.0 * amp + soft) - amp;
+                float edge = front + amp * sin(px.x * 0.045 + niri_clamped_progress * 6.0);
+                float mask = 1.0 - smoothstep(edge - soft, edge, px.y);
+                vec3 coords_tex = niri_geo_to_tex * coords_geo;
+                return texture2D(niri_tex, coords_tex.st) * mask;
+            }
+        "
+    }
+
+    // Window dissolves pixel by pixel in random order, very fast.
+    window-close {
+        duration-ms 110
+        curve "linear"
+        custom-shader r"
+            // hash12 (Dave Hoskins): no sin(), so no visible patterns on large pixel coords
+            float hash(vec2 p) {
+                vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                return fract((p3.x + p3.y) * p3.z);
+            }
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                if (coords_geo.x < 0.0 || coords_geo.x > 1.0 || coords_geo.y < 0.0 || coords_geo.y > 1.0)
+                    return vec4(0.0);
+                vec2 cell = floor(coords_geo.xy * size_geo.xy) + niri_random_seed * 100.0;
+                float mask = step(niri_clamped_progress, hash(cell));
+                vec3 coords_tex = niri_geo_to_tex * coords_geo;
+                return texture2D(niri_tex, coords_tex.st) * mask;
+            }
+        "
+    }
+}
