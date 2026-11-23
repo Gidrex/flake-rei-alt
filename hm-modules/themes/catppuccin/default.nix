@@ -12,6 +12,13 @@
     "yazi/Catppuccin-mocha.tmTheme".source = ./yazi.tmTheme;
   };
 
+  # Tauon is a Flatpak without /nix access, so a store symlink would dangle inside the sandbox: copy instead.
+  home.activation.tauonTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    dir="$HOME/.var/app/com.github.taiko2k.tauonmb/data/TauonMusicBox/theme"
+    run install -Dm644 ${./tauon.ttheme} "$dir/Catppuccin Mocha.ttheme"
+    run install -Dm644 ${./tauon-lavender.ttheme} "$dir/Catppuccin Mocha Lavender.ttheme"
+  '';
+
   home.sessionVariables = {
     FZF_DEFAULT_OPTS_FILE = "${./fzf.rc}";
     GLAMOUR_STYLE = "${./glamour.json}";

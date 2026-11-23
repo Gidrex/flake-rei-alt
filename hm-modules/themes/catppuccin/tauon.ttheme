@@ -1,0 +1,99 @@
+# Tauon Music Box theme: Catppuccin Mocha (accent blue). Keys follow Tauon 14's own theme export.
+17,17,27,255    window frame
+137,180,250,255    gallery highlight
+205,214,244,255    index playing
+205,214,244,255    time playing
+205,214,244,255    artist playing
+166,173,200,255    track album
+205,214,244,255    album playing
+24,24,37,255    top panel
+108,112,134,255    corner button off
+205,214,244,255    corner button on
+127,132,156,255    menu button normal
+205,214,244,255    menu button hover
+24,24,37,255    queue panel
+24,24,37,255    side panel
+24,24,37,255    lyrics panel
+30,30,46,255    gallery background
+30,30,46,255    tracklist panel
+186,194,222,255    track line
+88,91,112,255    track missing
+137,180,250,40    playing highlight
+147,153,178,255    track time
+245,194,231,255    fav line
+137,180,250,255    folder title
+69,71,90,255    folder line
+127,132,156,255    buttons off
+205,214,244,255    buttons over
+137,180,250,255    buttons active
+137,180,250,255    playing time
+127,132,156,255    track index
+205,214,244,255    track playing
+205,214,244,15    select highlight
+166,173,200,255    track artist
+17,17,27,255    tab active text
+166,173,200,255    tab text
+24,24,37,255    tab background
+49,50,68,255    tab over
+137,180,250,255    tab active background
+205,214,244,255    title info
+166,173,200,255    extra info
+205,214,244,255    bottom title
+69,71,90,255    scroll bar
+137,180,250,255    seek bar
+49,50,68,255    seek bg
+180,190,254,255    volume bar
+49,50,68,255    volume bg
+127,132,156,255    mode off
+205,214,244,255    mode over
+137,180,250,255    mode on
+0,0,0,0    art border
+49,50,68,255    tb line
+137,180,250,255    music vis
+49,50,68,255    menu background
+205,214,244,255    menu text
+108,112,134,255    menu disable
+205,214,244,60    menu icons
+69,71,90,255    menu highlight
+69,71,90,255    menu border
+166,173,200,255    lyrics text
+137,180,250,255    active lyric
+17,17,27,255    bottom panel
+30,30,46,255    mini bg
+69,71,90,255    mini border
+205,214,244,240    mini text 1
+205,214,244,120    mini text 2
+30,30,46,255    playlist background
+24,24,37,255    box background
+69,71,90,255    box border
+49,50,68,255    box text border
+127,132,156,255    box text label
+205,214,244,255    box title text
+205,214,244,255    box text normal
+166,173,200,255    box sub text
+205,214,244,255    box input text
+205,214,244,255    box button text highlight
+205,214,244,255    box button text normal
+49,50,68,255    box button background normal
+69,71,90,255    box button background highlight
+205,214,244,18    box button border
+17,17,27,255    window buttons background
+69,71,90,255    window buttons on
+127,132,156,255    window buttons icon off
+205,214,244,255    window buttons icon over
+243,139,168,255    window button x on
+127,132,156,255    window button x off
+24,24,37,255    column bar background
+24,24,37,255    artist bio background
+205,214,244,255    artist bio text
+17,17,27,255    visualizer bg
+116,199,236,255    link text
+205,214,244,255    star line playing
+49,50,68,255    message box bg
+205,214,244,255    message box text
+203,166,247,255    queue drag indicator
+137,180,250,255    pulse colour
+49,50,68,255    queue card background
+205,214,244,20    column grip
+166,173,200,200    column bar text
+88,91,112,175    box thumb background
