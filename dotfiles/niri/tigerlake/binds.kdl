@@ -11,6 +11,8 @@ binds {
     Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Shift+T { spawn-sh "foot -a 'foot-mini' -f 'GeistMono Nerd Font:size=23'"; }
     Mod+M { spawn-sh "com.github.taiko2k.tauonmb"; }
+    // Toggle centering of the focused column: state lives outside the repo in ~/.config/niri/center.kdl.
+    Mod+Shift+C { spawn-sh "f=$HOME/.config/niri/center.kdl; if grep -q never \"$f\" 2>/dev/null; then : > \"$f\"; else echo 'layout { center-focused-column \"never\"; }' > \"$f\"; fi; niri msg action load-config-file"; }
 
     XF86AudioRaiseVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
     XF86AudioLowerVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
