@@ -8,7 +8,6 @@
     enableNixpkgsReleaseCheck = false;
 
     sessionVariables = {
-      SHELL = "fish";
       TERM = "foot";
 
       ANDROID_HOME = "${config.home.homeDirectory}/Android/Sdk";
