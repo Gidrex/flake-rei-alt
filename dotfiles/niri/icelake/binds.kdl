@@ -20,5 +20,4 @@ binds {
     Mod+W { set-column-width "45%"; }
     Mod+A { set-column-width "60%"; }
     Mod+G { set-column-width "90%"; }
-    Mod+F { set-column-width "100%"; }
 }
