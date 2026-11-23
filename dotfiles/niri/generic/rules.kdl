@@ -3,6 +3,10 @@ window-rule {
     geometry-corner-radius 6
     clip-to-geometry true
     draw-border-with-background false
+    // Blur shows only through semi-transparent windows; xray (default) blurs the wallpaper once, cheap.
+    background-effect {
+        blur true
+    }
 }
 
 // Steam never steals focus
@@ -152,4 +156,21 @@ window-rule {
     match app-id="org.pulseaudio.pavucontrol"
     match app-id="Emulator"
     open-on-workspace "6"
+}
+
+// Menus of panels/bars (top layer): same rounding as windows, blurred behind
+layer-rule {
+    match layer="top"
+    popups {
+        geometry-corner-radius 6
+        background-effect {
+            blur true
+        }
+    }
+}
+
+// noctalia's overview wallpaper goes behind workspaces in Mod+Tab
+layer-rule {
+    match namespace="^noctalia-backdrop$"
+    place-within-backdrop true
 }
