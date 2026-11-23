@@ -2,7 +2,7 @@
 
 - `Alt+w` — save file
 - `Alt+q` — quit
-- `Z` — LazyGit (floating window); `ZZ` / `ZQ` are disabled
+- `Z` — LazyGit (floating window; on quit nvim `:cd`s into the repo you switched to); `ZZ` / `ZQ` are disabled
 - `Ctrl+y` — yazi picker (overrides Vim-default scroll-up)
 - `Alt+;` (insert mode) — command mode from insert
 - files auto-format on save (conform); no manual format key

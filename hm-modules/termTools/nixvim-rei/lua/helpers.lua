@@ -1,6 +1,6 @@
 local M = {}
 
-function M.float_term(cmd, on_exit)
+function M.float_term(cmd, on_exit, env)
   local buf = vim.api.nvim_create_buf(false, true)
   local width = math.floor(vim.o.columns * 0.9)
   local height = math.floor(vim.o.lines * 0.9)
@@ -16,6 +16,7 @@ function M.float_term(cmd, on_exit)
     border = "rounded",
   })
   vim.fn.termopen(cmd, {
+    env = env,
     on_exit = function(...)
       if on_exit then
         on_exit(...)
@@ -28,8 +29,22 @@ function M.float_term(cmd, on_exit)
   vim.cmd("startinsert")
 end
 
+-- Same as fish `lg`: lazygit writes the repo it switched to, nvim :cd's there.
 function M.open_lazygit()
-  M.float_term("lazygit")
+  local tmp = vim.fn.tempname()
+  M.float_term("lazygit", function()
+    local f = io.open(tmp, "r")
+    if f then
+      local dir = f:read("*l")
+      f:close()
+      os.remove(tmp)
+      if dir and dir ~= "" and dir ~= vim.fn.getcwd() then
+        vim.schedule(function()
+          vim.cmd.cd(vim.fn.fnameescape(dir))
+        end)
+      end
+    end
+  end, { LAZYGIT_NEW_DIR_FILE = tmp })
 end
 
 function M.open_yazi_picker()
