@@ -2,8 +2,6 @@ environment {
     GTK_CSD "0"
     QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
-    WLR_NO_HARDWARE_CURSORS "1"
-    DMS_DISABLE_MATUGEN "1"
 
     XDG_CURRENT_DESKTOP "niri"
     XDG_SESSION_TYPE "wayland"
@@ -17,9 +15,6 @@ environment {
     QT_QPA_PLATFORMTHEME "gtk3"
     QT_STYLE_OVERRIDE "kvantum"
 
-    GDK_DPI_SCALE "1"
-    GDK_SCALE "1"
-    QT_AUTO_SCREEN_SCALE_FACTOR "1"
 
     LIBVIRT_DEFAULT_URI "qemu:///system"
     // Force vaapi, skip dGPU
