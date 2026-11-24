@@ -161,6 +161,9 @@ declare const browser: {
 			maxResults?: number;
 		}): Promise<Array<{ url?: string; title?: string; lastVisitTime?: number }>>;
 	};
+	search: {
+		search(props: { query: string }): Promise<void>;
+	};
 };
 
 declare const glide: GlideAPI;
@@ -225,7 +228,8 @@ function launcher_row(title: string, url: string, icon?: string): unknown {
 glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", async () => {
 	// MRU tab switcher: most recently used first (built-in `tab` picker
 	// follows tab-bar order and has no recency sort). Below the tabs: history
-	// sites, most recently visited first, capped to HISTORY_SHOWN rows.
+	// sites, most recently visited first, capped to HISTORY_SHOWN rows. Nothing
+	// matched at all: a single row that searches the input in the default engine.
 	const tabs = (await glide.tabs.query({ currentWindow: true })).sort(
 		(a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0),
 	);
@@ -238,7 +242,7 @@ glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "o
 	const history_hays = history.map((item) => hay(item.title, item.url));
 	// Glide builds DOM for every option up front, so history gets a fixed pool
 	// of HISTORY_SHOWN slot rows refilled on each keystroke with the newest
-	// plain-substring hits (never the fuzzy default). matches() runs per slot,
+	// plain-substring hits. matches() runs per slot,
 	// so hits are computed once per input.
 	const HISTORY_SHOWN = 100;
 	let last_q: string | undefined;
@@ -262,7 +266,7 @@ glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "o
 				label: tab.title ?? tab.url ?? `#${tab.id}`,
 				description: tab.url ?? "",
 				render: () => launcher_row(tab.title ?? tab.url ?? "", tab.url ?? "", tab.favIconUrl),
-				matches: (props: { input: string }) => hay(tab.title, tab.url).includes(props.input.toLowerCase()) || null,
+				matches: (props: { input: string }) => hay(tab.title, tab.url).includes(props.input.toLowerCase()),
 				execute: async () => {
 					if (tab.id != null) {
 						await browser.tabs.update(tab.id, { active: true });
@@ -291,6 +295,21 @@ glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "o
 					},
 				};
 			}),
+			{
+				label: "search",
+				render: () => launcher_row("Search in default engine", ""),
+				matches: (props: { input: string }) => {
+					const q = props.input.toLowerCase();
+					return (
+						q.trim() !== "" &&
+						!tabs.some((tab) => hay(tab.title, tab.url).includes(q)) &&
+						history_hits(q.trim()).length === 0
+					);
+				},
+				execute: async (props: { input: string }) => {
+					await browser.search.search({ query: props.input.trim() });
+				},
+			},
 		],
 	});
 });
