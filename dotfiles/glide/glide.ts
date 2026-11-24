@@ -152,6 +152,14 @@ declare const browser: {
 	tabs: {
 		remove(tabIds: number | number[]): Promise<void>;
 		update(tabId: number, props: { active: boolean }): Promise<unknown>;
+		create(props: { url: string }): Promise<unknown>;
+	};
+	history: {
+		search(query: {
+			text: string;
+			startTime?: number;
+			maxResults?: number;
+		}): Promise<Array<{ url?: string; title?: string; lastVisitTime?: number }>>;
 	};
 };
 
@@ -180,97 +188,110 @@ glide.search_engines.add({
 });
 
 // Keymaps
+
+// One launcher row: two even columns inside a fixed-width centered block, name
+// cell (icon + ellipsis-clipped title) and URL cell keep stable edges
+// regardless of URL length.
+function launcher_row(title: string, url: string, icon?: string): unknown {
+	const clip = { minWidth: "0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" };
+	return DOM.create_element("div", {
+		style: { display: "flex", justifyContent: "center", width: "100%" },
+		children: [
+			DOM.create_element("div", {
+				style: { display: "flex", alignItems: "center", gap: "16px", width: "1100px", maxWidth: "100%" },
+				children: [
+					DOM.create_element("div", {
+						style: { display: "flex", alignItems: "center", gap: "8px", width: "480px", flexShrink: "0" },
+						children: [
+							...(icon != null
+								? [
+										DOM.create_element("img", {
+											src: icon,
+											alt: "",
+											style: { width: "16px", height: "16px", flexShrink: "0" },
+										}),
+									]
+								: []),
+							DOM.create_element("span", { title, style: { flex: "1", ...clip }, children: [title] }),
+						],
+					}),
+					DOM.create_element("span", { style: { flex: "1", opacity: "0.6", ...clip }, children: [url] }),
+				],
+			}),
+		],
+	});
+}
+
 glide.keymaps.set(["normal", "insert", "visual", "hint", "command", "ignore", "op-pending"], "<C-space>", async () => {
 	// MRU tab switcher: most recently used first (built-in `tab` picker
-	// follows tab-bar order and has no recency sort).
+	// follows tab-bar order and has no recency sort). Below the tabs: history
+	// sites, most recently visited first, capped to HISTORY_SHOWN rows.
 	const tabs = (await glide.tabs.query({ currentWindow: true })).sort(
 		(a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0),
 	);
-	await glide.commandline.show({
-		title: "tabs (recent first)",
-		options: tabs.map((tab) => ({
-			label: tab.title ?? tab.url ?? `#${tab.id}`,
-			description: tab.url ?? "",
-			// Two even columns: a fixed-width inner block is centered on
-			// screen, name cell (icon + ellipsis-clipped title) and URL
-			// cell keep stable edges inside it regardless of URL length.
-			render: () =>
-				DOM.create_element("div", {
-					style: {
-						display: "flex",
-						justifyContent: "center",
-						width: "100%",
-					},
-					children: [
-						DOM.create_element("div", {
-							style: {
-								display: "flex",
-								alignItems: "center",
-								gap: "16px",
-								width: "1100px",
-								maxWidth: "100%",
-							},
-							children: [
-								DOM.create_element("div", {
-									style: {
-										display: "flex",
-										alignItems: "center",
-										gap: "8px",
-										width: "480px",
-										flexShrink: "0",
-									},
-									children: [
-										...(tab.favIconUrl != null
-											? [
-													DOM.create_element("img", {
-														src: tab.favIconUrl,
-														alt: "",
-														style: {
-															width: "16px",
-															height: "16px",
-															flexShrink: "0",
-														},
-													}),
-												]
-											: []),
-										DOM.create_element("span", {
-											title: tab.title ?? tab.url ?? "",
-											style: {
-												flex: "1",
-												minWidth: "0",
-												overflow: "hidden",
-												textOverflow: "ellipsis",
-												whiteSpace: "nowrap",
-											},
-											children: [tab.title ?? tab.url ?? ""],
-										}),
-									],
-								}),
-								DOM.create_element("span", {
-									style: {
-										flex: "1",
-										minWidth: "0",
-										opacity: "0.6",
-										overflow: "hidden",
-										textOverflow: "ellipsis",
-										whiteSpace: "nowrap",
-									},
-									children: [tab.url ?? ""],
-								}),
-							],
-						}),
-					],
-				}),
-			matches: (props: { input: string }) => {
-				const q = props.input.toLowerCase();
-				return ((tab.title ?? "") + " " + (tab.url ?? "")).toLowerCase().includes(q) || null;
-			},
-			execute: async () => {
-				if (tab.id != null) {
-					await browser.tabs.update(tab.id, { active: true });
+	const hay = (title?: string, url?: string) => `${title ?? ""} ${url ?? ""}`.toLowerCase();
+	const open_urls = new Set(tabs.map((tab) => tab.url));
+	// shortcut: last 2000 visited pages preloaded once per open (options are static), raise if old sites go missing.
+	const history = (await browser.history.search({ text: "", startTime: 0, maxResults: 2000 }))
+		.filter((item) => item.url != null && !open_urls.has(item.url))
+		.sort((a, b) => (b.lastVisitTime ?? 0) - (a.lastVisitTime ?? 0));
+	const history_hays = history.map((item) => hay(item.title, item.url));
+	// Glide builds DOM for every option up front, so history gets a fixed pool
+	// of HISTORY_SHOWN slot rows refilled on each keystroke with the newest
+	// plain-substring hits (never the fuzzy default). matches() runs per slot,
+	// so hits are computed once per input.
+	const HISTORY_SHOWN = 100;
+	let last_q: string | undefined;
+	let hits: typeof history = [];
+	const history_hits = (q: string) => {
+		if (q !== last_q) {
+			last_q = q;
+			hits = [];
+			for (let j = 0; j < history_hays.length && hits.length < HISTORY_SHOWN; j++) {
+				if (history_hays[j].includes(q)) {
+					hits.push(history[j]);
 				}
-			},
-		})),
+			}
+		}
+		return hits;
+	};
+	await glide.commandline.show({
+		title: "tabs (recent first), then history",
+		options: [
+			...tabs.map((tab) => ({
+				label: tab.title ?? tab.url ?? `#${tab.id}`,
+				description: tab.url ?? "",
+				render: () => launcher_row(tab.title ?? tab.url ?? "", tab.url ?? "", tab.favIconUrl),
+				matches: (props: { input: string }) => hay(tab.title, tab.url).includes(props.input.toLowerCase()) || null,
+				execute: async () => {
+					if (tab.id != null) {
+						await browser.tabs.update(tab.id, { active: true });
+					}
+				},
+			})),
+			...Array.from({ length: HISTORY_SHOWN }, (_, i) => {
+				let row: HTMLElement | undefined;
+				let item: (typeof history)[number] | undefined;
+				return {
+					label: "history",
+					render: () => (row = launcher_row("", "") as HTMLElement),
+					matches: (props: { input: string }) => {
+						item = history_hits(props.input.toLowerCase().trim())[i];
+						const [title_el, url_el] = row?.querySelectorAll("span") ?? [];
+						if (item != null && title_el != null && url_el != null) {
+							title_el.textContent = title_el.title = item.title || item.url!;
+							url_el.textContent = item.url!;
+						}
+						return item != null;
+					},
+					execute: async () => {
+						if (item != null) {
+							await browser.tabs.create({ url: item.url! });
+						}
+					},
+				};
+			}),
+		],
 	});
 });
 glide.keymaps.del("normal", "<leader><leader>");
