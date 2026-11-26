@@ -76,3 +76,11 @@ window-rule {
   match app-id="com.github.taiko2k.tauonmb"
   opacity 0.94
 }
+
+// On-demand VRR only while the game itself is focused: games share workspace "3"
+// with the Steam client, and VRR on the static Steam UI makes the panel flicker.
+// Overrides the generic "Enable VRR" rule, so it must come after it.
+window-rule {
+    match app-id=r#"^steam_app_"# is-focused=false
+    variable-refresh-rate false
+}

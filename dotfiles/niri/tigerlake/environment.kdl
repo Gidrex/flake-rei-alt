@@ -1,5 +1,8 @@
 environment {
     XCURSOR_THEME "Afterglow-cursors"
     XCURSOR_SIZE "24"
+    PROTON_ENABLE_WAYLAND "1"
+    WAYLANDDRV_PRIMARY_MONITOR "DP-2"
+    PROTON_USE_NTSYNC "1"
 }
 

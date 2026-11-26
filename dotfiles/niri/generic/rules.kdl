@@ -9,10 +9,11 @@ window-rule {
     }
 }
 
-// Steam never steals focus
+// Steam and Chromium never steal focus
 window-rule {
     match app-id=r#"(?i)steam"#
     match app-id=r#"^steam_app_"#
+    match app-id="^chromium$"
     open-focused false
 }
 
