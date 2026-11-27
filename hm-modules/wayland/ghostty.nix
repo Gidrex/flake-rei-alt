@@ -19,6 +19,7 @@ in
     cursor-style-blink = false;
     mouse-hide-while-typing = true;
     confirm-close-surface = false;
+    keybind = [ "ctrl+enter=unbind" ]; # default toggle_fullscreen; let ctrl+enter reach apps
   };
 
   # niri's env carries TERM=foot from home.sessionVariables and fish re-sources it; restore ghostty's own.
