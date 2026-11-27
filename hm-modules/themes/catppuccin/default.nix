@@ -71,8 +71,8 @@
     # snacks.image renders mermaid blocks with mmdc; base theme + mocha palette.
     nixvim.plugins.snacks.settings.image.convert.mermaid.__raw = ''
       function()
-        -- 1.3x the terminal scale: snacks shows the PNG at its pixel size.
-        local scale = (Snacks.image.terminal.size().scale or 1) * 1.3
+        -- 2.00x the terminal scale: snacks shows the PNG at its pixel size.
+        local scale = (Snacks.image.terminal.size().scale or 1) * 2.00
         return { "-i", "{src}", "-o", "{file}", "-b", "transparent", "-c", "${./mermaid.json}", "-s", tostring(scale) }
       end
     '';

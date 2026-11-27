@@ -47,9 +47,9 @@ in
             # Image covers the mermaid/math source; concealcursor (render-markdown below) keeps it in normal mode.
             doc = {
               conceal.__raw = ''function(_, type) return type == "math" or type == "chart" end'';
-              # Room for the 1.3x mermaid render (catppuccin module); defaults 80x40 would shrink it back.
-              max_width = 120;
-              max_height = 60;
+              # Room for the 1.72x mermaid render (catppuccin module); defaults 80x40 would shrink it back.
+              max_width = 160;
+              max_height = 80;
             };
           };
         };
