@@ -40,6 +40,8 @@ in
         number = true;
         relativenumber = true;
         cursorline = true;
+        # Fixed gutter: an auto sign column appearing after render-markdown sizes a table pushes it past the edge.
+        signcolumn = "yes";
         mouse = "";
         termguicolors = true;
         wrap = true;
