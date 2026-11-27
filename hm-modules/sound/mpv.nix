@@ -1,7 +1,7 @@
 { pkgs, ... }:
 let
-  # Force the PipeWire graph (and so the KA11) to the playing file's sample rate; unset on exit.
-  # Rates mirror allowed-rates in pipewire.nix (= what the KA11 supports); others fall back to the default clock.
+  # Force the PipeWire graph (and so the DAC) to the playing file's sample rate; unset on exit.
+  # Rates mirror allowed-rates in pipewire.nix; others fall back to the default clock.
   # Shipped via programs.mpv.scripts (wrapper --script=) so it also loads under --load-scripts=no (riptide).
   # shortcut: last mpv to start/quit wins with several instances; upgrade to per-instance tracking if that bites.
   # pw-metadata comes from the host PipeWire.
@@ -36,7 +36,7 @@ in
       video-sync = "display-resample";
       tscale = "oversample";
 
-      # Audio: via PipeWire, shared with other apps, FP3 AutoEq smart filter in front of the KA11 (pipewire.nix).
+      # Audio: via PipeWire, shared with other apps.
       # pw-force-rate.lua pins the graph to the file's rate, so mpv is never resampled (other apps are instead).
       # Keep volume at 100: mpv's own volume is an extra software stage.
       ao = "pipewire";
