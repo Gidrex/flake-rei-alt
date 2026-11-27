@@ -87,6 +87,14 @@ in
       };
     };
 
+    # CachyOS start-gamescope-session (Steam game mode) runs `systemctl --user set-environment XDG_DESKTOP_PORTAL_DIR=""`
+    # and only Plasma resets it; after switching to niri x-d-p loads no backends, so FileChooser is missing and
+    # SDL apps (Tauon) fail with "Could not run zenity". Fixed at the unit, so it holds whatever started the portal.
+    configFile."systemd/user/xdg-desktop-portal.service.d/unset-portal-dir.conf".text = ''
+      [Service]
+      UnsetEnvironment=XDG_DESKTOP_PORTAL_DIR
+    '';
+
     desktopEntries.foot-open-folder = mkIf config.programs.foot.enable {
       name = "Foot (open folder)";
       exec = "${pkgs.foot}/bin/foot --working-directory=%f";
