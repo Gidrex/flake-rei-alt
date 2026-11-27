@@ -176,3 +176,9 @@ layer-rule {
     match namespace="^noctalia-backdrop$"
     place-within-backdrop true
 }
+
+// mpv (mpv-video = single window from yazi): full height
+window-rule {
+    match app-id="^mpv(-video)?$"
+    default-window-height { proportion 1.0; }
+}

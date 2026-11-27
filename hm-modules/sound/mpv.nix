@@ -16,8 +16,36 @@ let
     end)
     mp.register_event("shutdown", function() force(0) end)
   '';
+
+  # One mpv per <name> (yazi uses video): the first call starts it, later calls replace the track over IPC.
+  # app-id mpv-<name> lets niri place each window (dotfiles/niri/*/rules.kdl).
+  mpvOne = pkgs.writeShellApplication {
+    name = "mpv-one";
+    runtimeInputs = [
+      pkgs.socat
+      pkgs.jq
+    ];
+    text = ''
+      name="$1"
+      shift
+      sock="''${XDG_RUNTIME_DIR:-/tmp}/mpv-$name.sock"
+      load() {
+        jq -nc --arg f "$(realpath -- "$1")" --arg m "$2" '{command: ["loadfile", $f, $m]}' |
+          socat - "UNIX-CONNECT:$sock" >/dev/null
+      }
+      if [ "$#" -gt 0 ] && load "$1" replace 2>/dev/null; then
+        shift
+        for f in "$@"; do load "$f" append; done
+      else
+        rm -f "$sock" # stale socket of a closed mpv
+        exec mpv --input-ipc-server="$sock" --wayland-app-id="mpv-$name" -- "$@"
+      fi
+    '';
+  };
 in
 {
+  home.packages = [ mpvOne ];
+
   programs.mpv = {
     enable = true;
     config = {
@@ -59,7 +87,7 @@ in
       sub-font-size = 36;
       osd-font = "SauceCodePro Nerd Font Mono";
       osd-bar = "no";
-      border = "no";
+      # No border = "no": with force-window it makes mpv size itself to the video/cover and ignore niri's tile size.
     };
 
     scripts = with pkgs.mpvScripts; [

@@ -15,7 +15,7 @@ window-rule {
     match app-id="equibop"
     match app-id=r#"(?i)steam"#
     match app-id="clash-verge"
-    match app-id="^mpv$"
+    match app-id="^mpv(-video)?$"
     match app-id="chrome-.*"
     default-column-width { proportion 0.9; }
 }

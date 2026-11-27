@@ -72,6 +72,28 @@ in
           '';
         }
       ];
+      # One mpv window per kind instead of a new one per file (mpv-one in hm-modules/sound/mpv.nix).
+      # yazi 26 passes files as %s; "$@" is empty there, so mpv-one got no file and exited.
+      opener.play = [
+        {
+          run = "mpv-one video %s";
+          orphan = true;
+          desc = "mpv (one window)";
+        }
+      ];
+      opener.play-audio = [
+        {
+          run = "mpv-one audio %s";
+          orphan = true;
+          desc = "mpv mini player";
+        }
+      ];
+      open.prepend_rules = [
+        {
+          mime = "audio/*";
+          use = "play-audio";
+        }
+      ];
       tasks.image_alloc = 268435456; # 256 MB, enough for previews
     };
 
