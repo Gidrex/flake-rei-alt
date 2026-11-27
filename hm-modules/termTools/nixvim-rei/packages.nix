@@ -57,6 +57,7 @@ in
 
         # Markdown (oxide only, matches the single lsp server)
         markdown-oxide
+        mermaid-cli # mmdc: snacks.image renders mermaid blocks with it
 
         # Go
         gopls

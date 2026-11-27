@@ -35,11 +35,26 @@ in
       };
       snacks = {
         enable = true;
-        settings.picker = {
-          enabled = true;
-          # Pickers never dim the current buffer behind them
-          layout.backdrop = false;
+        settings = {
+          picker = {
+            enabled = true;
+            # Pickers never dim the current buffer behind them
+            layout.backdrop = false;
+          };
+          # Images + mermaid (via mmdc) inline; needs kitty graphics (ghostty/kitty, not foot).
+          image = {
+            enabled = true;
+            # Image covers the mermaid/math source; concealcursor (render-markdown below) keeps it in normal mode.
+            doc = {
+              conceal.__raw = ''function(_, type) return type == "math" or type == "chart" end'';
+              # Room for the 1.3x mermaid render (catppuccin module); defaults 80x40 would shrink it back.
+              max_width = 120;
+              max_height = 60;
+            };
+          };
         };
+        # ft: image module must be set up before a markdown buffer renders.
+        lazyLoad.settings.ft = "markdown";
         lazyLoad.settings.keys = [
           # <leader>f searches from cwd, <leader>F from the current buffer's dir.
           (snacksKey "<leader>f" "function() require('pickers').files() end" "File Picker")
@@ -58,6 +73,10 @@ in
           heading.right_pad = 1;
           # Rendered cursor line; raw only in insert mode
           anti_conceal.enabled = false;
+          # Concealed text (and snacks images over code) stays hidden on the cursor line outside insert.
+          win_options.concealcursor.rendered = "nc";
+          # snacks.image draws mermaid blocks; render-markdown's code background showed as a box beside the image.
+          code.disable = [ "mermaid" ];
         };
         lazyLoad.settings.ft = "markdown";
       };
