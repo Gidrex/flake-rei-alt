@@ -34,6 +34,7 @@
     ./services/syncthing.nix
 
     ./wayland/foot.nix
+    ./wayland/ghostty.nix
     ./wayland/kitty.nix
 
     ./themes/catppuccin

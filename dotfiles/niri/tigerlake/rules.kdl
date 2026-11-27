@@ -19,6 +19,7 @@ window-rule {
     open-on-output "DP-2"
     match app-id=r#"(?i)steam"#
     match app-id="foot"
+    match app-id="com.mitchellh.ghostty"
     match app-id="kitty"
     match app-id="ONLYOFFICE"
     match app-id="clash-verge"
@@ -69,6 +70,7 @@ window-rule {
 
 window-rule {
     match app-id="foot" is-active=false
+    match app-id="com.mitchellh.ghostty" is-active=false
     opacity 0.7
 }
 

@@ -6,7 +6,11 @@ binds {
     
     Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
-    Mod+O { spawn-sh "footclient --title scripts $HOME/flake-rei/scripts/scripts_menu.sh"; }
+    // Ghostty instead of footclient (no foot server on tigerlake); overrides generic/binds.kdl.
+    Mod+T { spawn "ghostty"; }
+    Mod+N { spawn "ghostty" "-e" "chora" "open" "note"; }
+    Mod+Shift+N { spawn "ghostty" "--title=notes" "-e" "chora" "open" "note"; }
+    Mod+O { spawn-sh "ghostty --title=scripts -e $HOME/flake-rei/scripts/scripts_menu.sh"; }
     Mod+Shift+D { spawn-sh "noctalia msg session lock"; }
     Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Shift+T { spawn-sh "foot -a 'foot-mini' -f 'GeistMono Nerd Font:size=23'"; }

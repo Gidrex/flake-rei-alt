@@ -1,4 +1,3 @@
 // Qt Quick takes QT_STYLE_OVERRIDE=kvantum for a QML module and the password dialog crashes.
 spawn-sh-at-startup "env -u QT_STYLE_OVERRIDE /usr/lib/polkit-kde-authentication-agent-1"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
-spawn-sh-at-startup "foot --server"
