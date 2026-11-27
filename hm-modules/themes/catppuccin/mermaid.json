@@ -3,6 +3,7 @@
   "look": "handDrawn",
   "handDrawnSeed": 3,
   "flowchart": { "curve": "basis", "nodeSpacing": 40, "rankSpacing": 55, "padding": 14 },
+  "sequence": { "wrap": true, "width": 200 },
   "themeCSS": ".node path{stroke-width:1.8px} .flowchart-link{stroke-width:1.4px}",
   "themeVariables": {
     "darkMode": true,
